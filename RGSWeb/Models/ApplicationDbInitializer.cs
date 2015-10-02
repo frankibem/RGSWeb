@@ -42,20 +42,20 @@ namespace RGSWeb.Models
             // Create some teachers
             ApplicationUser[] teachers = new ApplicationUser[]
             {
-                new ApplicationUser() { UserName = "susanmengel", FirstName = "Mengel", LastName = "Susan" },
-                new ApplicationUser() { UserName = "michaelgelfond", FirstName = "Michael", LastName = "Gelfond" }
+                new ApplicationUser() { UserName = "susanmengel@rgs.com", FirstName = "Mengel", LastName = "Susan" , Email = "susanmengel@rgs.com"},
+                new ApplicationUser() { UserName = "michaelgelfond@rgs.com", FirstName = "Michael", LastName = "Gelfond", Email = "michaelgelfond@rgs.com" }
             };
             CreateUsersAndAddToRole(teachers, roles[1]);
 
             // Create some students
             ApplicationUser[] students = new ApplicationUser[]
             {
-                new ApplicationUser() { UserName = "frankibem", FirstName = "Frank", LastName = "Ibem" },
-                new ApplicationUser() { UserName = "joshuahernandez", FirstName = "Joshua", LastName = "Hernandez" },
-                new ApplicationUser() { UserName = "laurenjoness", FirstName = "Lauren", LastName = "Joness" },
-                new ApplicationUser() { UserName = "clairegray", FirstName = "Claire", LastName = "Gray" },
-                new ApplicationUser() { UserName = "norisrogers", FirstName = "Noris", LastName = "Rogers" },
-                new ApplicationUser() { UserName = "michaelarroyo", FirstName = "Michael", LastName = "Arroyo" }
+                new ApplicationUser() { UserName = "frankibem@rgs.com", FirstName = "Frank", LastName = "Ibem", Email = "frankibem@rgs.com" },
+                new ApplicationUser() { UserName = "joshuahernandez@rgs.com", FirstName = "Joshua", LastName = "Hernandez", Email = "joshuahernandez@rgs.com" },
+                new ApplicationUser() { UserName = "laurenjoness@rgs.com", FirstName = "Lauren", LastName = "Joness", Email = "laurenjoness@rgs.com" },
+                new ApplicationUser() { UserName = "clairegray@rgs.com", FirstName = "Claire", LastName = "Gray", Email = "clairegray@rgs.com" },
+                new ApplicationUser() { UserName = "norisrogers@rgs.com", FirstName = "Noris", LastName = "Rogers", Email = "norisrogers@rgs.com" },
+                new ApplicationUser() { UserName = "michaelarroyo@rgs.com", FirstName = "Michael", LastName = "Arroyo", Email = "michaelarroyo@rgs.com" }
             };
             CreateUsersAndAddToRole(students, roles[2]);
 

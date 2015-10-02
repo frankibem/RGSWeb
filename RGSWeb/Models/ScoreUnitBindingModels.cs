@@ -14,9 +14,9 @@ namespace RGSWeb.Models
         /// <remarks>Set to 0 if adding for the first time</remarks>
         public int Id { get; set; }
         /// <summary>
-        /// Id of the student
+        /// Username of the student
         /// </summary>
-        public string StudentId { get; set; }
+        public string StudentUserName { get; set; }
         /// <summary>
         /// Id of the work item
         /// </summary>

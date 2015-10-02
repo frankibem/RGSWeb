@@ -40,7 +40,7 @@ namespace RGSWeb.Controllers
 
             var result = db.Enrollments.Where(e => e.Class.Id == @class.Id).Select(e => new UserResultView()
             {
-                Id = e.Student.Id,
+                UserName = e.Student.UserName,
                 FirstName = e.Student.FirstName,
                 LastName = e.Student.LastName
             });
@@ -60,11 +60,11 @@ namespace RGSWeb.Controllers
             }
 
             // Ensure that the student and the class exist
-            var student = await userManager.FindByIdAsync(enroll.StudentId);
+            var student = await userManager.FindByNameAsync(enroll.StudentUserName);
             var @class = await db.Classes.FindAsync(enroll.ClassId);
             if(student == null || @class == null)
             {
-                return BadRequest("Incorrect student id or class id");
+                return BadRequest("Incorrect student username or class id");
             }
 
             // Check that the student is not already enrolled
@@ -83,6 +83,7 @@ namespace RGSWeb.Controllers
 
             return Ok(newEnroll);
         }
+
         /// <summary>
         /// Removes a student from a class.
         /// </summary>
@@ -95,7 +96,7 @@ namespace RGSWeb.Controllers
                 return BadRequest(ModelState);
             }
 
-            var student = await userManager.FindByIdAsync(enroll.StudentId);
+            var student = await userManager.FindByNameAsync(enroll.StudentUserName);
             var @class = await db.Classes.FindAsync(enroll.ClassId);
             if(student == null || @class == null)
             {
@@ -103,14 +104,14 @@ namespace RGSWeb.Controllers
             }
 
             // Ensure that the student is enrolled before removing
-            var status = db.Enrollments.Where(e => e.Class.Id == enroll.ClassId && e.Student.Id == enroll.StudentId).FirstOrDefault();
+            var status = db.Enrollments.Where(e => e.Class.Id == enroll.ClassId && e.Student.UserName == enroll.StudentUserName).FirstOrDefault();
             if(status == null)
             {
                 return NotFound();
             }
 
             // Delete all student related data
-            var scoreUnits = db.ScoreUnits.Where(sc => sc.Student.Id == enroll.StudentId);
+            var scoreUnits = db.ScoreUnits.Where(sc => sc.Student.UserName == enroll.StudentUserName);
             db.ScoreUnits.RemoveRange(scoreUnits);
             db.Enrollments.Remove(status);
             await db.SaveChangesAsync();

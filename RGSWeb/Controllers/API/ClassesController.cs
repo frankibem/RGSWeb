@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using RGSWeb.Models;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -19,8 +16,8 @@ namespace RGSWeb.Controllers
     {
         private ApplicationDbContext db;
         private ApplicationUserManager userManager;
-        private string teacherRole = "Teacher";
-        private string studentRole = "Student";
+        private const string teacherRole = "Teacher";
+        private const string studentRole = "Student";
 
         public ClassesController()
         {
@@ -41,34 +38,34 @@ namespace RGSWeb.Controllers
         /// If userId is the id of a student, returns a list of all classes that student is enrolled in.
         /// Otherwise if it is that of a teacher, returns a list of all classes taught by the teacher
         /// </summary>
-        /// <param name="userId">Id of a teacher/student</param>
+        /// <param name="userName">Id of a teacher/student</param>
         // TODO: Filter returned result to contain only pertinent information
-        public async Task<IHttpActionResult> GetClasses(string userId)
+        public async Task<IHttpActionResult> GetClasses(string userName)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByNameAsync(userName);
             if(user == null)
             {
-                throw new HttpRequestException("No user with id: " + userId);
+                throw new HttpRequestException("No user with id: " + userName);
             }
 
-            else if(await userManager.IsInRoleAsync(userId, studentRole))
+            else if(await userManager.IsInRoleAsync(user.Id, studentRole))
             {
                 var result = from enrollment in db.Enrollments
-                             where enrollment.Student.Id == userId
+                             where enrollment.Student.UserName == userName
                              select enrollment.Class;
                 return Ok(result);
             }
 
-            else if(await userManager.IsInRoleAsync(userId, teacherRole))
+            else if(await userManager.IsInRoleAsync(user.Id, teacherRole))
             {
-                return Ok(db.Classes.Where(@class => @class.Teacher.Id == userId));
+                return Ok(db.Classes.Where(@class => @class.Teacher.UserName == userName));
             }
 
-            return BadRequest("User Id not a valid student or teacher");
+            return BadRequest("UserName is not valid");
         }
 
         // POST: api/Classes
@@ -78,7 +75,7 @@ namespace RGSWeb.Controllers
         [ResponseType(typeof(Class))]
         public async Task<IHttpActionResult> PostClass(CreateClassBindingModel classvm)
         {
-            var teacher = await userManager.FindByIdAsync(classvm.TeacherId);
+            var teacher = await userManager.FindByNameAsync(classvm.TeacherUserName);
             if(!ModelState.IsValid || teacher == null)
             {
                 return BadRequest(ModelState);

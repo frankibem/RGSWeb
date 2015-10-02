@@ -18,7 +18,7 @@ namespace RGSWeb.Models
         [Required]
         public short Section { get; set; }
         [Required]
-        public string TeacherId { get; set; }
+        public string TeacherUserName { get; set; }
     }
 
     public class UpdateClassBindingModel

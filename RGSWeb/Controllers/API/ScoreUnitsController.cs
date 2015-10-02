@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using RGSWeb.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace RGSWeb.Controllers
 {
@@ -39,7 +40,7 @@ namespace RGSWeb.Controllers
             return Ok(db.ScoreUnits.Where(su => su.WorkItem.Id == workItemId).Select(su => new ScoreUnitBindingModel
             {
                 Id = su.Id,
-                StudentId = su.Student.Id,
+                StudentUserName = su.Student.UserName,
                 WorkItemId = su.WorkItem.Id,
                 Grade = su.Grade
             }));
@@ -81,8 +82,10 @@ namespace RGSWeb.Controllers
         private async Task ProcessScoreUnit(ScoreUnitBindingModel model)
         {
             // Check that no score unit already exists for this work item for the student
+            ApplicationUserManager userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+            var student = await userManager.FindByNameAsync(model.StudentUserName);
             var workItem = await db.WorkItems.FindAsync(model.WorkItemId);
-            var student = db.Users.Find(model.StudentId);
+
             if(workItem == null || student == null)
             {
                 throw new Exception("Could not match Id to existing entry");

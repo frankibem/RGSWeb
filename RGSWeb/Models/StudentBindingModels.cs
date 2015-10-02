@@ -10,7 +10,7 @@ namespace RGSWeb.Models
     public class EnrollmentBindingModel
     {
         [Required]
-        public string StudentId { get; set; }
+        public string StudentUserName { get; set; }
         [Required]
         public int ClassId { get; set; }
     }

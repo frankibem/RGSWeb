@@ -496,7 +496,7 @@
             If userId is the id of a student, returns a list of all classes that student is enrolled in.
             Otherwise if it is that of a teacher, returns a list of all classes taught by the teacher
             </summary>
-            <param name="userId">Id of a teacher/student</param>
+            <param name="userName">Id of a teacher/student</param>
         </member>
         <member name="M:RGSWeb.Controllers.ClassesController.PostClass(RGSWeb.Models.CreateClassBindingModel)">
             <summary>
@@ -582,9 +582,9 @@
             </summary>
             <remarks>Set to 0 if adding for the first time</remarks>
         </member>
-        <member name="P:RGSWeb.Models.ScoreUnitBindingModel.StudentId">
+        <member name="P:RGSWeb.Models.ScoreUnitBindingModel.StudentUserName">
             <summary>
-            Id of the student
+            Username of the student
             </summary>
         </member>
         <member name="P:RGSWeb.Models.ScoreUnitBindingModel.WorkItemId">
@@ -612,7 +612,7 @@
             Date by which the work item is due
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.TeacherId">
+        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.TeacherUserName">
             <summary>
             Id of the instructor for the class
             </summary>

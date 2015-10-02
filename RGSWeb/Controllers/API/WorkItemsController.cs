@@ -106,10 +106,10 @@ namespace RGSWeb.Controllers
                 return BadRequest(ModelState);
             }
 
-            ApplicationUser teacher = await userManager.FindByIdAsync(workItemvm.TeacherId);
+            ApplicationUser teacher = await userManager.FindByNameAsync(workItemvm.TeacherUserName);
             if(teacher == null)
             {
-                return BadRequest(workItemvm.TeacherId.ToString() + " is not a valid teacher id");
+                return BadRequest(workItemvm.TeacherUserName.ToString() + " is not a valid teacher username");
             }
 
             WorkItem workItem = new WorkItem

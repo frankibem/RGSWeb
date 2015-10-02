@@ -19,7 +19,7 @@ namespace RGSWeb.Models
         /// <summary>
         /// Id of the instructor for the class
         /// </summary>
-        public string TeacherId { get; set; }
+        public string TeacherUserName { get; set; }
         // TODO: Ask and if necessary, remove. We can assume max points is always 100
         /// <summary>
         /// Maximum points assignable for this work item
