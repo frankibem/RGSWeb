@@ -10,7 +10,8 @@ namespace RGSWeb.Models
     {
         private ApplicationUserManager UserManager;
         private RoleManager<IdentityRole> RoleManager;
-        private string password = "SuperSecurePassword100";
+        private string adminPwd = System.Configuration.ConfigurationManager.AppSettings["adminpwd"];
+        private string password = System.Configuration.ConfigurationManager.AppSettings["testpwd"];
 
         protected override void Seed(ApplicationDbContext context)
         {
@@ -30,13 +31,13 @@ namespace RGSWeb.Models
             // Create admin account if it doesn't exist
             string userName = "admin@raidergrader.com";
 
-            var user = new ApplicationUser();
-            user.UserName = userName;
-            var adminResult = UserManager.Create(user, password);
+            var admin = new ApplicationUser();
+            admin.UserName = userName;
+            var adminResult = UserManager.Create(admin, adminPwd);
 
             if(adminResult.Succeeded)
             {
-                var result = UserManager.AddToRole(user.Id, roles[0]);
+                var result = UserManager.AddToRole(admin.Id, roles[0]);
             }
 
             // Create some teachers
