@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace RGSWeb.Models
 {
-    public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+    public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
     {
         private ApplicationUserManager UserManager;
         private RoleManager<IdentityRole> RoleManager;
@@ -29,10 +29,7 @@ namespace RGSWeb.Models
             }
 
             // Create admin account if it doesn't exist
-            string userName = "admin@raidergrader.com";
-
-            var admin = new ApplicationUser();
-            admin.UserName = userName;
+            var admin = new ApplicationUser() { UserName = "admin@rgs.com", Email = "admin@rgs.com", FirstName = "Admin" };
             var adminResult = UserManager.Create(admin, adminPwd);
 
             if(adminResult.Succeeded)
