@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using RGSWeb.Models;
+using RGSWeb.ViewModels;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -31,7 +34,27 @@ namespace RGSWeb.Controllers
         /// </summary>
         public IHttpActionResult Get()
         {
-            return Ok(db.Classes);
+            List<ClassViewModel> result = new List<ClassViewModel>();
+            foreach(Class cl in db.Classes.Include(cl => cl.Teacher))
+            {
+                result.Add(GetCVM(cl));
+            }
+
+            return Ok(result);
+        }
+
+        private ClassViewModel GetCVM(Class klass)
+        {
+            return new ClassViewModel
+            {
+                Id = klass.Id,
+                Title = klass.Title,
+                Prefix = klass.Prefix,
+                CourseNumber = klass.CourseNumber,
+                Section = klass.Section,
+                TeacherName = klass.Teacher.LastName + ", " + klass.Teacher.FirstName
+
+            };
         }
 
         /// <summary>
@@ -47,25 +70,30 @@ namespace RGSWeb.Controllers
                 return BadRequest();
             }
             var user = await userManager.FindByNameAsync(userName);
+
             if(user == null)
             {
                 throw new HttpRequestException("No user with id: " + userName);
             }
 
-            else if(await userManager.IsInRoleAsync(user.Id, studentRole))
+            IQueryable<Class> classes = null;
+            if(await userManager.IsInRoleAsync(user.Id, studentRole))
             {
-                var result = from enrollment in db.Enrollments
-                             where enrollment.Student.UserName == userName
-                             select enrollment.Class;
-                return Ok(result);
+                classes = db.Enrollments.Where(e => e.Student.UserName == userName).Select(e => e.Class).Include(c => c.Teacher);
             }
 
             else if(await userManager.IsInRoleAsync(user.Id, teacherRole))
             {
-                return Ok(db.Classes.Where(@class => @class.Teacher.UserName == userName));
+                classes = db.Classes.Where(@class => @class.Teacher.UserName == userName).Include(c => c.Teacher);
             }
 
-            return BadRequest("UserName is not valid");
+            List<ClassViewModel> result = new List<ClassViewModel>();
+            foreach(Class cl in classes)
+            {
+                result.Add(GetCVM(cl));
+            }
+
+            return Ok(result);
         }
 
         // POST: api/Classes
