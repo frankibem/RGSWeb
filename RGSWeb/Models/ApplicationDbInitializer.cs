@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace RGSWeb.Models
 {
-    public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
+    public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
     {
         private ApplicationUserManager UserManager;
         private RoleManager<IdentityRole> RoleManager;
