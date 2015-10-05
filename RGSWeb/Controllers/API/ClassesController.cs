@@ -43,7 +43,8 @@ namespace RGSWeb.Controllers
             return Ok(result);
         }
 
-        private ClassViewModel GetCVM(Class klass)
+        [NonAction]
+        public static ClassViewModel GetCVM(Class klass)
         {
             return new ClassViewModel
             {
@@ -53,7 +54,6 @@ namespace RGSWeb.Controllers
                 CourseNumber = klass.CourseNumber,
                 Section = klass.Section,
                 TeacherName = klass.Teacher.LastName + ", " + klass.Teacher.FirstName
-
             };
         }
 
@@ -94,6 +94,24 @@ namespace RGSWeb.Controllers
             }
 
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Returns the class with the specified id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ClassViewModel> GetClass(int id)
+        {
+            var result = await db.Classes.Where(c => c.Id == id).Include(c => c.Teacher).FirstOrDefaultAsync();
+            if(result == null)
+            {
+                return null;
+            }
+            else
+            {
+                return GetCVM(result);
+            }
         }
 
         // POST: api/Classes
