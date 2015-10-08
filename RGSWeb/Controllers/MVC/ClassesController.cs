@@ -30,6 +30,18 @@ namespace RGSWeb.Controllers.MVC
             return View(await db.Classes.ToListAsync());
         }
 
+        public async Task<ActionResult> List(string name)
+        {
+            var user = await userManager.FindByNameAsync(name);
+            if(user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var result = await db.Enrollments.Where(e => e.Student.UserName == name).Select(e => e.Class).ToListAsync();
+            ViewBag.UserName = String.Format("{0}, {1}", user.LastName, user.FirstName);
+            return View(result);
+        }
+
         // GET: Classes/Details/5
         public async Task<ActionResult> Details(int? id)
         {
