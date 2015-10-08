@@ -130,6 +130,7 @@ namespace RGSWeb.Controllers
             Class @class = new Class
             {
                 Title = classvm.Title,
+                Prefix = classvm.Prefix,
                 CourseNumber = classvm.CourseNumber,
                 Section = classvm.Section,
                 Teacher = teacher

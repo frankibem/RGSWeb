@@ -8,12 +8,21 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RGSWeb.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace RGSWeb.Controllers.MVC
 {
+    [Authorize(Roles = "Admin")]
     public class ClassesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db;
+        private ApplicationUserManager userManager;
+
+        public ClassesController()
+        {
+            db = new ApplicationDbContext();
+            userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+        }
 
         // GET: Classes
         public async Task<ActionResult> Index()
@@ -24,12 +33,12 @@ namespace RGSWeb.Controllers.MVC
         // GET: Classes/Details/5
         public async Task<ActionResult> Details(int? id)
         {
-            if (id == null)
+            if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Class @class = await db.Classes.FindAsync(id);
-            if (@class == null)
+            if(@class == null)
             {
                 return HttpNotFound();
             }
@@ -47,27 +56,43 @@ namespace RGSWeb.Controllers.MVC
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Title,Prefix,CourseNumber,Section")] Class @class)
+        public async Task<ActionResult> Create([Bind(Include = "Title,Prefix,CourseNumber,Section,TeacherUserName")] CreateClassBindingModel @cvm)
         {
-            if (ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
-                db.Classes.Add(@class);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return View(cvm);
             }
 
-            return View(@class);
+            var teacher = await userManager.FindByNameAsync(cvm.TeacherUserName);
+            if(teacher == null)
+            {
+                // TODO: Add error for teacher user name
+                return View(cvm);
+            }
+
+            Class @class = new Class
+            {
+                Title = cvm.Title,
+                Prefix = cvm.Prefix,
+                CourseNumber = cvm.CourseNumber,
+                Section = cvm.Section,
+                Teacher = teacher
+            };
+
+            db.Classes.Add(@class);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Classes/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
+            if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Class @class = await db.Classes.FindAsync(id);
-            if (@class == null)
+            if(@class == null)
             {
                 return HttpNotFound();
             }
@@ -81,7 +106,7 @@ namespace RGSWeb.Controllers.MVC
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Prefix,CourseNumber,Section")] Class @class)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 db.Entry(@class).State = EntityState.Modified;
                 await db.SaveChangesAsync();
@@ -93,12 +118,12 @@ namespace RGSWeb.Controllers.MVC
         // GET: Classes/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
+            if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Class @class = await db.Classes.FindAsync(id);
-            if (@class == null)
+            if(@class == null)
             {
                 return HttpNotFound();
             }
@@ -118,7 +143,7 @@ namespace RGSWeb.Controllers.MVC
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if(disposing)
             {
                 db.Dispose();
             }
