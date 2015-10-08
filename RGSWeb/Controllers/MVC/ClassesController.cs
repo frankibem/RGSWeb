@@ -32,6 +32,11 @@ namespace RGSWeb.Controllers.MVC
 
         public async Task<ActionResult> List(string name)
         {
+            if(name == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             var user = await userManager.FindByNameAsync(name);
             if(user == null)
             {
