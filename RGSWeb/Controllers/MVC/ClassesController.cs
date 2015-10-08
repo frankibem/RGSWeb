@@ -37,8 +37,17 @@ namespace RGSWeb.Controllers.MVC
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var result = await db.Enrollments.Where(e => e.Student.UserName == name).Select(e => e.Class).ToListAsync();
-            ViewBag.UserName = String.Format("{0}, {1}", user.LastName, user.FirstName);
+
+            var result = new List<Class>();
+            if(await userManager.IsInRoleAsync(user.Id, "Teacher"))
+            {
+                result = await db.Classes.Where(cl => cl.Teacher.Id == user.Id).ToListAsync();
+            }
+            else if(await userManager.IsInRoleAsync(user.Id, "Student"))
+            {
+                result = await db.Enrollments.Where(e => e.Student.UserName == name).Select(e => e.Class).ToListAsync();
+            }
+            ViewBag.UserName = string.Format("{0}, {1}", user.LastName, user.FirstName);
             return View(result);
         }
 
