@@ -40,7 +40,7 @@ namespace RGSWeb.Models
             // Create some teachers
             ApplicationUser[] teachers = new ApplicationUser[]
             {
-                new ApplicationUser() { UserName = "susanmengel@rgs.com", FirstName = "Mengel", LastName = "Susan" , Email = "susanmengel@rgs.com"},
+                new ApplicationUser() { UserName = "susanmengel@rgs.com", FirstName = "Susan", LastName = "Mengel" , Email = "susanmengel@rgs.com"},
                 new ApplicationUser() { UserName = "michaelgelfond@rgs.com", FirstName = "Michael", LastName = "Gelfond", Email = "michaelgelfond@rgs.com" }
             };
             CreateUsersAndAddToRole(teachers, roles[1]);
@@ -80,7 +80,7 @@ namespace RGSWeb.Models
             // Create some work items
             WorkItem[] workItems = new WorkItem[]
             {
-                new WorkItem() { Title = "Do great stuff", AssignedBy = teachers[1], DueDate = new DateTime(2015, 02, 14), MaxPoints = 100, Description = "Make humans everywhere proud. Build a robot, find sasquatch, go to space..", Class = classes[1] },
+                new WorkItem() { Title = "Do great stuff", AssignedBy = teachers[1], DueDate = new DateTime(2015, 02, 14), MaxPoints = 100, Description = "Make humans everywhere proud. Build a robot, find sasquatch, go to space...", Class = classes[1] },
                 new WorkItem() { Title = "Prepare presentation for Iteration I", AssignedBy = teachers[0], DueDate = new DateTime(2015, 09, 11), MaxPoints = 100, Description = "Be ready, get some good use cases, add some pictures in there, present stuff.", Class = classes[0] }
             };
             context.WorkItems.AddRange(workItems);
