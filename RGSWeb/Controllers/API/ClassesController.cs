@@ -24,7 +24,7 @@ namespace RGSWeb.Controllers
 
         public ApplicationUserManager UserManager
         {
-            get { return Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            get { return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
             set { _userManager = value; }
         }
 

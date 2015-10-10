@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.Owin;
+using RGSWeb.Models;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -9,21 +10,19 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using RGSWeb.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace RGSWeb.Controllers
 {
     [Authorize]
     public class WorkItemsController : ApiController
     {
-        private ApplicationDbContext db;
-        private ApplicationUserManager userManager;
+        private ApplicationDbContext _db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
 
-        public WorkItemsController()
+        public ApplicationUserManager UserManager
         {
-            db = new ApplicationDbContext();
-            userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+            get { return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            set { _userManager = value; }
         }
 
         // TODO: Add [Authorize(Roles = "Admin")] when login is implemented
@@ -33,29 +32,30 @@ namespace RGSWeb.Controllers
         /// <remarks>Admin only</remarks>
         public IQueryable<WorkItem> GetWorkItems()
         {
-            return db.WorkItems;
+            return _db.WorkItems;
         }
 
         /// <summary>
         /// Returns all work items associated with a class
         /// </summary>
         /// <param name="classId">Id of the class</param>
+        [ResponseType(typeof(IEnumerable<WorkItem>))]
         public async Task<IHttpActionResult> GetWorkItems(int classId)
         {
-            var @class = await db.Classes.FindAsync(classId);
+            var @class = await _db.Classes.FindAsync(classId);
             if(@class == null)
             {
-                return BadRequest(classId.ToString() + " is not a valid class Id");
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + classId));
             }
 
-            return Ok(db.WorkItems.Where(wi => wi.Class.Id == classId));
+            return Ok(_db.WorkItems.Where(wi => wi.Class.Id == classId));
         }
 
         // PUT: api/WorkItems/5
         /// <summary>
         /// Update a work item
         /// </summary>
-        [ResponseType(typeof(void))]
+        [ResponseType(typeof(HttpStatusCode))]
         public async Task<IHttpActionResult> PutWorkItem(UpdateWorkItemViewModel workItemvm)
         {
             if(!ModelState.IsValid)
@@ -63,31 +63,27 @@ namespace RGSWeb.Controllers
                 return BadRequest(ModelState);
             }
 
-            WorkItem workItem = await db.WorkItems.FindAsync(workItemvm.Id);
+            WorkItem workItem = await _db.WorkItems.FindAsync(workItemvm.Id);
             if(workItem == null)
             {
-                return NotFound();
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No workitem with id: " + workItemvm.Id));
             }
 
             workItem.Title = workItemvm.Title;
             workItem.Description = workItemvm.Description;
             workItem.DueDate = workItemvm.DueDate;
             workItem.MaxPoints = workItemvm.MaxPoints;
-            db.Entry(workItem).State = EntityState.Modified;
+            _db.Entry(workItem).State = EntityState.Modified;
 
             try
             {
-                await db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch(DbUpdateConcurrencyException)
             {
                 if(!WorkItemExists(workItemvm.Id))
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No workitem with id: " + workItemvm.Id));
                 }
             }
 
@@ -106,10 +102,10 @@ namespace RGSWeb.Controllers
                 return BadRequest(ModelState);
             }
 
-            ApplicationUser teacher = await userManager.FindByNameAsync(workItemvm.TeacherUserName);
+            ApplicationUser teacher = await UserManager.FindByNameAsync(workItemvm.TeacherUserName);
             if(teacher == null)
             {
-                return BadRequest(workItemvm.TeacherUserName.ToString() + " is not a valid teacher username");
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No teacher with id: " + workItemvm.TeacherUserName));
             }
 
             WorkItem workItem = new WorkItem
@@ -121,8 +117,8 @@ namespace RGSWeb.Controllers
                 MaxPoints = workItemvm.MaxPoints
             };
 
-            db.WorkItems.Add(workItem);
-            await db.SaveChangesAsync();
+            _db.WorkItems.Add(workItem);
+            await _db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = workItem.Id }, workItem);
         }
@@ -135,17 +131,18 @@ namespace RGSWeb.Controllers
         [ResponseType(typeof(WorkItem))]
         public async Task<IHttpActionResult> DeleteWorkItem(int id)
         {
-            WorkItem workItem = await db.WorkItems.FindAsync(id);
+            WorkItem workItem = await _db.WorkItems.FindAsync(id);
             if(workItem == null)
             {
-                return NotFound();
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No workitem with id: " + id));
             }
 
-            var scoreUnits = db.ScoreUnits.Where(sc => sc.WorkItem.Id == workItem.Id);
-            db.ScoreUnits.RemoveRange(scoreUnits);
-            db.WorkItems.Remove(workItem);
-            await db.SaveChangesAsync();
+            // Remove all associated data
+            var scoreUnits = _db.ScoreUnits.Where(sc => sc.WorkItem.Id == workItem.Id);
+            _db.ScoreUnits.RemoveRange(scoreUnits);
+            _db.WorkItems.Remove(workItem);
 
+            await _db.SaveChangesAsync();
             return Ok(workItem);
         }
 
@@ -153,14 +150,14 @@ namespace RGSWeb.Controllers
         {
             if(disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool WorkItemExists(int id)
         {
-            return db.WorkItems.Count(e => e.Id == id) > 0;
+            return _db.WorkItems.Count(e => e.Id == id) > 0;
         }
     }
 }

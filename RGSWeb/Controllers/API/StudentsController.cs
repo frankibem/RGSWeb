@@ -1,31 +1,32 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.Owin;
 using RGSWeb.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace RGSWeb.Controllers
 {
     [Authorize]
     public class StudentsController : ApiController
     {
-        private ApplicationDbContext db;
-        private ApplicationUserManager userManager;
+        private ApplicationDbContext _db = new ApplicationDbContext();
+        private ApplicationUserManager _userManager;
 
-        public StudentsController()
+        public ApplicationUserManager UserManager
         {
-            db = new ApplicationDbContext();
-            userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+            get { return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            set { _userManager = value; }
         }
 
         /// <summary>
         /// Returns a list of all students in a class
         /// </summary>
         /// <param name="classId">Id of the class</param>
+        [ResponseType(typeof(IEnumerable<UserResultView>))]
         public async Task<IHttpActionResult> GetStudents(int classId)
         {
             if(!ModelState.IsValid)
@@ -33,13 +34,13 @@ namespace RGSWeb.Controllers
                 return BadRequest(ModelState);
             }
 
-            var @class = await db.Classes.FindAsync(classId);
+            var @class = await _db.Classes.FindAsync(classId);
             if(@class == null)
             {
-                return NotFound();
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + classId));
             }
 
-            var result = db.Enrollments.Where(e => e.Class.Id == @class.Id).Select(e => new UserResultView()
+            var result = _db.Enrollments.Where(e => e.Class.Id == @class.Id).Select(e => new UserResultView()
             {
                 Email = e.Student.Email,
                 FirstName = e.Student.FirstName,
@@ -53,6 +54,7 @@ namespace RGSWeb.Controllers
         /// </summary>
         /// <param name="enroll">Contains the student Id and class Id</param>
         [HttpPost]
+        [ResponseType(typeof(Enrollment))]
         public async Task<IHttpActionResult> EnrollStudent(EnrollmentBindingModel enroll)
         {
             if(!ModelState.IsValid)
@@ -61,26 +63,28 @@ namespace RGSWeb.Controllers
             }
 
             // Ensure that the student and the class exist
-            var student = await userManager.FindByNameAsync(enroll.StudentUserName);
-            var @class = await db.Classes.FindAsync(enroll.ClassId);
+            var student = await UserManager.FindByNameAsync(enroll.StudentUserName);
+            var @class = await _db.Classes.FindAsync(enroll.ClassId);
             if(student == null || @class == null)
             {
-                return BadRequest("Incorrect student username or class id");
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                    string.Format("Could not match student:{0} or class:{1} to existing records", enroll.StudentUserName, enroll.ClassId)));
             }
 
             // Check that the student is not already enrolled
-            var status = (from enrollment in db.Enrollments
+            var status = (from enrollment in _db.Enrollments
                           where enrollment.Student.Id == student.Id && enrollment.Class.Id == @class.Id
                           select enrollment).FirstOrDefault();
+
             if(status != null)
             {
-                return BadRequest("Student is already in class");
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Conflict, "Student is already enrolled in class"));
             }
 
             // Enroll the student
             Enrollment newEnroll = new Enrollment { Class = @class, Student = student };
-            db.Enrollments.Add(newEnroll);
-            await db.SaveChangesAsync();
+            _db.Enrollments.Add(newEnroll);
+            await _db.SaveChangesAsync();
 
             return Ok(newEnroll);
         }
@@ -97,26 +101,39 @@ namespace RGSWeb.Controllers
                 return BadRequest(ModelState);
             }
 
-            var student = await userManager.FindByNameAsync(enroll.StudentUserName);
-            var @class = await db.Classes.FindAsync(enroll.ClassId);
+            var student = await UserManager.FindByNameAsync(enroll.StudentUserName);
+            var @class = await _db.Classes.FindAsync(enroll.ClassId);
+
             if(student == null || @class == null)
             {
-                return BadRequest("Incorrect student id or class id");
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                    string.Format("Could not match student:{0} or class:{1} to existing records", enroll.StudentUserName, enroll.ClassId)));
             }
 
             // Ensure that the student is enrolled before removing
-            var status = db.Enrollments.Where(e => e.Class.Id == enroll.ClassId && e.Student.UserName == enroll.StudentUserName).FirstOrDefault();
+            var status = _db.Enrollments.Where(e => e.Class.Id == enroll.ClassId && e.Student.UserName == enroll.StudentUserName).FirstOrDefault();
             if(status == null)
             {
-                return NotFound();
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                    string.Format("{0} is not enrolled in class:{0}", enroll.StudentUserName, enroll.ClassId)));
             }
 
             // Delete all student related data
-            var scoreUnits = db.ScoreUnits.Where(sc => sc.Student.UserName == enroll.StudentUserName);
-            db.ScoreUnits.RemoveRange(scoreUnits);
-            db.Enrollments.Remove(status);
-            await db.SaveChangesAsync();
-            return StatusCode(HttpStatusCode.NoContent);
+            var scoreUnits = _db.ScoreUnits.Where(sc => sc.Student.UserName == enroll.StudentUserName);
+            _db.ScoreUnits.RemoveRange(scoreUnits);
+            _db.Enrollments.Remove(status);
+
+            await _db.SaveChangesAsync();
+            return Ok(status);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if(disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
