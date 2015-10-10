@@ -486,13 +486,6 @@
             Registers a new user
             </summary>
         </member>
-        <member name="M:RGSWeb.Controllers.ClassesController.GetClasses(System.String)">
-            <summary>
-            If userId is the id of a student, returns a list of all classes that student is enrolled in.
-            Otherwise if it is that of a teacher, returns a list of all classes taught by the teacher
-            </summary>
-            <param name="userName">Id of a teacher/student</param>
-        </member>
         <member name="M:RGSWeb.Controllers.ClassesController.GetClass(System.Int32)">
             <summary>
             Returns the class with the specified id
