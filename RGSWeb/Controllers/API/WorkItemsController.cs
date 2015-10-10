@@ -14,7 +14,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace RGSWeb.Controllers
 {
-    // TODO: Add [Authorize] when login is implemented
+    [Authorize]
     public class WorkItemsController : ApiController
     {
         private ApplicationDbContext db;

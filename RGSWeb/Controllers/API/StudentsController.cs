@@ -10,6 +10,7 @@ using System.Web.Http;
 
 namespace RGSWeb.Controllers
 {
+    [Authorize]
     public class StudentsController : ApiController
     {
         private ApplicationDbContext db;
@@ -40,7 +41,7 @@ namespace RGSWeb.Controllers
 
             var result = db.Enrollments.Where(e => e.Class.Id == @class.Id).Select(e => new UserResultView()
             {
-                UserName = e.Student.UserName,
+                Email = e.Student.Email,
                 FirstName = e.Student.FirstName,
                 LastName = e.Student.LastName
             });

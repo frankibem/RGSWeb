@@ -486,11 +486,6 @@
             Registers a new user
             </summary>
         </member>
-        <member name="M:RGSWeb.Controllers.ClassesController.Get">
-            <summary>
-            Returns all classes
-            </summary>
-        </member>
         <member name="M:RGSWeb.Controllers.ClassesController.GetClasses(System.String)">
             <summary>
             If userId is the id of a student, returns a list of all classes that student is enrolled in.

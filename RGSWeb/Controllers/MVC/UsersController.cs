@@ -11,8 +11,7 @@ using System.Web.Mvc;
 
 namespace RGSWeb.Controllers.MVC
 {
-    // Add Authorize Attribute for admin
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         ApplicationDbContext db;

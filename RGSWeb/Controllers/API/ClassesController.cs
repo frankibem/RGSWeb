@@ -14,7 +14,7 @@ using System.Web.Http.Description;
 
 namespace RGSWeb.Controllers
 {
-    // TODO: Add [Authorize] when login is implemented
+    [Authorize]
     public class ClassesController : ApiController
     {
         private ApplicationDbContext db;
@@ -26,21 +26,6 @@ namespace RGSWeb.Controllers
         {
             db = new ApplicationDbContext();
             userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
-        }
-
-        // TODO: Add [Authorize(Roles = "Admin")] when login is implemented
-        /// <summary>
-        /// Returns all classes
-        /// </summary>
-        public IHttpActionResult Get()
-        {
-            List<ClassViewModel> result = new List<ClassViewModel>();
-            foreach(Class cl in db.Classes.Include(cl => cl.Teacher))
-            {
-                result.Add(GetCVM(cl));
-            }
-
-            return Ok(result);
         }
 
         [NonAction]
@@ -62,7 +47,6 @@ namespace RGSWeb.Controllers
         /// Otherwise if it is that of a teacher, returns a list of all classes taught by the teacher
         /// </summary>
         /// <param name="userName">Id of a teacher/student</param>
-        // TODO: Filter returned result to contain only pertinent information
         public async Task<IHttpActionResult> GetClasses(string userName)
         {
             if(!ModelState.IsValid)
