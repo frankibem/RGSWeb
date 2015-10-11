@@ -520,10 +520,12 @@
             </summary>
             <param name="workItemId">Id of the score unit to get</param>
         </member>
-        <member name="M:RGSWeb.Controllers.ScoreUnitsController.PutScoreUnits(System.Collections.Generic.List{RGSWeb.Models.ScoreUnitBindingModel})">
+        <member name="M:RGSWeb.Controllers.ScoreUnitsController.ProcessScoreUnit(RGSWeb.Models.ScoreUnitBindingModel)">
             <summary>
-            Add or update grade(s)
+            Updates a scoreunit if it already exists, otherwise creates a new one for the associated student
             </summary>
+            <param name="model"></param>
+            <returns></returns>
         </member>
         <member name="M:RGSWeb.Controllers.StudentsController.GetStudents(System.Int32)">
             <summary>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using RGSWeb.Models;
 using System.Collections.Generic;
 using System.Data;
@@ -21,7 +22,7 @@ namespace RGSWeb.Controllers
 
         public ApplicationUserManager UserManager
         {
-            get { return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            get { return _userManager ?? new ApplicationUserManager(new UserStore<ApplicationUser>(_db)); }
             set { _userManager = value; }
         }
 
