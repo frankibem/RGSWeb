@@ -39,7 +39,8 @@ namespace RGSWeb.Controllers
                 Prefix = klass.Prefix,
                 CourseNumber = klass.CourseNumber,
                 Section = klass.Section,
-                TeacherName = klass.Teacher.LastName + ", " + klass.Teacher.FirstName
+                TeacherName = klass.Teacher.LastName + ", " + klass.Teacher.FirstName,
+                GradeDistribution = klass.GradeDistribution
             };
         }
 
@@ -119,7 +120,8 @@ namespace RGSWeb.Controllers
                 Prefix = classvm.Prefix,
                 CourseNumber = classvm.CourseNumber,
                 Section = classvm.Section,
-                Teacher = teacher
+                Teacher = teacher,
+                GradeDistribution = classvm.GradeDistribution
             };
 
             _db.Classes.Add(@class);
@@ -151,6 +153,7 @@ namespace RGSWeb.Controllers
             @class.Prefix = uclassvm.Prefix;
             @class.CourseNumber = uclassvm.CourseNumber;
             @class.Section = uclassvm.Section;
+            @class.GradeDistribution = uclassvm.GradeDistribution;
 
             _db.Entry(@class).State = EntityState.Modified;
             try

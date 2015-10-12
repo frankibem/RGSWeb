@@ -219,6 +219,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountBindingModels.cs" />
+    <Compile Include="Models\GradeDistribution.cs" />
+    <Compile Include="Models\WorkItemType.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />
     <Compile Include="Models\Announcement.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />

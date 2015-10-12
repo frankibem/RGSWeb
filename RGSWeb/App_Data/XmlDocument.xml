@@ -573,6 +573,16 @@
             </summary>
             <param name="id">Id of the work item to delete</param>
         </member>
+        <member name="T:RGSWeb.Models.GradeDistribution">
+            <summary>
+            Class to represent the weight distribution of the different types of workitems
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.WorkItemType">
+            <summary>
+            Class to represent the different types of workitems
+            </summary>
+        </member>
         <member name="P:RGSWeb.Models.ScoreUnitBindingModel.Id">
             <summary>
             Id of the score unit to update

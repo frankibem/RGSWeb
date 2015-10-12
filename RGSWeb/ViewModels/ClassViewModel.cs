@@ -1,4 +1,6 @@
-﻿namespace RGSWeb.ViewModels
+﻿using RGSWeb.Models;
+
+namespace RGSWeb.ViewModels
 {
     public class ClassViewModel
     {
@@ -8,5 +10,6 @@
         public short CourseNumber { get; set; }
         public short Section { get; set; }
         public string TeacherName { get; set; }
+        public GradeDistribution GradeDistribution { get; set; }
     }
 }

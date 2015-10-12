@@ -10,7 +10,7 @@ namespace RGSWeb.Models
         public DateTime DueDate { get; set; }
         public ApplicationUser AssignedBy { get; set; }
         public float MaxPoints { get; set; }
-        public float Weight { get; set; }
+        public WorkItemType Type { get; set; }
         public Class Class { get; set; }
     }
 }

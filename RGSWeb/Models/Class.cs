@@ -10,6 +10,7 @@ namespace RGSWeb.Models
         [Display(Name = "Course Number")]
         public short CourseNumber { get; set; }
         public short Section { get; set; }
+        public GradeDistribution GradeDistribution { get; set; }
         public ApplicationUser Teacher { get; set; }
     }
 }

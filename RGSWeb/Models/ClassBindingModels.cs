@@ -19,6 +19,8 @@ namespace RGSWeb.Models
         public short Section { get; set; }
         [Required]
         public string TeacherUserName { get; set; }
+        [Required]
+        public GradeDistribution GradeDistribution { get; set; }
     }
 
     public class UpdateClassBindingModel
@@ -33,5 +35,7 @@ namespace RGSWeb.Models
         public short CourseNumber { get; set; }
         [Required]
         public short Section { get; set; }
+        [Required]
+        public GradeDistribution GradeDistribution { get; set; }
     }
 }
