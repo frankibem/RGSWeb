@@ -31,7 +31,7 @@ namespace RGSWeb.Managers
         }
 
         /// <summary>
-        /// The UserManager to use for user related queries
+        /// The UserManager to use for user queries
         /// </summary>
         public ApplicationUserManager UserManager
         {
@@ -86,6 +86,37 @@ namespace RGSWeb.Managers
             }
 
             return classes;
+        }
+
+        /// <summary>
+        /// Returns all students who have been accepted into a class
+        /// </summary>
+        /// <param name="class">The class to return students for</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ApplicationUser>> GetAcceptedStudents(Class @class)
+        {
+            return await Db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == false).Select(e => e.Student).ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns all students who have not been accepted into class (their status is
+        ///  pending)
+        /// </summary>
+        /// <param name="class">The class to return students for</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ApplicationUser>> GetPendingStudents(Class @class)
+        {
+            return await Db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == true).Select(e => e.Student).ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns all students in a class (both pending and accepted)
+        /// </summary>
+        /// <param name="class">The class to return students for</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ApplicationUser>> GetAllStudents(Class @class)
+        {
+            return await Db.Enrollments.Where(e => e.Class.Id == @class.Id).Select(e => e.Student).ToListAsync();
         }
 
         /// <summary>
@@ -182,6 +213,59 @@ namespace RGSWeb.Managers
             Db.SaveChanges();
 
             return @class;
+        }
+
+        /// <summary>
+        /// Enrolls a new student into the class
+        /// </summary>
+        /// <param name="class">Class to enroll the student in</param>
+        /// <param name="student">Student to enroll in a class</param>
+        /// <returns>Null if the an enrollment has already been created. Otherwise, the
+        /// enrollment that was just created.</returns>
+        public async Task<Enrollment> CreateStudentEnrollment(Class @class, ApplicationUser student)
+        {
+            var status = await (from enrollment in Db.Enrollments
+                                where enrollment.Student.Id == student.Id && enrollment.Class.Id == @class.Id
+                                select enrollment).FirstOrDefaultAsync();
+
+            if(status != null)
+            {
+                return null;
+            }
+
+            // Enroll the student
+            Enrollment newEnroll = new Enrollment { Class = @class, Student = student };
+            Db.Enrollments.Add(newEnroll);
+            await Db.SaveChangesAsync();
+
+            return newEnroll;
+        }
+
+        /// <summary>
+        /// Deletes a students enrollment in a class
+        /// </summary>
+        /// <param name="class">The class the student is enrolled in or has applied for enrollment</param>
+        /// <param name="student">The student to unenroll from the class</param>
+        /// <returns>Null if the student is not enrolled in class. Otherwise, returns the
+        /// enrollment that was removed</returns>
+        /// <remarks>This clears all data associated with the student in this class and
+        /// cannot be undone</remarks>
+        public async Task<Enrollment> RemoveStudentEnrollment(Class @class, ApplicationUser student)
+        {
+            // Check that the student is actually enrolled
+            var status = await Db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Student.Id == student.Id).FirstOrDefaultAsync();
+            if(status == null)
+            {
+                return null;
+            }
+
+            // Delete all student related data
+            var scoreUnits = await Db.ScoreUnits.Where(sc => sc.Student.Id == student.Id).ToListAsync();
+            Db.ScoreUnits.RemoveRange(scoreUnits);
+            Db.Enrollments.Remove(status);
+            await Db.SaveChangesAsync();
+
+            return status;
         }
 
         /// <summary>
