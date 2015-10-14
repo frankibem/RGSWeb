@@ -218,6 +218,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Managers\ClassManager.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\GradeDistribution.cs" />
     <Compile Include="Models\WorkItemType.cs" />
