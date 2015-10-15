@@ -219,6 +219,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Managers\ClassManager.cs" />
+    <Compile Include="Managers\ScoreUnitManager.cs" />
     <Compile Include="Managers\WorkItemManager.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\GradeDistribution.cs" />
