@@ -237,33 +237,6 @@ namespace RGSWeb.Managers
         }
 
         /// <summary>
-        /// Deletes a students enrollment in a class
-        /// </summary>
-        /// <param name="class">The class the student is enrolled in or has applied for enrollment</param>
-        /// <param name="student">The student to unenroll from the class</param>
-        /// <returns>Null if the student is not enrolled in class. Otherwise, returns the
-        /// enrollment that was removed</returns>
-        /// <remarks>This clears all data associated with the student in this class and
-        /// cannot be undone</remarks>
-        public async Task<Enrollment> RemoveStudentEnrollment(Class @class, ApplicationUser student)
-        {
-            // Check that the student is actually enrolled
-            var status = await Db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Student.Id == student.Id).FirstOrDefaultAsync();
-            if(status == null)
-            {
-                return null;
-            }
-
-            // Delete all student related data
-            var scoreUnits = await Db.ScoreUnits.Where(sc => sc.Student.Id == student.Id).ToListAsync();
-            Db.ScoreUnits.RemoveRange(scoreUnits);
-            Db.Enrollments.Remove(status);
-            await Db.SaveChangesAsync();
-
-            return status;
-        }
-
-        /// <summary>
         /// Returns true if a class with the given id exists. Otherwise false
         /// </summary>
         /// <param name="id">Id of the class to search for</param>

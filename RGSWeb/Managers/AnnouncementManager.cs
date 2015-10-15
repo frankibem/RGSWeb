@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RGSWeb.Managers
 {
-    public class UserManager
+    public class AnnouncementManager
     {
     }
 }

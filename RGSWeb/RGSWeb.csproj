@@ -218,9 +218,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Managers\AnnouncementManager.cs" />
     <Compile Include="Managers\ClassManager.cs" />
+    <Compile Include="Managers\EnrollmentManager.cs" />
     <Compile Include="Managers\ScoreUnitManager.cs" />
-    <Compile Include="Managers\UserManager.cs" />
+    <Compile Include="Managers\AccountManager.cs" />
     <Compile Include="Managers\WorkItemManager.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\EnrollmentState.cs" />
