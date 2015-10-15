@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RGSWeb.Managers
@@ -94,7 +93,7 @@ namespace RGSWeb.Managers
         public async Task UpdateWorkItem(UpdateWorkItemViewModel uwvm)
         {
             // Find the WorkItem and update its properties
-            var workItem = await Db.WorkItems.FindAsync(uwvm);
+            var workItem = await Db.WorkItems.FindAsync(uwvm.Id);
             if(workItem == null)
             {
                 throw new Exception("No WorkItem with id: " + uwvm.Id);

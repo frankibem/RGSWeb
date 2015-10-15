@@ -27,7 +27,14 @@ namespace RGSWeb.Controllers
 
         public ClassManager ClassManager
         {
-            get { return _classManager ?? new ClassManager(_db, UserManager); }
+            get
+            {
+                if(_classManager == null)
+                {
+                    _classManager = new ClassManager(_db, UserManager);
+                }
+                return _classManager;
+            }
             set { _classManager = value; }
         }
 
