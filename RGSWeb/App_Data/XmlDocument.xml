@@ -517,6 +517,11 @@
             </summary>
             <param name="id">Id of the class to delete</param>
         </member>
+        <member name="T:RGSWeb.Controllers.ScoreUnitsController">
+            <summary>
+            API Controller for ScoreUnit related actions
+            </summary>
+        </member>
         <member name="M:RGSWeb.Controllers.ScoreUnitsController.GetScoreUnits">
             <summary>
             Returns all score-units
@@ -527,6 +532,11 @@
             Returns all score units associated with a work item
             </summary>
             <param name="workItemId">Id of the score unit to get</param>
+        </member>
+        <member name="M:RGSWeb.Controllers.ScoreUnitsController.PutScoreUnits(System.Collections.Generic.List{RGSWeb.Models.ScoreUnitBindingModel})">
+            <summary>
+            Add or update grade(s)
+            </summary>
         </member>
         <member name="M:RGSWeb.Controllers.ScoreUnitsController.ProcessScoreUnit(RGSWeb.Models.ScoreUnitBindingModel)">
             <summary>
@@ -898,6 +908,11 @@
             The student for which the enrollment applies
             </summary>
         </member>
+        <member name="T:RGSWeb.Models.ScoreUnitBindingModel">
+            <summary>
+            Alternative model for representing specific information from a ScoreUnit
+            </summary>
+        </member>
         <member name="P:RGSWeb.Models.ScoreUnitBindingModel.Id">
             <summary>
             Id of the score unit to update
@@ -918,6 +933,17 @@
             <summary>
             Student's grade
             </summary>
+        </member>
+        <member name="M:RGSWeb.Models.ScoreUnitBindingModel.#ctor">
+            <summary>
+            Default constructor to create a ScoreUnitBindingModel
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Models.ScoreUnitBindingModel.#ctor(RGSWeb.Models.ScoreUnit)">
+            <summary>
+            Creates a model from the given ScoreUnit
+            </summary>
+            <param name="scoreUnit">ScoreUnit to create the model from</param>
         </member>
         <member name="T:RGSWeb.Models.CreateWorkItemViewModel">
             <summary>

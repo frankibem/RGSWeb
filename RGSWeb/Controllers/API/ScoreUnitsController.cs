@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
+using RGSWeb.Managers;
 using RGSWeb.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -13,11 +14,28 @@ using System.Web.Http.Description;
 
 namespace RGSWeb.Controllers
 {
+    /// <summary>
+    /// API Controller for ScoreUnit related actions
+    /// </summary>
     [Authorize]
     public class ScoreUnitsController : ApiController
     {
         private ApplicationDbContext _db = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
+        private ScoreUnitManager _scoreUnitManager;
+
+        private ScoreUnitManager ScoreUnitManager
+        {
+            get
+            {
+                if(_scoreUnitManager == null)
+                {
+                    _scoreUnitManager = new ScoreUnitManager(_db, UserManager);
+                }
+                return _scoreUnitManager;
+            }
+            set { _scoreUnitManager = value; }
+        }
 
         public ApplicationUserManager UserManager
         {
@@ -41,22 +59,23 @@ namespace RGSWeb.Controllers
         /// </summary>
         /// <param name="workItemId">Id of the score unit to get</param>
         [ResponseType(typeof(IQueryable<ScoreUnitBindingModel>))]
-        public IEnumerable<ScoreUnitBindingModel> GetScoreUnits(int workItemId)
+        public async Task<IEnumerable<ScoreUnitBindingModel>> GetScoreUnits(int workItemId)
         {
-            return _db.ScoreUnits.Where(su => su.WorkItem.Id == workItemId).Select(su => new ScoreUnitBindingModel
+            var workItem = await _db.WorkItems.FindAsync(workItemId);
+            if(workItem == null)
             {
-                Id = su.Id,
-                StudentUserName = su.Student.UserName,
-                WorkItemId = su.WorkItem.Id,
-                Grade = su.Grade
-            });
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No WorkItem with id: " + workItemId));
+            }
+
+            var scoreUnits = await ScoreUnitManager.GetScoreUnits(workItem);
+            return scoreUnits.Select(su => new ScoreUnitBindingModel(su)).ToList();
         }
 
         // PUT: api/ScoreUnits
-        [ResponseType(typeof(HttpStatusCode))]
         /// <summary>
         /// Add or update grade(s)
         /// </summary>
+        [ResponseType(typeof(HttpStatusCode))]
         public async Task<IHttpActionResult> PutScoreUnits(List<ScoreUnitBindingModel> scoreUnits)
         {
             if(!ModelState.IsValid)
@@ -64,13 +83,13 @@ namespace RGSWeb.Controllers
                 return BadRequest(ModelState);
             }
 
-            if(scoreUnits.Count() != 0)
+            try
             {
-                foreach(var workItem in scoreUnits)
-                {
-                    await ProcessScoreUnit(workItem);
-                }
-                await _db.SaveChangesAsync();
+                await ScoreUnitManager.UpdateScoreUnits(scoreUnits);
+            }
+            catch(Exception ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
             }
 
             return StatusCode(HttpStatusCode.NoContent);
