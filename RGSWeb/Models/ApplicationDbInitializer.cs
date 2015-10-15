@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace RGSWeb.Models
 {
-    public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+    public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
     {
         private ApplicationUserManager UserManager;
         private RoleManager<IdentityRole> RoleManager;
@@ -60,8 +60,10 @@ namespace RGSWeb.Models
             // Create some classes
             Class[] classes = new Class[]
             {
-                new Class() { Title = "Software Engineering I", Prefix = "CS", CourseNumber = 3375, Section = 1, Teacher = teachers[0] },
-                new Class() { Title = "Theory of Automata", Prefix = "CS", CourseNumber = 3350, Section = 2, Teacher = teachers[1] }
+                new Class() { Title = "Software Engineering I", Prefix = "CS", CourseNumber = 3375, Section = 1, Teacher = teachers[0],
+                GradeDistribution = new GradeDistribution() { Exam = 40, Homework = 20, Quiz = 15, Project = 15, Other = 10 } },
+                new Class() { Title = "Theory of Automata", Prefix = "CS", CourseNumber = 3350, Section = 2, Teacher = teachers[1],
+                GradeDistribution = new GradeDistribution() { Exam = 30, Homework = 20, Quiz = 15, Project = 20, Other = 5 }  }
             };
             context.Classes.AddRange(classes);
             context.SaveChanges();

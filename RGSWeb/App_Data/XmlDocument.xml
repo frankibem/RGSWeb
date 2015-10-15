@@ -486,6 +486,14 @@
             Registers a new user
             </summary>
         </member>
+        <member name="M:RGSWeb.Controllers.ClassesController.GetClasses(System.String)">
+            <summary>
+            If userId is the id of a student, returns a list of all classes that student is enrolled in.
+            If it is that of a teacher, returns a list of all classes taught by the teacher
+            </summary>
+            <param name="userName">Id of teacher/student</param>
+            <returns></returns>
+        </member>
         <member name="M:RGSWeb.Controllers.ClassesController.GetClass(System.Int32)">
             <summary>
             Returns the class with the specified id
@@ -692,10 +700,53 @@
         </member>
         <member name="M:RGSWeb.Managers.ClassManager.ConvertToClassViewModel(RGSWeb.Models.Class)">
             <summary>
-            Converts the given class to a ClassViewModel
+            Converts a class to a view model which can be used for binding and display
             </summary>
-            <param name="class"></param>
+            <param name="class">The class to convert</param>
             <returns></returns>
+        </member>
+        <member name="T:RGSWeb.Managers.ScoreUnitManager">
+            <summary>
+            Manages all ScoreUnit related actions - creation, update, deletion...
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Managers.ScoreUnitManager.Db">
+            <summary>
+            The Database Context to use for queries
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Managers.ScoreUnitManager.UserManager">
+            <summary>
+            The UserManager to use for user queries
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.#ctor(RGSWeb.Models.ApplicationDbContext)">
+            <summary>
+            Creates a new ScoreUnitManager with the given Database context
+            </summary>
+            <param name="db">The Database context to use</param>
+        </member>
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.#ctor(RGSWeb.Models.ApplicationDbContext,RGSWeb.ApplicationUserManager)">
+            <summary>
+            Creates a new ScoreUnitManager with the given Database context and UserManager
+            </summary>
+            <param name="db">The Database context to use</param>
+            <param name="userManager">The UserManager to use</param>
+            <remarks>The UserManager must have been created from db</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.GetScoreUnits(RGSWeb.Models.WorkItem)">
+            <summary>
+            Returns all the ScoreUnits associated with the given WorkItem
+            </summary>
+            <param name="workItem">WorkItem for which to return ScoreUnits</param>
+            <returns>Creates new ScoreUnits for all students who have none</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.UpdateScoreUnits(System.Collections.Generic.List{RGSWeb.Models.ScoreUnitBindingModel})">
+            <summary>
+            Updates the ScoreUnits in the database using details from the modesl in the given list
+            </summary>
+            <param name="subm">List of models used for the update</param>
+            <exception cref="T:System.Exception">Throws an exception if one of the models could not be found</exception>
         </member>
         <member name="T:RGSWeb.Managers.WorkItemManager">
             <summary>
@@ -732,6 +783,12 @@
             </summary>
             <param name="cwvm">Model containing the detail of the WorkItem to create</param>
             <returns>Null if the class or teacher is not found, Otherwise, returns the WorkItem created</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.UpdateWorkItem(RGSWeb.Models.UpdateWorkItemViewModel)">
+            <summary>
+            Updates a WorkItem using details in the given model
+            </summary>
+            <param name="uwvm">Model containing details of the WorkItem to update</param>
         </member>
         <member name="M:RGSWeb.Managers.WorkItemManager.GetClassWorkItems(RGSWeb.Models.Class)">
             <summary>
@@ -929,6 +986,11 @@
         <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.MaxPoints">
             <summary>
             Maximum points assignable for this WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Type">
+            <summary>
+            The type of this WorkItem (e.g. Project, Exam...)
             </summary>
         </member>
     </members>

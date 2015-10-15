@@ -69,11 +69,6 @@ namespace RGSWeb.Managers
         /// (both pending and accepted).</remarks>
         public async Task<IEnumerable<Class>> GetUserClasses(ApplicationUser user)
         {
-            if(user == null)
-            {
-                return null;
-            }
-
             IQueryable<Class> classes = null;
             if(await UserManager.IsInRoleAsync(user.Id, studentRole))
             {
@@ -279,9 +274,9 @@ namespace RGSWeb.Managers
         }
 
         /// <summary>
-        /// Converts the given class to a ClassViewModel
+        /// Converts a class to a view model which can be used for binding and display
         /// </summary>
-        /// <param name="class"></param>
+        /// <param name="class">The class to convert</param>
         /// <returns></returns>
         public static ClassViewModel ConvertToClassViewModel(Class @class)
         {
