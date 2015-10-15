@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using RGSWeb.Managers;
 using RGSWeb.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,20 @@ namespace RGSWeb.Controllers
     {
         private ApplicationDbContext _db = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
+        private ClassManager _classManager;
+
+        public ClassManager ClassManager
+        {
+            get
+            {
+                if(_classManager == null)
+                {
+                    _classManager = new ClassManager(_db, UserManager);
+                }
+                return _classManager;
+            }
+            set { _classManager = value; }
+        }
 
         public ApplicationUserManager UserManager
         {
@@ -72,20 +87,11 @@ namespace RGSWeb.Controllers
                     string.Format("Could not match student:{0} or class:{1} to existing records", enroll.StudentUserName, enroll.ClassId)));
             }
 
-            // Check that the student is not already enrolled
-            var status = (from enrollment in _db.Enrollments
-                          where enrollment.Student.Id == student.Id && enrollment.Class.Id == @class.Id
-                          select enrollment).FirstOrDefault();
-
-            if(status != null)
+            var newEnroll = await ClassManager.CreateStudentEnrollment(@class, student);
+            if(newEnroll == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Conflict, "Student is already enrolled in class"));
             }
-
-            // Enroll the student
-            Enrollment newEnroll = new Enrollment { Class = @class, Student = student };
-            _db.Enrollments.Add(newEnroll);
-            await _db.SaveChangesAsync();
 
             return Ok(newEnroll);
         }
@@ -111,21 +117,14 @@ namespace RGSWeb.Controllers
                     string.Format("Could not match student:{0} or class:{1} to existing records", enroll.StudentUserName, enroll.ClassId)));
             }
 
-            // Ensure that the student is enrolled before removing
-            var status = _db.Enrollments.Where(e => e.Class.Id == enroll.ClassId && e.Student.UserName == enroll.StudentUserName).FirstOrDefault();
-            if(status == null)
+            var enrollment = await ClassManager.RemoveStudentEnrollment(@class, student);
+            if(enrollment == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
                     string.Format("{0} is not enrolled in class:{0}", enroll.StudentUserName, enroll.ClassId)));
             }
 
-            // Delete all student related data
-            var scoreUnits = _db.ScoreUnits.Where(sc => sc.Student.UserName == enroll.StudentUserName);
-            _db.ScoreUnits.RemoveRange(scoreUnits);
-            _db.Enrollments.Remove(status);
-
-            await _db.SaveChangesAsync();
-            return Ok(status);
+            return Ok(enrollment);
         }
 
         protected override void Dispose(bool disposing)
