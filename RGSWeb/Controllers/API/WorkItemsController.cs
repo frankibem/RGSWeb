@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 using RGSWeb.Models;
 using System.Collections.Generic;
 using System.Data;
@@ -54,7 +53,7 @@ namespace RGSWeb.Controllers
 
         // PUT: api/WorkItems/5
         /// <summary>
-        /// Update a work item
+        /// Update a WorkItem
         /// </summary>
         [ResponseType(typeof(HttpStatusCode))]
         public async Task<IHttpActionResult> PutWorkItem(UpdateWorkItemViewModel workItemvm)
@@ -93,7 +92,7 @@ namespace RGSWeb.Controllers
 
         // POST: api/WorkItems
         /// <summary>
-        /// Create a new work item
+        /// Create a new WorkItem
         /// </summary>
         [ResponseType(typeof(WorkItem))]
         public async Task<IHttpActionResult> PostWorkItem(CreateWorkItemViewModel workItemvm)
@@ -126,9 +125,9 @@ namespace RGSWeb.Controllers
 
         // DELETE: api/WorkItems/5
         /// <summary>
-        /// Delete a work item and all associated data
+        /// Delete a WorkItem and all associated data
         /// </summary>
-        /// <param name="id">Id of the work item to delete</param>
+        /// <param name="id">Id of the WorkItem to delete</param>
         [ResponseType(typeof(WorkItem))]
         public async Task<IHttpActionResult> DeleteWorkItem(int id)
         {

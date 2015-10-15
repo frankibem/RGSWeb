@@ -559,19 +559,210 @@
         </member>
         <member name="M:RGSWeb.Controllers.WorkItemsController.PutWorkItem(RGSWeb.Models.UpdateWorkItemViewModel)">
             <summary>
-            Update a work item
+            Update a WorkItem
             </summary>
         </member>
         <member name="M:RGSWeb.Controllers.WorkItemsController.PostWorkItem(RGSWeb.Models.CreateWorkItemViewModel)">
             <summary>
-            Create a new work item
+            Create a new WorkItem
             </summary>
         </member>
         <member name="M:RGSWeb.Controllers.WorkItemsController.DeleteWorkItem(System.Int32)">
             <summary>
-            Delete a work item and all associated data
+            Delete a WorkItem and all associated data
             </summary>
-            <param name="id">Id of the work item to delete</param>
+            <param name="id">Id of the WorkItem to delete</param>
+        </member>
+        <member name="T:RGSWeb.Managers.ClassManager">
+            <summary>
+            Manages all class related actions - creation, update, deletion...
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Managers.ClassManager.Db">
+            <summary>
+            The Database Context to use for queries
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Managers.ClassManager.UserManager">
+            <summary>
+            The UserManager to use for user queries
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.#ctor(RGSWeb.Models.ApplicationDbContext)">
+            <summary>
+            Creates a new ClassManager with the given Database context
+            </summary>
+            <param name="db">The Database context to use</param>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.#ctor(RGSWeb.Models.ApplicationDbContext,RGSWeb.ApplicationUserManager)">
+            <summary>
+            Creates a new ClassManager with the given Database context and UserManager
+            </summary>
+            <param name="db">The Database context to use</param>
+            <param name="userManager">The UserManager to use</param>
+            <remarks>The UserManager must have been created from db</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.GetUserClasses(RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Returns a list of classes for the user
+            </summary>
+            <param name="user"></param>
+            <remarks>If the user is a teacher, returns classes taught by the teacher.
+            If the user is a student, returns classes enrolled in by the student
+            (both pending and accepted).</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.GetAcceptedStudents(RGSWeb.Models.Class)">
+            <summary>
+            Returns all students who have been accepted into a class
+            </summary>
+            <param name="class">The class to return students for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.GetPendingStudents(RGSWeb.Models.Class)">
+            <summary>
+            Returns all students who have not been accepted into class (their status is
+             pending)
+            </summary>
+            <param name="class">The class to return students for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.GetAllStudents(RGSWeb.Models.Class)">
+            <summary>
+            Returns all students in a class (both pending and accepted)
+            </summary>
+            <param name="class">The class to return students for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.GetClassById(System.Int32)">
+            <summary>
+            Returns the class with the given id.
+            </summary>
+            <param name="id"></param>
+            <returns>Null if class is not found</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.CreateClass(RGSWeb.Models.CreateClassBindingModel)">
+            <summary>
+            Creates a new class from the given binding model
+            </summary>
+            <param name="classBindingModel">Model containing the details of the class
+            to create</param>
+            <returns>Null if teacher could not be found. Otherwise, returns the 
+            created class</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.UpdateClass(RGSWeb.Models.UpdateClassBindingModel)">
+            <summary>
+            Updates a class using details in the given model
+            </summary>
+            <param name="ucbm">Model containing details of the class to update</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.DeleteClass(System.Int32)">
+            <summary>
+            Deletes the class with the specified id.
+            </summary>
+            <param name="id"></param>
+            <returns>The class that was deleted</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.CreateStudentEnrollment(RGSWeb.Models.Class,RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Enrolls a new student into the class
+            </summary>
+            <param name="class">Class to enroll the student in</param>
+            <param name="student">Student to enroll in a class</param>
+            <returns>Null if the an enrollment has already been created. Otherwise, the
+            enrollment that was just created.</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.RemoveStudentEnrollment(RGSWeb.Models.Class,RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Deletes a students enrollment in a class
+            </summary>
+            <param name="class">The class the student is enrolled in or has applied for enrollment</param>
+            <param name="student">The student to unenroll from the class</param>
+            <returns>Null if the student is not enrolled in class. Otherwise, returns the
+            enrollment that was removed</returns>
+            <remarks>This clears all data associated with the student in this class and
+            cannot be undone</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.ClassExists(System.Int32)">
+            <summary>
+            Returns true if a class with the given id exists. Otherwise false
+            </summary>
+            <param name="id">Id of the class to search for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.ConvertToClassViewModel(RGSWeb.Models.Class)">
+            <summary>
+            Converts the given class to a ClassViewModel
+            </summary>
+            <param name="class"></param>
+            <returns></returns>
+        </member>
+        <member name="T:RGSWeb.Managers.WorkItemManager">
+            <summary>
+            Manages all Work-Item related actions - creation, update, deletion ...
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Managers.WorkItemManager.Db">
+            <summary>
+            The Database context to use for queries
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Managers.WorkItemManager.UserManager">
+            <summary>
+            The UserManager to use for queries
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.#ctor(RGSWeb.Models.ApplicationDbContext)">
+            <summary>
+            Creates a new WorkItemManager with the given Database context
+            </summary>
+            <param name="db">The Database context to use</param>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.#ctor(RGSWeb.Models.ApplicationDbContext,RGSWeb.ApplicationUserManager)">
+            <summary>
+            Creates a new WorkItemManager with the given Database context and UserManager
+            </summary>
+            <param name="db">The Database context to use</param>
+            <param name="userManager">The UserManager to use</param>
+            <remarks>The UserManager must have been created from db</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.CreateWorkItem(RGSWeb.Models.CreateWorkItemViewModel)">
+            <summary>
+            Creates a new WorkItem from the given model
+            </summary>
+            <param name="cwvm">Model containing the detail of the WorkItem to create</param>
+            <returns>Null if the class or teacher is not found, Otherwise, returns the WorkItem created</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.GetClassWorkItems(RGSWeb.Models.Class)">
+            <summary>
+            Returns all WorkItems that have been assigned in a class
+            </summary>
+            <param name="class">Class to return WorkItems for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.GetWorkItemById(System.Int32)">
+            <summary>
+            Returns the WorkItem with the given id.
+            </summary>
+            <param name="id">Id of the WorkItem to find</param>
+            <returns>Null if the WorkItem is not found</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.DeleteWorkItemById(System.Int32)">
+            <summary>
+            Deletes the WorkItem with the given id
+            </summary>
+            <param name="id">Id of the WorkItem to delete</param>
+            <returns>Null if the WorkItem could not be found. Otherwise,
+            returns the deleted WorkItem</returns>
+            <remarks>Delete all data associated with the WorkItem i.e. scoreunits</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.WorkItemExists(System.Int32)">
+            <summary>
+            Returns true if a WorkItem with the given id exists
+            and false otherwise
+            </summary>
+            <param name="id">The id of the WorkItem to search for</param>
+            <returns></returns>
         </member>
         <member name="T:RGSWeb.Models.GradeDistribution">
             <summary>
@@ -581,6 +772,72 @@
         <member name="T:RGSWeb.Models.WorkItemType">
             <summary>
             Class to represent the different types of workitems
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.Class">
+            <summary>
+             Represents a class in the raider grader system
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Class.Id">
+            <summary>
+            The id of the class
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Class.Title">
+            <summary>
+            The title of the Class
+            </summary>
+            <example>Advanced Biology</example>
+        </member>
+        <member name="P:RGSWeb.Models.Class.Prefix">
+            <summary>
+            The short prefix for the class
+            </summary>
+            <example>BIO</example>
+        </member>
+        <member name="P:RGSWeb.Models.Class.CourseNumber">
+            <summary>
+            The course number
+            </summary>
+            <example>3375</example>
+        </member>
+        <member name="P:RGSWeb.Models.Class.Section">
+            <summary>
+            The section of the class
+            </summary>
+            <example>1</example>
+        </member>
+        <member name="P:RGSWeb.Models.Class.GradeDistribution">
+            <summary>
+            The distribution of grades for this class for the different types
+            of work items
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Class.Teacher">
+            <summary>
+            The teacher who is going to teach this class
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Id">
+            <summary>
+            The Id of the enrollment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Class">
+            <summary>
+            The Class for which the enrollment applies
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Pending">
+            <summary>
+            Pending is true if the student has not been accepted to a class
+            and false otherwise
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Student">
+            <summary>
+            The student for which the enrollment applies
             </summary>
         </member>
         <member name="P:RGSWeb.Models.ScoreUnitBindingModel.Id">
@@ -604,19 +861,24 @@
             Student's grade
             </summary>
         </member>
+        <member name="T:RGSWeb.Models.CreateWorkItemViewModel">
+            <summary>
+            A model whose details are used to create a WorkItem
+            </summary>
+        </member>
         <member name="P:RGSWeb.Models.CreateWorkItemViewModel.Title">
             <summary>
-            The title of the work item
+            The title of the WorkItem
             </summary>
         </member>
         <member name="P:RGSWeb.Models.CreateWorkItemViewModel.Description">
             <summary>
-            A short description of the work item
+            A short description of the WorkItem
             </summary>
         </member>
         <member name="P:RGSWeb.Models.CreateWorkItemViewModel.DueDate">
             <summary>
-            Date by which the work item is due
+            Date by which the WorkItem is due
             </summary>
         </member>
         <member name="P:RGSWeb.Models.CreateWorkItemViewModel.TeacherUserName">
@@ -626,42 +888,47 @@
         </member>
         <member name="P:RGSWeb.Models.CreateWorkItemViewModel.MaxPoints">
             <summary>
-            Maximum points assignable for this work item
+            Maximum points assignable for this WorkItem
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.Weight">
+        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.ClassId">
             <summary>
-            Numerical weight of this work item
+            The id of the class to which the WorkItem should belong
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.Type">
+            <summary>
+            The type of this WorkItem (e.g. Project, Exam...)
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.UpdateWorkItemViewModel">
+            <summary>
+            A model whose detail are used to update a WorkItem
             </summary>
         </member>
         <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Id">
             <summary>
-            Id of the work item that is being updated
+            Id of the WorkItem that is being updated
             </summary>
         </member>
         <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Title">
             <summary>
-            The title of the work item
+            The title of the WorkItem
             </summary>
         </member>
         <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Description">
             <summary>
-            A short description of the work item
+            A short description of the WorkItem
             </summary>
         </member>
         <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.DueDate">
             <summary>
-            Date by which the work item is due
+            Date by which the WorkItem is due
             </summary>
         </member>
         <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.MaxPoints">
             <summary>
-            Maximum points assignable for this work item
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Weight">
-            <summary>
-            Numerical weight of this work item
+            Maximum points assignable for this WorkItem
             </summary>
         </member>
     </members>

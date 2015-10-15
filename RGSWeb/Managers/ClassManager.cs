@@ -168,7 +168,7 @@ namespace RGSWeb.Managers
         public async Task UpdateClass(UpdateClassBindingModel ucbm)
         {
             // Find the class and update its properties
-            var @class = Db.Classes.Find(ucbm.Id);
+            var @class = await Db.Classes.FindAsync(ucbm.Id);
             if(@class == null)
             {
                 throw new Exception("No class with id: " + ucbm.Id);

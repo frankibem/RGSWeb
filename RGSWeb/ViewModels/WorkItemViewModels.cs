@@ -2,61 +2,69 @@
 
 namespace RGSWeb.Models
 {
+    /// <summary>
+    /// A model whose details are used to create a WorkItem
+    /// </summary>
     public class CreateWorkItemViewModel
     {
         /// <summary>
-        /// The title of the work item
+        /// The title of the WorkItem
         /// </summary>
         public string Title { get; set; }
         /// <summary>
-        /// A short description of the work item
+        /// A short description of the WorkItem
         /// </summary>
         public string Description { get; set; }
         /// <summary>
-        /// Date by which the work item is due
+        /// Date by which the WorkItem is due
         /// </summary>
         public DateTime DueDate { get; set; }
         /// <summary>
         /// Id of the instructor for the class
         /// </summary>
         public string TeacherUserName { get; set; }
-        // TODO: Ask and if necessary, remove. We can assume max points is always 100
         /// <summary>
-        /// Maximum points assignable for this work item
+        /// Maximum points assignable for this WorkItem
         /// </summary>
         public float MaxPoints { get; set; }
         /// <summary>
-        /// Numerical weight of this work item
+        /// The id of the class to which the WorkItem should belong
         /// </summary>
-        public float Weight { get; set; }
+        public int ClassId { get; set; }
+        /// <summary>
+        /// The type of this WorkItem (e.g. Project, Exam...)
+        /// </summary>
+        public WorkItemType Type { get; set; }
     }
 
+    /// <summary>
+    /// A model whose detail are used to update a WorkItem
+    /// </summary>
     public class UpdateWorkItemViewModel
     {
         /// <summary>
-        /// Id of the work item that is being updated
+        /// Id of the WorkItem that is being updated
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// The title of the work item
+        /// The title of the WorkItem
         /// </summary>
         public string Title { get; set; }
         /// <summary>
-        /// A short description of the work item
+        /// A short description of the WorkItem
         /// </summary>
         public string Description { get; set; }
         /// <summary>
-        /// Date by which the work item is due
+        /// Date by which the WorkItem is due
         /// </summary>
         public DateTime DueDate { get; set; }
-        // TODO: Ask and if necessary, remove. We can assume max points is always 100
         /// <summary>
-        /// Maximum points assignable for this work item
+        /// Maximum points assignable for this WorkItem
         /// </summary>
         public float MaxPoints { get; set; }
         /// <summary>
-        /// Numerical weight of this work item
+        /// The type of this WorkItem (e.g. Project, Exam...)
         /// </summary>
-        public float Weight { get; set; }
+        public WorkItemType Type { get; set; }
     }
 }
