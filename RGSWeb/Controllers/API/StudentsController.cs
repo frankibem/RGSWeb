@@ -42,8 +42,9 @@ namespace RGSWeb.Controllers
         /// Returns a list of all students in a class
         /// </summary>
         /// <param name="classId">Id of the class</param>
+        /// <param name="state">The state of the students to obtain e.g. All, PendingOnly, AcceptedOnly</param>
         [ResponseType(typeof(IEnumerable<UserResultView>))]
-        public async Task<IHttpActionResult> GetStudents(int classId)
+        public async Task<IHttpActionResult> GetStudents(int classId, EnrollmentState? state)
         {
             if(!ModelState.IsValid)
             {
@@ -56,12 +57,21 @@ namespace RGSWeb.Controllers
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + classId));
             }
 
-            var result = _db.Enrollments.Where(e => e.Class.Id == @class.Id).Select(e => new UserResultView()
+            IEnumerable<ApplicationUser> users = null;
+            if(!state.HasValue || state == EnrollmentState.All)
             {
-                Email = e.Student.Email,
-                FirstName = e.Student.FirstName,
-                LastName = e.Student.LastName
-            });
+                users = await ClassManager.GetAllStudents(@class);
+            }
+            else if(state == EnrollmentState.AcceptedOnly)
+            {
+                users = await ClassManager.GetAcceptedStudents(@class);
+            }
+            else if(state == EnrollmentState.PendingOnly)
+            {
+                users = await ClassManager.GetPendingStudents(@class);
+            }
+
+            var result = users.Select(u => new UserResultView(u));
             return Ok(result);
         }
 

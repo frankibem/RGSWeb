@@ -220,8 +220,10 @@
     </Compile>
     <Compile Include="Managers\ClassManager.cs" />
     <Compile Include="Managers\ScoreUnitManager.cs" />
+    <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Managers\WorkItemManager.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
+    <Compile Include="Models\EnrollmentState.cs" />
     <Compile Include="Models\GradeDistribution.cs" />
     <Compile Include="Models\WorkItemType.cs" />
     <Compile Include="ViewModels\AccountViewModels.cs" />

@@ -74,8 +74,9 @@ namespace RGSWeb.Models
             {
                 enrollments.Add(new Enrollment() { Student = student, Class = classes[0] });
             }
-            enrollments.Add(new Enrollment() { Student = students[1], Class = classes[1] });
-            enrollments.Add(new Enrollment() { Student = students[3], Class = classes[1] });
+
+            enrollments.Add(new Enrollment() { Student = students[1], Class = classes[1], Pending = true });
+            enrollments.Add(new Enrollment() { Student = students[3], Class = classes[1], Pending = true });
             context.Enrollments.AddRange(enrollments);
             context.SaveChanges();
 

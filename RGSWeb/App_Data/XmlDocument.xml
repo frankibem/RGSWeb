@@ -535,11 +535,12 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:RGSWeb.Controllers.StudentsController.GetStudents(System.Int32)">
+        <member name="M:RGSWeb.Controllers.StudentsController.GetStudents(System.Int32,System.Nullable{RGSWeb.Models.EnrollmentState})">
             <summary>
             Returns a list of all students in a class
             </summary>
             <param name="classId">Id of the class</param>
+            <param name="state">The state of the students to obtain e.g. All, PendingOnly, AcceptedOnly</param>
         </member>
         <member name="M:RGSWeb.Controllers.StudentsController.EnrollStudent(RGSWeb.Models.EnrollmentBindingModel)">
             <summary>
