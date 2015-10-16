@@ -66,10 +66,12 @@ namespace RGSWeb.Managers
         public async Task<IEnumerable<ScoreUnit>> GetScoreUnits(WorkItem workItem)
         {
             ClassManager classManager = new ClassManager(Db, UserManager);
-            var students = await classManager.GetAllStudents(workItem.Class);
+            var students = await classManager.GetAcceptedStudents(workItem.Class);
 
             var newScoreUnits = new List<ScoreUnit>();
-            var scoreUnits = await Db.ScoreUnits.Where(su => su.WorkItem.Id == workItem.Id).ToDictionaryAsync(su => su.Student.Id);
+            var scoreUnits = await Db.ScoreUnits
+                .Include(su => su.Student)
+                .Where(su => su.WorkItem.Id == workItem.Id).ToDictionaryAsync(su => su.Student.Id);
 
             // Create new ScoreUnits for those who don't have one
             foreach(var student in students)

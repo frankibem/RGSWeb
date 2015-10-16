@@ -1,4 +1,5 @@
-﻿using RGSWeb.Models;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using RGSWeb.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -41,6 +42,7 @@ namespace RGSWeb.Managers
         public WorkItemManager(ApplicationDbContext db)
         {
             Db = db;
+            UserManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
         }
 
         /// <summary>
@@ -132,7 +134,7 @@ namespace RGSWeb.Managers
                 return null;
             }
 
-            return await Db.WorkItems.Where(e => e.Class.Id == @class.Id).ToListAsync();
+            return await Db.WorkItems.Where(e => e.Class.Id == @class.Id).Include(e => e.AssignedBy).ToListAsync();
         }
 
         /// <summary>

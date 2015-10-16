@@ -42,7 +42,7 @@ namespace RGSWeb.Controllers
         [ResponseType(typeof(IQueryable<ScoreUnitBindingModel>))]
         public async Task<IEnumerable<ScoreUnitBindingModel>> GetScoreUnits(int workItemId)
         {
-            var workItem = await _db.WorkItems.FindAsync(workItemId);
+            var workItem = await _db.WorkItems.Include(wi => wi.Class).Where(wi => wi.Id == workItemId).FirstOrDefaultAsync();
             if(workItem == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No WorkItem with id: " + workItemId));

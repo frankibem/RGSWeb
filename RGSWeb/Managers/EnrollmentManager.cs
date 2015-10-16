@@ -103,7 +103,7 @@ namespace RGSWeb.Managers
         /// <returns></returns>
         public async Task<IEnumerable<Enrollment>> GetAllEnrollmentsForClass(Class @class)
         {
-            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id).ToListAsync();
+            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id).Include(e => e.Student).ToListAsync();
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace RGSWeb.Managers
         /// <returns></returns>
         public async Task<IEnumerable<Enrollment>> GetPendingEnrollmentsForClass(Class @class)
         {
-            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == true).ToListAsync();
+            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == true).Include(e => e.Student).ToListAsync();
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace RGSWeb.Managers
         /// <returns></returns>
         public async Task<IEnumerable<Enrollment>> GetAcceptedEnrollmentsForClass(Class @class)
         {
-            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == false).ToListAsync();
+            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == false).Include(e => e.Student).ToListAsync();
         }
     }
 }

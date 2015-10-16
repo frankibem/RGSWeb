@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace RGSWeb.Models
 {
-    public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
+    public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
     {
         private ApplicationUserManager UserManager;
         private RoleManager<IdentityRole> RoleManager;
@@ -72,11 +72,11 @@ namespace RGSWeb.Models
             List<Enrollment> enrollments = new List<Enrollment>();
             foreach(var student in students)
             {
-                enrollments.Add(new Enrollment() { Student = student, Class = classes[0] });
+                enrollments.Add(new Enrollment() { Student = student, Class = classes[0], Pending = false });
             }
 
             enrollments.Add(new Enrollment() { Student = students[1], Class = classes[1], Pending = true });
-            enrollments.Add(new Enrollment() { Student = students[3], Class = classes[1], Pending = true });
+            enrollments.Add(new Enrollment() { Student = students[3], Class = classes[1], Pending = false });
             context.Enrollments.AddRange(enrollments);
             context.SaveChanges();
 
