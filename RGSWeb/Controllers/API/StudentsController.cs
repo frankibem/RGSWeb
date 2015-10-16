@@ -62,48 +62,17 @@ namespace RGSWeb.Controllers
             {
                 users = await ClassManager.GetAllStudents(@class);
             }
-            else if(state == EnrollmentState.AcceptedOnly)
+            else if(state == EnrollmentState.Accepted)
             {
                 users = await ClassManager.GetAcceptedStudents(@class);
             }
-            else if(state == EnrollmentState.PendingOnly)
+            else if(state == EnrollmentState.Pending)
             {
                 users = await ClassManager.GetPendingStudents(@class);
             }
 
             var result = users.Select(u => new UserResultView(u));
             return Ok(result);
-        }
-
-        /// <summary>
-        /// Enrolls a student in a class
-        /// </summary>
-        /// <param name="enroll">Contains the student Id and class Id</param>
-        [HttpPost]
-        [ResponseType(typeof(Enrollment))]
-        public async Task<IHttpActionResult> EnrollStudent(EnrollmentBindingModel enroll)
-        {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // Ensure that the student and the class exist
-            var student = await UserManager.FindByNameAsync(enroll.StudentUserName);
-            var @class = await _db.Classes.FindAsync(enroll.ClassId);
-            if(student == null || @class == null)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
-                    string.Format("Could not match student:{0} or class:{1} to existing records", enroll.StudentUserName, enroll.ClassId)));
-            }
-
-            var newEnroll = await ClassManager.CreateStudentEnrollment(@class, student);
-            if(newEnroll == null)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Conflict, "Student is already enrolled in class"));
-            }
-
-            return Ok(newEnroll);
         }
 
         /// <summary>

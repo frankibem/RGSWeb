@@ -209,32 +209,6 @@ namespace RGSWeb.Managers
         }
 
         /// <summary>
-        /// Enrolls a new student into the class
-        /// </summary>
-        /// <param name="class">Class to enroll the student in</param>
-        /// <param name="student">Student to enroll in a class</param>
-        /// <returns>Null if the an enrollment has already been created. Otherwise, the
-        /// enrollment that was just created.</returns>
-        public async Task<Enrollment> CreateStudentEnrollment(Class @class, ApplicationUser student)
-        {
-            var status = await (from enrollment in Db.Enrollments
-                                where enrollment.Student.Id == student.Id && enrollment.Class.Id == @class.Id
-                                select enrollment).FirstOrDefaultAsync();
-
-            if(status != null)
-            {
-                return null;
-            }
-
-            // Enroll the student
-            Enrollment newEnroll = new Enrollment { Class = @class, Student = student };
-            Db.Enrollments.Add(newEnroll);
-            await Db.SaveChangesAsync();
-
-            return newEnroll;
-        }
-
-        /// <summary>
         /// Returns true if a class with the given id exists. Otherwise false
         /// </summary>
         /// <param name="id">Id of the class to search for</param>

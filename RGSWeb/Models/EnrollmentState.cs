@@ -6,10 +6,4 @@ using System.Threading.Tasks;
 
 namespace RGSWeb.Models
 {
-    public enum EnrollmentState
-    {
-        All,
-        PendingOnly,
-        AcceptedOnly
-    }
 }

@@ -13,5 +13,6 @@ namespace RGSWeb.Models
         public string StudentUserName { get; set; }
         [Required]
         public int ClassId { get; set; }
+        public bool Accept { get; set; }
     }
 }
