@@ -84,36 +84,6 @@ namespace RGSWeb.Managers
         }
 
         /// <summary>
-        /// Returns all students who have been accepted into a class
-        /// </summary>
-        /// <param name="class">The class to return students for</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<ApplicationUser>> GetAcceptedStudents(Class @class)
-        {
-            return await Db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == false).Select(e => e.Student).ToListAsync();
-        }
-        /// <summary>
-        /// Returns all students who have not been accepted into class (their status is
-        ///  pending)
-        /// </summary>
-        /// <param name="class">The class to return students for</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<ApplicationUser>> GetPendingStudents(Class @class)
-        {
-            return await Db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == true).Select(e => e.Student).ToListAsync();
-        }
-
-        /// <summary>
-        /// Returns all students in a class (both pending and accepted)
-        /// </summary>
-        /// <param name="class">The class to return students for</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<ApplicationUser>> GetAllStudents(Class @class)
-        {
-            return await Db.Enrollments.Where(e => e.Class.Id == @class.Id).Select(e => e.Student).ToListAsync();
-        }
-
-        /// <summary>
         /// Returns the class with the given id.
         /// </summary>
         /// <param name="id"></param>
@@ -218,7 +188,7 @@ namespace RGSWeb.Managers
             return Db.Classes.Count(e => e.Id == id) > 0;
         }
 
-       /// <summary>
+        /// <summary>
         /// Converts a class to a view model which can be used for binding and display
         /// </summary>
         /// <param name="class">The class to convert</param>

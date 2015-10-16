@@ -2,8 +2,6 @@
 using RGSWeb.Managers;
 using RGSWeb.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,6 +13,7 @@ namespace RGSWeb.Controllers.API
     /// <summary>
     /// API controller for announcement related actions
     /// </summary>
+    [Authorize]
     public class AnnouncementsController : ApiController
     {
         private ApplicationDbContext _db = new ApplicationDbContext();

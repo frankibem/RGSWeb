@@ -213,7 +213,6 @@
     <Compile Include="Controllers\MVC\ClassesController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\API\ScoreUnitsController.cs" />
-    <Compile Include="Controllers\API\StudentsController.cs" />
     <Compile Include="Controllers\API\WorkItemsController.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
     <Compile Include="Controllers\MVC\UsersController.cs" />

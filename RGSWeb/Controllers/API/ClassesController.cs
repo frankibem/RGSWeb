@@ -12,6 +12,9 @@ using System.Web.Http.Description;
 
 namespace RGSWeb.Controllers
 {
+    /// <summary>
+    /// API controller for class related actions
+    /// </summary>
     [Authorize]
     public class ClassesController : ApiController
     {
@@ -19,23 +22,14 @@ namespace RGSWeb.Controllers
         private ApplicationUserManager _userManager;
         private ClassManager _classManager;
 
-        public ApplicationUserManager UserManager
+        /// <summary>
+        /// Creates a new default ClassesController
+        /// </summary>
+        public ClassesController()
         {
-            get { return _userManager ?? new ApplicationUserManager(new UserStore<ApplicationUser>(_db)); }
-            set { _userManager = value; }
-        }
-
-        public ClassManager ClassManager
-        {
-            get
-            {
-                if(_classManager == null)
-                {
-                    _classManager = new ClassManager(_db, UserManager);
-                }
-                return _classManager;
-            }
-            set { _classManager = value; }
+            _db = new ApplicationDbContext();
+            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>());
+            _classManager = new ClassManager(_db);
         }
 
         /// <summary>
@@ -47,18 +41,18 @@ namespace RGSWeb.Controllers
         [ResponseType(typeof(IEnumerable<ClassViewModel>))]
         public async Task<IHttpActionResult> GetClasses(string userName)
         {
-            if(!ModelState.IsValid)
+            if(!ModelState.IsValid || userName == null)
             {
                 return BadRequest();
             }
 
-            var user = await UserManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByNameAsync(userName);
             if(user == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No user with id: " + userName));
             }
 
-            var classes = await ClassManager.GetUserClasses(user);
+            var classes = await _classManager.GetUserClasses(user);
             List<ClassViewModel> result = new List<ClassViewModel>();
             foreach(Class cl in classes)
             {
@@ -71,11 +65,11 @@ namespace RGSWeb.Controllers
         /// <summary>
         /// Returns the class with the specified id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Id of the class to return</param>
         /// <returns></returns>
         public async Task<ClassViewModel> GetClass(int id)
         {
-            var result = await ClassManager.GetClassById(id);
+            var result = await _classManager.GetClassById(id);
             if(result == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + id));
@@ -98,7 +92,7 @@ namespace RGSWeb.Controllers
                 return BadRequest(ModelState);
             }
 
-            var @class = await ClassManager.CreateClass(classvm);
+            var @class = await _classManager.CreateClass(classvm);
             if(@class == null)
             {
                 return BadRequest(ModelState);
@@ -120,7 +114,7 @@ namespace RGSWeb.Controllers
 
             try
             {
-                await ClassManager.UpdateClass(uclassvm);
+                await _classManager.UpdateClass(uclassvm);
             }
             catch(Exception ex)
             {
@@ -138,7 +132,7 @@ namespace RGSWeb.Controllers
         [ResponseType(typeof(Class))]
         public async Task<Class> DeleteClass(int id)
         {
-            Class @class = await ClassManager.DeleteClass(id);
+            Class @class = await _classManager.DeleteClass(id);
             if(@class == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + id));
