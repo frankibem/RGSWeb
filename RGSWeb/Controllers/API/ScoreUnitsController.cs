@@ -24,33 +24,14 @@ namespace RGSWeb.Controllers
         private ApplicationUserManager _userManager;
         private ScoreUnitManager _scoreUnitManager;
 
-        private ScoreUnitManager ScoreUnitManager
-        {
-            get
-            {
-                if(_scoreUnitManager == null)
-                {
-                    _scoreUnitManager = new ScoreUnitManager(_db, UserManager);
-                }
-                return _scoreUnitManager;
-            }
-            set { _scoreUnitManager = value; }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get { return _userManager ?? new ApplicationUserManager(new UserStore<ApplicationUser>(_db)); }
-            set { _userManager = value; }
-        }
-
-        // GET: api/ScoreUnits
-        // TODO: Add [Authorize(Roles = "Admin")] when login is implemented
         /// <summary>
-        /// Returns all score-units
+        /// Creates a new default ScoreUnitsController
         /// </summary>
-        public IQueryable<ScoreUnit> GetScoreUnits()
+        public ScoreUnitsController()
         {
-            return _db.ScoreUnits;
+            _db = new ApplicationDbContext();
+            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>());
+            _scoreUnitManager = new ScoreUnitManager(_db);
         }
 
         // GET: api/ScoreUnits/5
@@ -67,7 +48,7 @@ namespace RGSWeb.Controllers
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No WorkItem with id: " + workItemId));
             }
 
-            var scoreUnits = await ScoreUnitManager.GetScoreUnits(workItem);
+            var scoreUnits = await _scoreUnitManager.GetScoreUnits(workItem);
             return scoreUnits.Select(su => new ScoreUnitBindingModel(su)).ToList();
         }
 
@@ -85,7 +66,7 @@ namespace RGSWeb.Controllers
 
             try
             {
-                await ScoreUnitManager.UpdateScoreUnits(scoreUnits);
+                await _scoreUnitManager.UpdateScoreUnits(scoreUnits);
             }
             catch(Exception ex)
             {
@@ -93,43 +74,6 @@ namespace RGSWeb.Controllers
             }
 
             return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        /// <summary>
-        /// Updates a scoreunit if it already exists, otherwise creates a new one for the associated student
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        private async Task ProcessScoreUnit(ScoreUnitBindingModel model)
-        {
-            // Check that no score unit already exists for this work item for the student
-            var student = await UserManager.FindByNameAsync(model.StudentUserName);
-            var workItem = await _db.WorkItems.FindAsync(model.WorkItemId);
-
-            if(workItem == null || student == null)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
-                    string.Format("Could not match workItem:{0} | student:{1} to existing records", model.WorkItemId, model.StudentUserName)));
-            }
-
-            var scoreUnit = await _db.ScoreUnits.Where(sc => sc.Student.Id == student.Id && sc.WorkItem.Id == workItem.Id).FirstOrDefaultAsync();
-            // If it exists already, update it
-            if(scoreUnit != null)
-            {
-                scoreUnit.Grade = model.Grade;
-                _db.Entry(scoreUnit).State = EntityState.Modified;
-            }
-            // Create a new score unit
-            else
-            {
-                scoreUnit = new ScoreUnit
-                {
-                    Student = student,
-                    WorkItem = workItem,
-                    Grade = model.Grade
-                };
-                _db.ScoreUnits.Add(scoreUnit);
-            }
         }
 
         protected override void Dispose(bool disposing)

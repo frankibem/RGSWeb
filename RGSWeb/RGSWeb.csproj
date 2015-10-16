@@ -207,6 +207,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\AnnouncementsController.cs" />
     <Compile Include="Controllers\API\ClassesController.cs" />
     <Compile Include="Controllers\API\EnrollmentsController.cs" />
     <Compile Include="Controllers\MVC\ClassesController.cs" />
