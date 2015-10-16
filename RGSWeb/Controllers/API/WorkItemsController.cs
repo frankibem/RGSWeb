@@ -3,7 +3,6 @@ using RGSWeb.Managers;
 using RGSWeb.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -12,40 +11,24 @@ using System.Web.Http.Description;
 
 namespace RGSWeb.Controllers
 {
+    /// <summary>
+    /// API controller for WorkItem related actions
+    /// </summary>
     [Authorize]
     public class WorkItemsController : ApiController
     {
         private ApplicationDbContext _db = new ApplicationDbContext();
         private ApplicationUserManager _userManager;
-        private WorkItemManager _wimanager;
+        private WorkItemManager _workItemManager;
 
-        public ApplicationUserManager UserManager
-        {
-            get { return _userManager ?? new ApplicationUserManager(new UserStore<ApplicationUser>(_db)); }
-            set { _userManager = value; }
-        }
-
-        public WorkItemManager WorkItemManager
-        {
-            get
-            {
-                if(_wimanager == null)
-                {
-                    _wimanager = new WorkItemManager(_db, UserManager);
-                }
-                return _wimanager;
-            }
-            set { _wimanager = value; }
-        }
-
-        // TODO: Add [Authorize(Roles = "Admin")] when login is implemented
         /// <summary>
-        /// Returns all work items
+        /// Create a new default WorkItemsController
         /// </summary>
-        /// <remarks>Admin only</remarks>
-        public IQueryable<WorkItem> GetWorkItems()
+        public WorkItemsController()
         {
-            return _db.WorkItems;
+            _db = new ApplicationDbContext();
+            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>());
+            _workItemManager = new WorkItemManager(_db);
         }
 
         /// <summary>
@@ -53,7 +36,7 @@ namespace RGSWeb.Controllers
         /// </summary>
         /// <param name="classId">Id of the class</param>
         [ResponseType(typeof(IEnumerable<WorkItem>))]
-        public async Task<IHttpActionResult> GetWorkItems(int classId)
+        public async Task<IHttpActionResult> GetClassWorkItems(int classId)
         {
             var @class = await _db.Classes.FindAsync(classId);
             if(@class == null)
@@ -61,7 +44,7 @@ namespace RGSWeb.Controllers
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + classId));
             }
 
-            return Ok(await WorkItemManager.GetClassWorkItems(@class));
+            return Ok(await _workItemManager.GetClassWorkItems(@class));
         }
 
         // PUT: api/WorkItems/5
@@ -78,7 +61,7 @@ namespace RGSWeb.Controllers
 
             try
             {
-                await WorkItemManager.UpdateWorkItem(workItemvm);
+                await _workItemManager.UpdateWorkItem(workItemvm);
             }
             catch(Exception ex)
             {
@@ -100,7 +83,7 @@ namespace RGSWeb.Controllers
                 return BadRequest(ModelState);
             }
 
-            var workItem = await WorkItemManager.CreateWorkItem(workItemvm);
+            var workItem = await _workItemManager.CreateWorkItem(workItemvm);
             if(workItem == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Could not match teacher or class to existing records"));
@@ -117,7 +100,7 @@ namespace RGSWeb.Controllers
         [ResponseType(typeof(WorkItem))]
         public async Task<WorkItem> DeleteWorkItem(int id)
         {
-            var workItem = await WorkItemManager.DeleteWorkItemById(id);
+            var workItem = await _workItemManager.DeleteWorkItemById(id);
             if(workItem == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No workitem with id: " + id));

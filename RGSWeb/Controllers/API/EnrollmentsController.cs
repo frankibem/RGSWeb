@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using RGSWeb.Managers;
 using RGSWeb.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
