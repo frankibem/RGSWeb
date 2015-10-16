@@ -1,4 +1,5 @@
 ﻿using RGSWeb.Models;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,15 @@ namespace RGSWeb.Managers
     public class EnrollmentManager
     {
         private ApplicationDbContext _db;
+
+        /// <summary>
+        /// Creates a new EnrollmentManager with the given database context
+        /// </summary>
+        /// <param name="db"></param>
+        public EnrollmentManager(ApplicationDbContext db)
+        {
+            _db = db;
+        }
 
         /// <summary>
         /// Enrolls a new student into the class
@@ -84,6 +94,36 @@ namespace RGSWeb.Managers
             }
 
             await _db.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Returns all enrollments both pending and not for a class
+        /// </summary>
+        /// <param name="class">The class to return the enrollments for</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Enrollment>> GetAllEnrollmentsForClass(Class @class)
+        {
+            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id).ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns all pending enrollments for the given class
+        /// </summary>
+        /// <param name="class">Class to return pending enrollments for</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Enrollment>> GetPendingEnrollmentsForClass(Class @class)
+        {
+            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == true).ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns all non-pending enrollments for the given class
+        /// </summary>
+        /// <param name="class">Class to return non-pending enrollments for</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Enrollment>> GetAcceptedEnrollmentsForClass(Class @class)
+        {
+            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == false).ToListAsync();
         }
     }
 }

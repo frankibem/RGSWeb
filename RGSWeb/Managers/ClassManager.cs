@@ -92,7 +92,6 @@ namespace RGSWeb.Managers
         {
             return await Db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == false).Select(e => e.Student).ToListAsync();
         }
-
         /// <summary>
         /// Returns all students who have not been accepted into class (their status is
         ///  pending)
@@ -159,7 +158,6 @@ namespace RGSWeb.Managers
         /// Updates a class using details in the given model
         /// </summary>
         /// <param name="ucbm">Model containing details of the class to update</param>
-        /// <returns></returns>
         public async Task UpdateClass(UpdateClassBindingModel ucbm)
         {
             // Find the class and update its properties
@@ -246,7 +244,7 @@ namespace RGSWeb.Managers
             return Db.Classes.Count(e => e.Id == id) > 0;
         }
 
-        /// <summary>
+       /// <summary>
         /// Converts a class to a view model which can be used for binding and display
         /// </summary>
         /// <param name="class">The class to convert</param>
