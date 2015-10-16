@@ -18,7 +18,7 @@ namespace RGSWeb.Controllers
     [Authorize]
     public class ClassesController : ApiController
     {
-        private ApplicationDbContext _db = new ApplicationDbContext();
+        private ApplicationDbContext _db;
         private ApplicationUserManager _userManager;
         private ClassManager _classManager;
 
@@ -28,7 +28,7 @@ namespace RGSWeb.Controllers
         public ClassesController()
         {
             _db = new ApplicationDbContext();
-            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>());
+            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_db));
             _classManager = new ClassManager(_db);
         }
 
