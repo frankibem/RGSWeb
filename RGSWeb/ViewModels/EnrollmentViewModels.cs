@@ -32,6 +32,11 @@ namespace RGSWeb.ViewModels
         public float Grade { get; set; }
 
         /// <summary>
+        /// Creates a view-model for an enrollment with default values
+        /// </summary>
+        public EnrollmentViewModel() { }
+
+        /// <summary>
         /// Creates a view-model for the given enrollment
         /// </summary>
         /// <param name="enrollment">Model containing the details for the view-model</param>

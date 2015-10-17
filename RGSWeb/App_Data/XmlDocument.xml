@@ -1341,6 +1341,11 @@
             </summary>
             <remarks>Default grade is -1 (pending). User's of this class must set it explicitly</remarks>
         </member>
+        <member name="M:RGSWeb.ViewModels.EnrollmentViewModel.#ctor">
+            <summary>
+            Creates a view-model for an enrollment with default values
+            </summary>
+        </member>
         <member name="M:RGSWeb.ViewModels.EnrollmentViewModel.#ctor(RGSWeb.Models.Enrollment)">
             <summary>
             Creates a view-model for the given enrollment
@@ -1369,7 +1374,7 @@
         </member>
         <member name="M:RGSWeb.ViewModels.UserViewModel.#ctor">
             <summary>
-            Creates a default UserViewModel
+            Creates a view-model for a user with default values
             </summary>
         </member>
         <member name="M:RGSWeb.ViewModels.UserViewModel.#ctor(RGSWeb.Models.ApplicationUser)">
@@ -1386,6 +1391,11 @@
         <member name="P:RGSWeb.ViewModels.StudentViewModel.Grade">
             <summary>
             The student's grade for the class
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.StudentViewModel.#ctor">
+            <summary>
+            Creates a view-model for a student with default values
             </summary>
         </member>
         <member name="M:RGSWeb.ViewModels.StudentViewModel.#ctor(RGSWeb.Models.ApplicationUser)">
@@ -1424,6 +1434,11 @@
         <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.Class">
             <summary>
             Class for which the announcement was created
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.AnnouncementViewModel.#ctor">
+            <summary>
+            Creates a view-moel for an announcement with default values
             </summary>
         </member>
         <member name="M:RGSWeb.ViewModels.AnnouncementViewModel.#ctor(RGSWeb.Models.Announcement)">
@@ -1478,6 +1493,11 @@
             The teacher who is going to teach this class
             </summary>
         </member>
+        <member name="M:RGSWeb.ViewModels.ClassViewModel.#ctor">
+            <summary>
+            Creates a view-model for a class with default values
+            </summary>
+        </member>
         <member name="M:RGSWeb.ViewModels.ClassViewModel.#ctor(RGSWeb.Models.Class)">
             <summary>
             Creates a ClassViewModel for the given class
@@ -1523,6 +1543,11 @@
         <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Class">
             <summary>
             The Class to which the WorkItem belongs
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.WorkItemViewModel.#ctor">
+            <summary>
+            Creates a view-model for a WorkItem with default values
             </summary>
         </member>
         <member name="M:RGSWeb.ViewModels.WorkItemViewModel.#ctor(RGSWeb.Models.WorkItem)">

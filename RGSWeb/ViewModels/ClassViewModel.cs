@@ -45,6 +45,11 @@ namespace RGSWeb.ViewModels
         public UserViewModel Teacher { get; set; }
 
         /// <summary>
+        /// Creates a view-model for a class with default values
+        /// </summary>
+        public ClassViewModel() { }
+
+        /// <summary>
         /// Creates a ClassViewModel for the given class
         /// </summary>
         /// <param name="class">Class to create view-model for</param>

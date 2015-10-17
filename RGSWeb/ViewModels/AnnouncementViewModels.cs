@@ -30,6 +30,11 @@ namespace RGSWeb.ViewModels
         public ClassViewModel Class { get; set; }
 
         /// <summary>
+        /// Creates a view-moel for an announcement with default values
+        /// </summary>
+        public AnnouncementViewModel() { }
+
+        /// <summary>
         /// Creates a view-model for the announcement
         /// </summary>
         /// <param name="announcement"></param>
