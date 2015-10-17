@@ -219,24 +219,5 @@ namespace RGSWeb.Managers
         {
             return Db.Classes.Count(e => e.Id == id) > 0;
         }
-
-        /// <summary>
-        /// Converts a class to a view model which can be used for binding and display
-        /// </summary>
-        /// <param name="class">The class to convert</param>
-        /// <returns></returns>
-        public static ClassViewModel ConvertToClassViewModel(Class @class)
-        {
-            return new ClassViewModel
-            {
-                Id = @class.Id,
-                Title = @class.Title,
-                Prefix = @class.Prefix,
-                CourseNumber = @class.CourseNumber,
-                Section = @class.Section,
-                TeacherName = @class.Teacher.LastName + ", " + @class.Teacher.FirstName,
-                GradeDistribution = @class.GradeDistribution
-            };
-        }
     }
 }

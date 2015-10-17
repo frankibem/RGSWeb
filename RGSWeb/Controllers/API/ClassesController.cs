@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Linq;
 
 namespace RGSWeb.Controllers
 {
@@ -53,12 +54,8 @@ namespace RGSWeb.Controllers
             }
 
             var classes = await _classManager.GetUserClasses(user);
-            List<ClassViewModel> result = new List<ClassViewModel>();
-            foreach(Class cl in classes)
-            {
-                result.Add(ClassManager.ConvertToClassViewModel(cl));
-            }
 
+            var result = classes.Select(@class => new ClassViewModel(@class));
             return Ok(result);
         }
 
@@ -76,7 +73,7 @@ namespace RGSWeb.Controllers
             }
             else
             {
-                return ClassManager.ConvertToClassViewModel(result);
+                return new ClassViewModel(result);
             }
         }
 
@@ -84,7 +81,7 @@ namespace RGSWeb.Controllers
         /// <summary>
         /// Creates a new class
         /// </summary>
-        [ResponseType(typeof(Class))]
+        [ResponseType(typeof(ClassViewModel))]
         public async Task<IHttpActionResult> PostClass(CreateClassBindingModel classvm)
         {
             if(!ModelState.IsValid)
@@ -97,7 +94,7 @@ namespace RGSWeb.Controllers
             {
                 return BadRequest(ModelState);
             }
-            return CreatedAtRoute("DefaultApi", new { id = @class.Id }, @class);
+            return CreatedAtRoute("DefaultApi", new { id = @class.Id }, new ClassViewModel(@class));
         }
 
         // PUT: api/Classes
@@ -129,15 +126,15 @@ namespace RGSWeb.Controllers
         /// Deletes a class
         /// </summary>
         /// <param name="id">Id of the class to delete</param>
-        [ResponseType(typeof(Class))]
-        public async Task<Class> DeleteClass(int id)
+        [ResponseType(typeof(ClassViewModel))]
+        public async Task<ClassViewModel> DeleteClass(int id)
         {
             Class @class = await _classManager.DeleteClass(id);
             if(@class == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + id));
             }
-            return @class;
+            return new ClassViewModel(@class);
         }
 
         protected override void Dispose(bool disposing)
