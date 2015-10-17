@@ -486,11 +486,119 @@
             Registers a new user
             </summary>
         </member>
+        <member name="T:RGSWeb.Controllers.API.AnnouncementsController">
+            <summary>
+            API controller for announcement related actions
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.AnnouncementsController.#ctor">
+            <summary>
+            Create a new default AnnouncementsController
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.AnnouncementsController.GetClassAnnouncements(System.Int32)">
+            <summary>
+            Returns all announcements made in a class
+            </summary>
+            <param name="classId">Id of the class</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.AnnouncementsController.PutAnnouncement(RGSWeb.Models.UpdateAnnouncementModel)">
+            <summary>
+            Update an announcement
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.AnnouncementsController.PostAnnouncement(RGSWeb.Models.CreateAnnouncementModel)">
+            <summary>
+            Create a new announcement
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.AnnouncementsController.DeleteWorkItem(System.Int32)">
+            <summary>
+            Delete an announcment by id
+            </summary>
+            <param name="id">Id of the announcement to delete</param>
+        </member>
+        <member name="T:RGSWeb.Controllers.API.EnrollmentsController">
+            <summary>
+            API controller for enrollment related actions
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.#ctor">
+            <summary>
+            Create a new default EnrollmentsController
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.GetEnrollments(System.Int32,System.Nullable{RGSWeb.Models.EnrollmentState})">
+            <summary>
+            Return a list of enrollments in a class
+            </summary>
+            <param name="classId">Id of the class</param>
+            <param name="state">The state of the students to obtain e.g. All, PendingOnly, AcceptedOnly</param>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.RequestEnrollment(RGSWeb.Models.EnrollmentBindingModel)">
+            <summary>
+            Request student enrollment into a class
+            </summary>
+            <param name="enroll">Contains the student Id and class Id</param>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.AcceptStudentEnrollment(RGSWeb.Models.EnrollmentBindingModel)">
+            <summary>
+            Accept/Reject a student's enrollment into a class
+            </summary>
+            <param name="enroll">Model containing the details of the enrollment</param>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.DropStudent(RGSWeb.Models.EnrollmentBindingModel)">
+            <summary>
+            Drops a student from a class
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Controllers.API.GradesController">
+            <summary>
+            API controller for grade related actions
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.GradesController.#ctor">
+            <summary>
+            Creates a new default GradesController
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.GradesController.GetGradesForClass(System.Int32)">
+            <summary>
+            Returns the grades of all students in a class
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.GradesController.GetStudentsGrade(System.String,System.Int32)">
+            <summary>
+            Returns a students grade in a class
+            </summary>
+            <param name="classId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:RGSWeb.Controllers.ClassesController">
+            <summary>
+            API controller for class related actions
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.ClassesController.#ctor">
+            <summary>
+            Creates a new default ClassesController
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.ClassesController.GetClasses(System.String)">
+            <summary>
+            If userId is the id of a student, returns a list of all classes that student is enrolled in.
+            If it is that of a teacher, returns a list of all classes taught by the teacher
+            </summary>
+            <param name="userName">Id of teacher/student</param>
+            <returns></returns>
+        </member>
         <member name="M:RGSWeb.Controllers.ClassesController.GetClass(System.Int32)">
             <summary>
             Returns the class with the specified id
             </summary>
-            <param name="id"></param>
+            <param name="id">Id of the class to return</param>
             <returns></returns>
         </member>
         <member name="M:RGSWeb.Controllers.ClassesController.PostClass(RGSWeb.Models.CreateClassBindingModel)">
@@ -509,9 +617,14 @@
             </summary>
             <param name="id">Id of the class to delete</param>
         </member>
-        <member name="M:RGSWeb.Controllers.ScoreUnitsController.GetScoreUnits">
+        <member name="T:RGSWeb.Controllers.ScoreUnitsController">
             <summary>
-            Returns all score-units
+            API Controller for ScoreUnit related actions
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.ScoreUnitsController.#ctor">
+            <summary>
+            Creates a new default ScoreUnitsController
             </summary>
         </member>
         <member name="M:RGSWeb.Controllers.ScoreUnitsController.GetScoreUnits(System.Int32)">
@@ -520,58 +633,507 @@
             </summary>
             <param name="workItemId">Id of the score unit to get</param>
         </member>
-        <member name="M:RGSWeb.Controllers.ScoreUnitsController.ProcessScoreUnit(RGSWeb.Models.ScoreUnitBindingModel)">
+        <member name="M:RGSWeb.Controllers.ScoreUnitsController.PutScoreUnits(System.Collections.Generic.List{RGSWeb.Models.ScoreUnitBindingModel})">
             <summary>
-            Updates a scoreunit if it already exists, otherwise creates a new one for the associated student
+            Updates grade(s) for a WorkItem
             </summary>
-            <param name="model"></param>
-            <returns></returns>
         </member>
-        <member name="M:RGSWeb.Controllers.StudentsController.GetStudents(System.Int32)">
+        <member name="T:RGSWeb.Controllers.WorkItemsController">
             <summary>
-            Returns a list of all students in a class
+            API controller for WorkItem related actions
             </summary>
-            <param name="classId">Id of the class</param>
         </member>
-        <member name="M:RGSWeb.Controllers.StudentsController.EnrollStudent(RGSWeb.Models.EnrollmentBindingModel)">
+        <member name="M:RGSWeb.Controllers.WorkItemsController.#ctor">
             <summary>
-            Enrolls a student in a class
+            Create a new default WorkItemsController
             </summary>
-            <param name="enroll">Contains the student Id and class Id</param>
         </member>
-        <member name="M:RGSWeb.Controllers.StudentsController.UnEnrollStudent(RGSWeb.Models.EnrollmentBindingModel)">
-            <summary>
-            Removes a student from a class.
-            </summary>
-            <param name="enroll">Contains the student Id and class Id</param>
-        </member>
-        <member name="M:RGSWeb.Controllers.WorkItemsController.GetWorkItems">
-            <summary>
-            Returns all work items
-            </summary>
-            <remarks>Admin only</remarks>
-        </member>
-        <member name="M:RGSWeb.Controllers.WorkItemsController.GetWorkItems(System.Int32)">
+        <member name="M:RGSWeb.Controllers.WorkItemsController.GetClassWorkItems(System.Int32)">
             <summary>
             Returns all work items associated with a class
             </summary>
             <param name="classId">Id of the class</param>
         </member>
-        <member name="M:RGSWeb.Controllers.WorkItemsController.PutWorkItem(RGSWeb.Models.UpdateWorkItemViewModel)">
+        <member name="M:RGSWeb.Controllers.WorkItemsController.PutWorkItem(RGSWeb.ViewModels.UpdateWorkItemViewModel)">
             <summary>
-            Update a work item
+            Update a WorkItem
             </summary>
         </member>
-        <member name="M:RGSWeb.Controllers.WorkItemsController.PostWorkItem(RGSWeb.Models.CreateWorkItemViewModel)">
+        <member name="M:RGSWeb.Controllers.WorkItemsController.PostWorkItem(RGSWeb.ViewModels.CreateWorkItemViewModel)">
             <summary>
-            Create a new work item
+            Create a new WorkItem
             </summary>
         </member>
         <member name="M:RGSWeb.Controllers.WorkItemsController.DeleteWorkItem(System.Int32)">
             <summary>
-            Delete a work item and all associated data
+            Delete a WorkItem and all associated data
             </summary>
-            <param name="id">Id of the work item to delete</param>
+            <param name="id">Id of the WorkItem to delete</param>
+        </member>
+        <member name="T:RGSWeb.Managers.AnnouncementManager">
+            <summary>
+            Manages all announcement related actions - creation, update, deletion ...
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Managers.AnnouncementManager.#ctor(RGSWeb.Models.ApplicationDbContext)">
+            <summary>
+            Creates a new AnnouncementManager with the given database context
+            </summary>
+            <param name="db"></param>
+        </member>
+        <member name="M:RGSWeb.Managers.AnnouncementManager.CreateAnnouncement(RGSWeb.Models.CreateAnnouncementModel)">
+            <summary>
+            Creates a new announcement from the given model
+            </summary>
+            <param name="cam"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.AnnouncementManager.UpdateAnnouncement(RGSWeb.Models.UpdateAnnouncementModel)">
+            <summary>
+            Updates an announcement using details in the given model
+            </summary>
+            <param name="uam">Model containing details of the announcement to update</param>
+        </member>
+        <member name="M:RGSWeb.Managers.AnnouncementManager.DeleteAnnouncement(System.Int32)">
+            <summary>
+            Deletes the announcement with the specified id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.AnnouncementManager.GetAnnouncementsForClass(RGSWeb.Models.Class)">
+            <summary>
+            Returns a list of announcements for the given class
+            </summary>
+            <param name="class"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.AnnouncementManager.AnnouncementExists(System.Int32)">
+            <summary>
+            Returns true if an announcement with the given id exists. Otherwise false
+            </summary>
+            <param name="id">Id of the announcement to search for</param>
+            <returns></returns>
+        </member>
+        <member name="T:RGSWeb.Managers.ClassManager">
+            <summary>
+            Manages all class related actions - creation, update, deletion...
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.#ctor(RGSWeb.Models.ApplicationDbContext)">
+            <summary>
+            Creates a new ClassManager with the given Database context
+            </summary>
+            <param name="db">The Database context to use</param>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.#ctor(RGSWeb.Models.ApplicationDbContext,RGSWeb.ApplicationUserManager)">
+            <summary>
+            Creates a new ClassManager with the given Database context and UserManager
+            </summary>
+            <param name="db">The Database context to use</param>
+            <param name="userManager">The UserManager to use</param>
+            <remarks>The UserManager must have been created from db</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.GetUserClasses(RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Returns a list of classes for the user
+            </summary>
+            <param name="user"></param>
+            <remarks>If the user is a teacher, returns classes taught by the teacher.
+            If the user is a student, returns classes enrolled in by the student
+            (both pending and accepted).</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.GetClassById(System.Int32)">
+            <summary>
+            Returns the class with the given id.
+            </summary>
+            <param name="id"></param>
+            <returns>Null if class is not found</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.CreateClass(RGSWeb.Models.CreateClassBindingModel)">
+            <summary>
+            Creates a new class from the given binding model
+            </summary>
+            <param name="classBindingModel">Model containing the details of the class
+            to create</param>
+            <returns>Null if teacher could not be found. Otherwise, returns the 
+            created class</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.UpdateClass(RGSWeb.Models.UpdateClassBindingModel)">
+            <summary>
+            Updates a class using details in the given model
+            </summary>
+            <param name="ucbm">Model containing details of the class to update</param>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.DeleteClass(System.Int32)">
+            <summary>
+            Deletes the class with the specified id.
+            </summary>
+            <param name="id"></param>
+            <returns>The class that was deleted</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.GetAcceptedStudents(RGSWeb.Models.Class)">
+            <summary>
+            Returns all students who have been accepted into a class
+            </summary>
+            <param name="class">The class to return students for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.GetPendingStudents(RGSWeb.Models.Class)">
+            <summary>
+            Returns all students who have not been accepted into class (their status is
+             pending)
+            </summary>
+            <param name="class">The class to return students for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.GetAllStudents(RGSWeb.Models.Class)">
+            <summary>
+            Returns all students in a class (both pending and accepted)
+            </summary>
+            <param name="class">The class to return students for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ClassManager.ClassExists(System.Int32)">
+            <summary>
+            Returns true if a class with the given id exists. Otherwise false
+            </summary>
+            <param name="id">Id of the class to search for</param>
+            <returns></returns>
+        </member>
+        <member name="T:RGSWeb.Managers.EnrollmentManager">
+            <summary>
+            Manages all enrollment related actions - request, removal and update.
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Managers.EnrollmentManager.#ctor(RGSWeb.Models.ApplicationDbContext)">
+            <summary>
+            Creates a new EnrollmentManager with the given database context
+            </summary>
+            <param name="db"></param>
+        </member>
+        <member name="M:RGSWeb.Managers.EnrollmentManager.RequestEnrollment(RGSWeb.Models.Class,RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Enrolls a new student into the class
+            </summary>
+            <param name="class">Class to enroll the student in</param>
+            <param name="student">Student to enroll in a class</param>
+            <returns>Null if the an enrollment has already been created. Otherwise, the
+            enrollment that was just created.</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.EnrollmentManager.DropStudent(RGSWeb.Models.Class,RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Deletes a students enrollment in a class
+            </summary>
+            <param name="class">The class the student is enrolled in or has applied for enrollment</param>
+            <param name="student">The student to unenroll from the class</param>
+            <returns>Null if the student is not enrolled in class. Otherwise, returns the
+            enrollment that was removed</returns>
+            <remarks>This clears all data associated with the student in this class and
+            cannot be undone</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.EnrollmentManager.AcceptEnrollment(RGSWeb.Models.Enrollment,System.Boolean)">
+            <summary>
+            Accepts or rejects a students enrollment into a class
+            </summary>
+            <param name="enrollment">The enrollment to update</param>
+            <param name="state">True if the student should be accepted. Otherwise false.</param>
+            <remarks>Deletes the enrollment if rejected</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.EnrollmentManager.GetAllEnrollmentsForClass(RGSWeb.Models.Class)">
+            <summary>
+            Returns all enrollments both pending and not for a class
+            </summary>
+            <param name="class">The class to return the enrollments for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.EnrollmentManager.GetPendingEnrollmentsForClass(RGSWeb.Models.Class)">
+            <summary>
+            Returns all pending enrollments for the given class
+            </summary>
+            <param name="class">Class to return pending enrollments for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.EnrollmentManager.GetAcceptedEnrollmentsForClass(RGSWeb.Models.Class)">
+            <summary>
+            Returns all non-pending enrollments for the given class
+            </summary>
+            <param name="class">Class to return non-pending enrollments for</param>
+            <returns></returns>
+        </member>
+        <member name="T:RGSWeb.Managers.GradeManager">
+            <summary>
+            Used to determine a students grade
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Managers.GradeManager.#ctor(RGSWeb.Models.ApplicationDbContext)">
+            <summary>
+            Creates a new GradeManager with the given Database context
+            </summary>
+            <param name="db">The Database context to use</param>
+        </member>
+        <member name="M:RGSWeb.Managers.GradeManager.GetStudentGradeAsync(RGSWeb.Models.ApplicationUser,RGSWeb.Models.Class)">
+            <summary>
+            Calculates and returns a students grade in a class
+            </summary>
+            <param name="student">To student to calculate a grade for</param>
+            <param name="class">The class that the student is enrolled in</param>
+            <returns></returns>
+        </member>
+        <member name="T:RGSWeb.Managers.ScoreUnitManager">
+            <summary>
+            Manages all ScoreUnit related actions - creation, update, deletion...
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.#ctor(RGSWeb.Models.ApplicationDbContext)">
+            <summary>
+            Creates a new ScoreUnitManager with the given Database context
+            </summary>
+            <param name="db">The Database context to use</param>
+        </member>
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.#ctor(RGSWeb.Models.ApplicationDbContext,RGSWeb.ApplicationUserManager)">
+            <summary>
+            Creates a new ScoreUnitManager with the given Database context and UserManager
+            </summary>
+            <param name="db">The Database context to use</param>
+            <param name="userManager">The UserManager to use</param>
+            <remarks>The UserManager must have been created from db</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.GetScoreUnits(RGSWeb.Models.WorkItem)">
+            <summary>
+            Returns all the ScoreUnits associated with the given WorkItem
+            </summary>
+            <param name="workItem">WorkItem for which to return ScoreUnits</param>
+            <returns>Creates new ScoreUnits for all students who have none</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.GetStudentScoreUnit(RGSWeb.Models.WorkItem,RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Returns a students ScoreUnit for a WorkItem
+            </summary>
+            <param name="workItem">WorkItem to return the ScoreUnit for</param>
+            <param name="student">Student to return the ScorreUnit for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.UpdateScoreUnits(System.Collections.Generic.List{RGSWeb.Models.ScoreUnitBindingModel})">
+            <summary>
+            Updates the ScoreUnits in the database using details from the modesl in the given list
+            </summary>
+            <param name="subm">List of models used for the update</param>
+            <exception cref="T:System.Exception">Throws an exception if one of the models could not be found</exception>
+        </member>
+        <member name="T:RGSWeb.Managers.WorkItemManager">
+            <summary>
+            Manages all Work-Item related actions - creation, update, deletion ...
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Managers.WorkItemManager.Db">
+            <summary>
+            The Database context to use for queries
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Managers.WorkItemManager.UserManager">
+            <summary>
+            The UserManager to use for queries
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.#ctor(RGSWeb.Models.ApplicationDbContext)">
+            <summary>
+            Creates a new WorkItemManager with the given Database context
+            </summary>
+            <param name="db">The Database context to use</param>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.#ctor(RGSWeb.Models.ApplicationDbContext,RGSWeb.ApplicationUserManager)">
+            <summary>
+            Creates a new WorkItemManager with the given Database context and UserManager
+            </summary>
+            <param name="db">The Database context to use</param>
+            <param name="userManager">The UserManager to use</param>
+            <remarks>The UserManager must have been created from db</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.CreateWorkItem(RGSWeb.ViewModels.CreateWorkItemViewModel)">
+            <summary>
+            Creates a new WorkItem from the given model
+            </summary>
+            <param name="cwvm">Model containing the detail of the WorkItem to create</param>
+            <returns>Null if the class or teacher is not found, Otherwise, returns the WorkItem created</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.UpdateWorkItem(RGSWeb.ViewModels.UpdateWorkItemViewModel)">
+            <summary>
+            Updates a WorkItem using details in the given model
+            </summary>
+            <param name="uwvm">Model containing details of the WorkItem to update</param>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.GetClassWorkItems(RGSWeb.Models.Class)">
+            <summary>
+            Returns all WorkItems that have been assigned in a class
+            </summary>
+            <param name="class">Class to return WorkItems for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.GetWorkItemById(System.Int32)">
+            <summary>
+            Returns the WorkItem with the given id.
+            </summary>
+            <param name="id">Id of the WorkItem to find</param>
+            <returns>Null if the WorkItem is not found</returns>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.DeleteWorkItemById(System.Int32)">
+            <summary>
+            Deletes the WorkItem with the given id
+            </summary>
+            <param name="id">Id of the WorkItem to delete</param>
+            <returns>Null if the WorkItem could not be found. Otherwise,
+            returns the deleted WorkItem</returns>
+            <remarks>Delete all data associated with the WorkItem i.e. scoreunits</remarks>
+        </member>
+        <member name="M:RGSWeb.Managers.WorkItemManager.WorkItemExists(System.Int32)">
+            <summary>
+            Returns true if a WorkItem with the given id exists
+            and false otherwise
+            </summary>
+            <param name="id">The id of the WorkItem to search for</param>
+            <returns></returns>
+        </member>
+        <member name="T:RGSWeb.Models.Announcement">
+            <summary>
+            Class to represent a class announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Announcement.Id">
+            <summary>
+            Id of the announcment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Announcement.Title">
+            <summary>
+            Title of the announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Announcement.Description">
+            <summary>
+            Description of the announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Announcement.CreatedOn">
+            <summary>
+            Creation time of the assignment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Announcement.Class">
+            <summary>
+            Class for which the announcement was created
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.CreateAnnouncementModel">
+            <summary>
+            Model used to create an announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.CreateAnnouncementModel.Title">
+            <summary>
+            Title of the announcment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.CreateAnnouncementModel.Description">
+            <summary>
+            Description of the announcement (main content)
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.CreateAnnouncementModel.ClassId">
+            <summary>
+            Id of the class for which to create the announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.CreateAnnouncementModel.CreatedOn">
+            <summary>
+            Creation time for the assignment
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.UpdateAnnouncementModel">
+            <summary>
+            Model used to update an announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.UpdateAnnouncementModel.Id">
+            <summary>
+            Id of the announcement to update
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.UpdateAnnouncementModel.Title">
+            <summary>
+            Updated announcement title
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.UpdateAnnouncementModel.Description">
+            <summary>
+            Updated announcement description
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.Enrollment">
+            <summary>
+            A class to represent student enrollment in a "class"
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Id">
+            <summary>
+            The Id of the enrollment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Class">
+            <summary>
+            The Class for which the enrollment applies
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Pending">
+            <summary>
+            Pending is true if the student has not been accepted to a class
+            and false otherwise
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Student">
+            <summary>
+            The student for which the enrollment applies
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.EnrollmentState">
+            <summary>
+            Represents the 
+            </summary>
+        </member>
+        <member name="F:RGSWeb.Models.EnrollmentState.All">
+            <summary>
+            Return all enrollments pending and non-pending
+            </summary>
+        </member>
+        <member name="F:RGSWeb.Models.EnrollmentState.Pending">
+            <summary>
+            Return only pending enrollments
+            </summary>
+        </member>
+        <member name="F:RGSWeb.Models.EnrollmentState.Accepted">
+            <summary>
+            Return only non-pending enrollments
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.EnrollmentBindingModel">
+            <summary>
+            Model used for requesting and accepting an enrollment by a student
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.EnrollmentBindingModel.StudentUserName">
+            <summary>
+            The student's username
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.EnrollmentBindingModel.ClassId">
+            <summary>
+            Id of the class for enrollment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.EnrollmentBindingModel.Accept">
+            <summary>
+            True if student should be accepted, false otherwise.
+            </summary>
         </member>
         <member name="T:RGSWeb.Models.GradeDistribution">
             <summary>
@@ -581,6 +1143,97 @@
         <member name="T:RGSWeb.Models.WorkItemType">
             <summary>
             Class to represent the different types of workitems
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.UserResultView">
+            <summary>
+            Alternative model to represent a user
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.UserResultView.Email">
+            <summary>
+            User's email address
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.UserResultView.FirstName">
+            <summary>
+            User's first name
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.UserResultView.LastName">
+            <summary>
+            User's last name
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Models.UserResultView.#ctor">
+            <summary>
+            Creates a default UserResultView
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Models.UserResultView.#ctor(RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Create a UserResultView for the given user
+            </summary>
+            <param name="user">Model to create the UserResultView from</param>
+        </member>
+        <member name="T:RGSWeb.Models.Class">
+            <summary>
+             Represents a class in the raider grader system
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Class.Id">
+            <summary>
+            The id of the class
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Class.Title">
+            <summary>
+            The title of the Class
+            </summary>
+            <example>Advanced Biology</example>
+        </member>
+        <member name="P:RGSWeb.Models.Class.Prefix">
+            <summary>
+            The short prefix for the class
+            </summary>
+            <example>BIO</example>
+        </member>
+        <member name="P:RGSWeb.Models.Class.CourseNumber">
+            <summary>
+            The course number
+            </summary>
+            <example>3375</example>
+        </member>
+        <member name="P:RGSWeb.Models.Class.Section">
+            <summary>
+            The section of the class
+            </summary>
+            <example>1</example>
+        </member>
+        <member name="P:RGSWeb.Models.Class.GradeDistribution">
+            <summary>
+            The distribution of grades for this class for the different types
+            of work items
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Class.Teacher">
+            <summary>
+            The teacher who is going to teach this class
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.ApplicationUser.FirstName">
+            <summary>
+            The user's first name
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.ApplicationUser.LastName">
+            <summary>
+            The user's last name
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.ScoreUnitBindingModel">
+            <summary>
+            Alternative model for representing specific information from a ScoreUnit
             </summary>
         </member>
         <member name="P:RGSWeb.Models.ScoreUnitBindingModel.Id">
@@ -604,64 +1257,348 @@
             Student's grade
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.Title">
+        <member name="M:RGSWeb.Models.ScoreUnitBindingModel.#ctor">
             <summary>
-            The title of the work item
+            Default constructor to create a ScoreUnitBindingModel
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.Description">
+        <member name="M:RGSWeb.Models.ScoreUnitBindingModel.#ctor(RGSWeb.Models.ScoreUnit)">
             <summary>
-            A short description of the work item
+            Creates a model from the given ScoreUnit
+            </summary>
+            <param name="scoreUnit">ScoreUnit to create the model from</param>
+        </member>
+        <member name="T:RGSWeb.Models.WorkItem">
+            <summary>
+            Model to represent a class work-item
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.DueDate">
+        <member name="P:RGSWeb.Models.WorkItem.Id">
             <summary>
-            Date by which the work item is due
+            Id of the WorkItem
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.TeacherUserName">
+        <member name="P:RGSWeb.Models.WorkItem.Title">
             <summary>
-            Id of the instructor for the class
+            The title of the WorkItem
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.MaxPoints">
+        <member name="P:RGSWeb.Models.WorkItem.Description">
             <summary>
-            Maximum points assignable for this work item
+            Description for the WorkItem
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.Weight">
+        <member name="P:RGSWeb.Models.WorkItem.DueDate">
             <summary>
-            Numerical weight of this work item
+            Date and time at which the WorkItem is due
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Id">
+        <member name="P:RGSWeb.Models.WorkItem.MaxPoints">
             <summary>
-            Id of the work item that is being updated
+            Maximum points attainable for this WorkItem
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Title">
+        <member name="P:RGSWeb.Models.WorkItem.Type">
             <summary>
-            The title of the work item
+            The type of the WorkItem
+            </summary>
+            <example>Exam</example>
+        </member>
+        <member name="P:RGSWeb.Models.WorkItem.Class">
+            <summary>
+            The Class to which the WorkItem belongs
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Description">
+        <member name="T:RGSWeb.ViewModels.EnrollmentViewModel">
             <summary>
-            A short description of the work item
+            View-model to represent an enrollment in a class
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.DueDate">
+        <member name="P:RGSWeb.ViewModels.EnrollmentViewModel.Id">
             <summary>
-            Date by which the work item is due
+            The Id of the enrollment
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.MaxPoints">
+        <member name="P:RGSWeb.ViewModels.EnrollmentViewModel.Class">
             <summary>
-            Maximum points assignable for this work item
+            The Class for which the enrollment applies
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Weight">
+        <member name="P:RGSWeb.ViewModels.EnrollmentViewModel.Pending">
             <summary>
-            Numerical weight of this work item
+            Pending is true if the student has not been accepted to a class
+            and false otherwise
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.EnrollmentViewModel.Student">
+            <summary>
+            The student for which the enrollment applies
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.EnrollmentViewModel.Grade">
+            <summary>
+            Students grade in the class
+            </summary>
+            <remarks>Default grade is -1 (pending). User's of this class must set it explicitly</remarks>
+        </member>
+        <member name="M:RGSWeb.ViewModels.EnrollmentViewModel.#ctor(RGSWeb.Models.Enrollment)">
+            <summary>
+            Creates a view-model for the given enrollment
+            </summary>
+            <param name="enrollment">Model containing the details for the view-model</param>
+        </member>
+        <member name="T:RGSWeb.ViewModels.UserViewModel">
+            <summary>
+            Base view-model for application users
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UserViewModel.FirstName">
+            <summary>
+            The user's first name
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UserViewModel.LastName">
+            <summary>
+            The user's last name
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UserViewModel.UserName">
+            <summary>
+            Username for user
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.UserViewModel.#ctor">
+            <summary>
+            Creates a default UserViewModel
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.UserViewModel.#ctor(RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Create a UserModel for an ApplicationUser
+            </summary>
+            <param name="user"></param>
+        </member>
+        <member name="T:RGSWeb.ViewModels.StudentViewModel">
+            <summary>
+            Model for representing a student
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.StudentViewModel.Grade">
+            <summary>
+            The student's grade for the class
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.StudentViewModel.#ctor(RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Creates a StudentViewModel for an ApplicationUser
+            </summary>
+            <param name="user">ApplicationUser to construct view-model from</param>
+            <param name="class">Class to calculate the students in</param>
+            <param name="manager">Grademanager to calculate student's grade</param>
+        </member>
+        <member name="T:RGSWeb.ViewModels.AnnouncementViewModel">
+            <summary>
+            View-model to represent an announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.Id">
+            <summary>
+            Id of the announcment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.Title">
+            <summary>
+            Title of the announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.Description">
+            <summary>
+            Description of the announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.CreatedOn">
+            <summary>
+            Creation time of the assignment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.Class">
+            <summary>
+            Class for which the announcement was created
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.AnnouncementViewModel.#ctor(RGSWeb.Models.Announcement)">
+            <summary>
+            Creates a view-model for the announcement
+            </summary>
+            <param name="announcement"></param>
+        </member>
+        <member name="T:RGSWeb.ViewModels.ClassViewModel">
+            <summary>
+            View-model to represent a class
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.ClassViewModel.Id">
+            <summary>
+            The id of the class
+            </summary>
+            <example>1s</example>
+        </member>
+        <member name="P:RGSWeb.ViewModels.ClassViewModel.Title">
+            <summary>
+            The title of the Class
+            </summary>
+            <example>Advanced Biology</example>
+        </member>
+        <member name="P:RGSWeb.ViewModels.ClassViewModel.Prefix">
+            <summary>
+            The short prefix for the class
+            </summary>
+            <example>BIO</example>
+        </member>
+        <member name="P:RGSWeb.ViewModels.ClassViewModel.CourseNumber">
+            <summary>
+            The course number
+            </summary>
+            <example>3375</example>
+        </member>
+        <member name="P:RGSWeb.ViewModels.ClassViewModel.Section">
+            <summary>
+            The section of the class
+            </summary>
+            <example>1</example>
+        </member>
+        <member name="P:RGSWeb.ViewModels.ClassViewModel.GradeDistribution">
+            <summary>
+            The distribution of grades for this class for the different types
+            of work items
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.ClassViewModel.Teacher">
+            <summary>
+            The teacher who is going to teach this class
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.ClassViewModel.#ctor(RGSWeb.Models.Class)">
+            <summary>
+            Creates a ClassViewModel for the given class
+            </summary>
+            <param name="class">Class to create view-model for</param>
+        </member>
+        <member name="T:RGSWeb.ViewModels.WorkItemViewModel">
+            <summary>
+            View-model to represent a WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Id">
+            <summary>
+            Id of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Title">
+            <summary>
+            The title of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Description">
+            <summary>
+            Description for the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.DueDate">
+            <summary>
+            Date and time at which the WorkItem is due
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.MaxPoints">
+            <summary>
+            Maximum points attainable for this WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Type">
+            <summary>
+            The type of the WorkItem
+            </summary>
+            <example>Exam</example>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Class">
+            <summary>
+            The Class to which the WorkItem belongs
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.WorkItemViewModel.#ctor(RGSWeb.Models.WorkItem)">
+            <summary>
+            Creates a view-model for the given WorkItem
+            </summary>
+            <param name="workItem">Model after which the view-model is created</param>
+        </member>
+        <member name="T:RGSWeb.ViewModels.CreateWorkItemViewModel">
+            <summary>
+            A model whose details are used to create a WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.Title">
+            <summary>
+            The title of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.Description">
+            <summary>
+            A short description of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.DueDate">
+            <summary>
+            Date by which the WorkItem is due
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.MaxPoints">
+            <summary>
+            Maximum points assignable for this WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.ClassId">
+            <summary>
+            The id of the class to which the WorkItem should belong
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.Type">
+            <summary>
+            The type of this WorkItem (e.g. Project, Exam...)
+            </summary>
+        </member>
+        <member name="T:RGSWeb.ViewModels.UpdateWorkItemViewModel">
+            <summary>
+            A model whose detail are used to update a WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.Id">
+            <summary>
+            Id of the WorkItem that is being updated
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.Title">
+            <summary>
+            The title of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.Description">
+            <summary>
+            A short description of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.DueDate">
+            <summary>
+            Date by which the WorkItem is due
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.MaxPoints">
+            <summary>
+            Maximum points assignable for this WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.Type">
+            <summary>
+            The type of this WorkItem (e.g. Project, Exam...)
             </summary>
         </member>
     </members>

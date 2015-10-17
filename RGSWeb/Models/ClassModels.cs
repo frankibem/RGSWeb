@@ -1,17 +1,20 @@
-﻿using RGSWeb.Models;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace RGSWeb.ViewModels
+namespace RGSWeb.Models
 {
     /// <summary>
-    /// View-model to represent a class
+    ///  Represents a class in the raider grader system
     /// </summary>
-    public class ClassViewModel
+    public class Class
     {
         /// <summary>
         /// The id of the class
         /// </summary>
-        /// <example>1s</example>
         public int Id { get; set; }
         /// <summary>
         /// The title of the Class
@@ -42,24 +45,38 @@ namespace RGSWeb.ViewModels
         /// <summary>
         /// The teacher who is going to teach this class
         /// </summary>
-        public UserViewModel Teacher { get; set; }
+        public ApplicationUser Teacher { get; set; }
+    }
 
-        /// <summary>
-        /// Creates a ClassViewModel for the given class
-        /// </summary>
-        /// <param name="class">Class to create view-model for</param>
-        public ClassViewModel(Class @class)
-        {
-            if(@class != null)
-            {
-                Id = @class.Id;
-                Title = @class.Title;
-                Prefix = @class.Prefix;
-                CourseNumber = @class.CourseNumber;
-                Section = @class.Section;
-                GradeDistribution = @class.GradeDistribution;
-                Teacher = new UserViewModel(@class.Teacher);
-            }
-        }
+    public class CreateClassBindingModel
+    {
+        [Required]
+        public string Title { get; set; }
+        [Required]
+        public string Prefix { get; set; }
+        [Required]
+        public short CourseNumber { get; set; }
+        [Required]
+        public short Section { get; set; }
+        [Required]
+        public string TeacherUserName { get; set; }
+        [Required]
+        public GradeDistribution GradeDistribution { get; set; }
+    }
+
+    public class UpdateClassBindingModel
+    {
+        [Required]
+        public int Id { get; set; }
+        [Required]
+        public string Title { get; set; }
+        [Required]
+        public string Prefix { get; set; }
+        [Required]
+        public short CourseNumber { get; set; }
+        [Required]
+        public short Section { get; set; }
+        [Required]
+        public GradeDistribution GradeDistribution { get; set; }
     }
 }

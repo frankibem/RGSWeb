@@ -5,10 +5,10 @@
     /// </summary>
     public class GradeDistribution
     {
-        public float Exam;
-        public float Quiz;
-        public float Project;
-        public float Homework;
-        public float Other;
+        public float Exam { get; set; }
+        public float Quiz { get; set; }
+        public float Project { get; set; }
+        public float Homework { get; set; }
+        public float Other { get; set; }
     }
 }

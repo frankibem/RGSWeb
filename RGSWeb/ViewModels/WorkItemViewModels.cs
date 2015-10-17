@@ -1,62 +1,121 @@
-﻿using System;
+﻿using RGSWeb.Models;
+using System;
 
-namespace RGSWeb.Models
+namespace RGSWeb.ViewModels
 {
-    public class CreateWorkItemViewModel
+    /// <summary>
+    /// View-model to represent a WorkItem
+    /// </summary>
+    public class WorkItemViewModel
     {
         /// <summary>
-        /// The title of the work item
-        /// </summary>
-        public string Title { get; set; }
-        /// <summary>
-        /// A short description of the work item
-        /// </summary>
-        public string Description { get; set; }
-        /// <summary>
-        /// Date by which the work item is due
-        /// </summary>
-        public DateTime DueDate { get; set; }
-        /// <summary>
-        /// Id of the instructor for the class
-        /// </summary>
-        public string TeacherUserName { get; set; }
-        // TODO: Ask and if necessary, remove. We can assume max points is always 100
-        /// <summary>
-        /// Maximum points assignable for this work item
-        /// </summary>
-        public float MaxPoints { get; set; }
-        /// <summary>
-        /// Numerical weight of this work item
-        /// </summary>
-        public float Weight { get; set; }
-    }
-
-    public class UpdateWorkItemViewModel
-    {
-        /// <summary>
-        /// Id of the work item that is being updated
+        /// Id of the WorkItem
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// The title of the work item
+        /// The title of the WorkItem
         /// </summary>
         public string Title { get; set; }
         /// <summary>
-        /// A short description of the work item
+        /// Description for the WorkItem
         /// </summary>
         public string Description { get; set; }
         /// <summary>
-        /// Date by which the work item is due
+        /// Date and time at which the WorkItem is due
         /// </summary>
         public DateTime DueDate { get; set; }
-        // TODO: Ask and if necessary, remove. We can assume max points is always 100
         /// <summary>
-        /// Maximum points assignable for this work item
+        /// Maximum points attainable for this WorkItem
         /// </summary>
         public float MaxPoints { get; set; }
         /// <summary>
-        /// Numerical weight of this work item
+        /// The type of the WorkItem
         /// </summary>
-        public float Weight { get; set; }
+        /// <example>Exam</example>
+        public WorkItemType Type { get; set; }
+        /// <summary>
+        /// The Class to which the WorkItem belongs
+        /// </summary>
+        public ClassViewModel Class { get; set; }
+
+        /// <summary>
+        /// Creates a view-model for the given WorkItem
+        /// </summary>
+        /// <param name="workItem">Model after which the view-model is created</param>
+        public WorkItemViewModel(WorkItem workItem)
+        {
+            if(workItem != null)
+            {
+                Id = workItem.Id;
+                Title = workItem.Title;
+                Description = workItem.Description;
+                DueDate = workItem.DueDate;
+                MaxPoints = workItem.MaxPoints;
+                Type = workItem.Type;
+                Class = new ClassViewModel(workItem.Class);
+            }
+        }
+    }
+
+    /// <summary>
+    /// A model whose details are used to create a WorkItem
+    /// </summary>
+    public class CreateWorkItemViewModel
+    {
+        /// <summary>
+        /// The title of the WorkItem
+        /// </summary>
+        public string Title { get; set; }
+        /// <summary>
+        /// A short description of the WorkItem
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// Date by which the WorkItem is due
+        /// </summary>
+        public DateTime DueDate { get; set; }
+        /// <summary>
+        /// Maximum points assignable for this WorkItem
+        /// </summary>
+        public float MaxPoints { get; set; }
+        /// <summary>
+        /// The id of the class to which the WorkItem should belong
+        /// </summary>
+        public int ClassId { get; set; }
+        /// <summary>
+        /// The type of this WorkItem (e.g. Project, Exam...)
+        /// </summary>
+        public WorkItemType Type { get; set; }
+    }
+
+    /// <summary>
+    /// A model whose detail are used to update a WorkItem
+    /// </summary>
+    public class UpdateWorkItemViewModel
+    {
+        /// <summary>
+        /// Id of the WorkItem that is being updated
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// The title of the WorkItem
+        /// </summary>
+        public string Title { get; set; }
+        /// <summary>
+        /// A short description of the WorkItem
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
+        /// Date by which the WorkItem is due
+        /// </summary>
+        public DateTime DueDate { get; set; }
+        /// <summary>
+        /// Maximum points assignable for this WorkItem
+        /// </summary>
+        public float MaxPoints { get; set; }
+        /// <summary>
+        /// The type of this WorkItem (e.g. Project, Exam...)
+        /// </summary>
+        public WorkItemType Type { get; set; }
     }
 }

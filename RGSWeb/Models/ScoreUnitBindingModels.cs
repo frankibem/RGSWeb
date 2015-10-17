@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RGSWeb.Models
 {
+    /// <summary>
+    /// Alternative model for representing specific information from a ScoreUnit
+    /// </summary>
     public class ScoreUnitBindingModel
     {
         /// <summary>
@@ -25,5 +28,22 @@ namespace RGSWeb.Models
         /// Student's grade
         /// </summary>
         public float? Grade { get; set; }
+
+        /// <summary>
+        /// Default constructor to create a ScoreUnitBindingModel
+        /// </summary>
+        public ScoreUnitBindingModel() { }
+
+        /// <summary>
+        /// Creates a model from the given ScoreUnit
+        /// </summary>
+        /// <param name="scoreUnit">ScoreUnit to create the model from</param>
+        public ScoreUnitBindingModel(ScoreUnit scoreUnit)
+        {
+            Id = scoreUnit.Id;
+            StudentUserName = scoreUnit.Student.UserName;
+            WorkItemId = scoreUnit.WorkItem.Id;
+            Grade = scoreUnit.Grade;
+        }
     }
 }

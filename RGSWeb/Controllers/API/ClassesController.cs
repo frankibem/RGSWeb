@@ -1,103 +1,79 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
+using RGSWeb.Managers;
 using RGSWeb.Models;
 using RGSWeb.ViewModels;
+using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Linq;
 
 namespace RGSWeb.Controllers
 {
+    /// <summary>
+    /// API controller for class related actions
+    /// </summary>
     [Authorize]
     public class ClassesController : ApiController
     {
-        private ApplicationDbContext _db = new ApplicationDbContext();
+        private ApplicationDbContext _db;
         private ApplicationUserManager _userManager;
+        private ClassManager _classManager;
 
-        private const string teacherRole = "Teacher";
-        private const string studentRole = "Student";
-
-        public ApplicationUserManager UserManager
+        /// <summary>
+        /// Creates a new default ClassesController
+        /// </summary>
+        public ClassesController()
         {
-            get { return _userManager ?? new ApplicationUserManager(new UserStore<ApplicationUser>(_db)); }
-            set { _userManager = value; }
+            _db = new ApplicationDbContext();
+            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_db));
+            _classManager = new ClassManager(_db);
         }
 
-        [NonAction]
-        public static ClassViewModel ConvertToClassViewModel(Class klass)
-        {
-            return new ClassViewModel
-            {
-                Id = klass.Id,
-                Title = klass.Title,
-                Prefix = klass.Prefix,
-                CourseNumber = klass.CourseNumber,
-                Section = klass.Section,
-                TeacherName = klass.Teacher.LastName + ", " + klass.Teacher.FirstName,
-                GradeDistribution = klass.GradeDistribution
-            };
-        }
-
-        [ResponseType(typeof(IEnumerable<ClassViewModel>))]
         /// <summary>
         /// If userId is the id of a student, returns a list of all classes that student is enrolled in.
         /// If it is that of a teacher, returns a list of all classes taught by the teacher
         /// </summary>
-        /// <param name="userName">Id of a teacher/student</param>
+        /// <param name="userName">Id of teacher/student</param>
+        /// <returns></returns>
+        [ResponseType(typeof(IEnumerable<ClassViewModel>))]
         public async Task<IHttpActionResult> GetClasses(string userName)
         {
-            if(!ModelState.IsValid)
+            if(!ModelState.IsValid || userName == null)
             {
                 return BadRequest();
             }
 
-            var user = await UserManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByNameAsync(userName);
             if(user == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No user with id: " + userName));
             }
 
-            IQueryable<Class> classes = null;
-            if(await UserManager.IsInRoleAsync(user.Id, studentRole))
-            {
-                classes = _db.Enrollments.Where(e => e.Student.UserName == userName).Select(e => e.Class).Include(c => c.Teacher);
-            }
+            var classes = await _classManager.GetUserClasses(user);
 
-            else if(await UserManager.IsInRoleAsync(user.Id, teacherRole))
-            {
-                classes = _db.Classes.Where(@class => @class.Teacher.UserName == userName).Include(c => c.Teacher);
-            }
-
-            List<ClassViewModel> result = new List<ClassViewModel>();
-            foreach(Class cl in classes)
-            {
-                result.Add(ConvertToClassViewModel(cl));
-            }
-
+            var result = classes.Select(@class => new ClassViewModel(@class));
             return Ok(result);
         }
 
         /// <summary>
         /// Returns the class with the specified id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Id of the class to return</param>
         /// <returns></returns>
         public async Task<ClassViewModel> GetClass(int id)
         {
-            var result = await _db.Classes.Where(c => c.Id == id).Include(c => c.Teacher).FirstOrDefaultAsync();
+            var result = await _classManager.GetClassById(id);
             if(result == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + id));
             }
             else
             {
-                return ConvertToClassViewModel(result);
+                return new ClassViewModel(result);
             }
         }
 
@@ -105,28 +81,20 @@ namespace RGSWeb.Controllers
         /// <summary>
         /// Creates a new class
         /// </summary>
-        [ResponseType(typeof(Class))]
+        [ResponseType(typeof(ClassViewModel))]
         public async Task<IHttpActionResult> PostClass(CreateClassBindingModel classvm)
         {
-            var teacher = await UserManager.FindByNameAsync(classvm.TeacherUserName);
-            if(!ModelState.IsValid || teacher == null)
+            if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Class @class = new Class
+            var @class = await _classManager.CreateClass(classvm);
+            if(@class == null)
             {
-                Title = classvm.Title,
-                Prefix = classvm.Prefix,
-                CourseNumber = classvm.CourseNumber,
-                Section = classvm.Section,
-                Teacher = teacher,
-                GradeDistribution = classvm.GradeDistribution
-            };
-
-            _db.Classes.Add(@class);
-            await _db.SaveChangesAsync();
-            return CreatedAtRoute("DefaultApi", new { id = @class.Id }, @class);
+                return BadRequest(ModelState);
+            }
+            return CreatedAtRoute("DefaultApi", new { id = @class.Id }, new ClassViewModel(@class));
         }
 
         // PUT: api/Classes
@@ -141,32 +109,13 @@ namespace RGSWeb.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Find the class and update its properties
-            var @class = _db.Classes.Find(uclassvm.Id);
-            if(@class == null)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + uclassvm.Id));
-            }
-
-            // Update attributes
-            @class.Title = uclassvm.Title;
-            @class.Prefix = uclassvm.Prefix;
-            @class.CourseNumber = uclassvm.CourseNumber;
-            @class.Section = uclassvm.Section;
-            @class.GradeDistribution = uclassvm.GradeDistribution;
-
-            _db.Entry(@class).State = EntityState.Modified;
             try
             {
-                await _db.SaveChangesAsync();
+                await _classManager.UpdateClass(uclassvm);
             }
-            catch(DbUpdateConcurrencyException)
+            catch(Exception ex)
             {
-                // Deleted before update maybe?
-                if(!ClassExists(@class.Id))
-                {
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + uclassvm.Id));
-                }
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -177,19 +126,15 @@ namespace RGSWeb.Controllers
         /// Deletes a class
         /// </summary>
         /// <param name="id">Id of the class to delete</param>
-        [ResponseType(typeof(Class))]
-        public IHttpActionResult DeleteClass(int id)
+        [ResponseType(typeof(ClassViewModel))]
+        public async Task<ClassViewModel> DeleteClass(int id)
         {
-            Class @class = _db.Classes.Find(id);
+            Class @class = await _classManager.DeleteClass(id);
             if(@class == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + id));
             }
-
-            _db.Classes.Remove(@class);
-            _db.SaveChanges();
-
-            return Ok(@class);
+            return new ClassViewModel(@class);
         }
 
         protected override void Dispose(bool disposing)
@@ -199,11 +144,6 @@ namespace RGSWeb.Controllers
                 _db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private bool ClassExists(int id)
-        {
-            return _db.Classes.Count(e => e.Id == id) > 0;
         }
     }
 }

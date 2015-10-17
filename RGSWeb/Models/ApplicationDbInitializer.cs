@@ -60,8 +60,10 @@ namespace RGSWeb.Models
             // Create some classes
             Class[] classes = new Class[]
             {
-                new Class() { Title = "Software Engineering I", Prefix = "CS", CourseNumber = 3375, Section = 1, Teacher = teachers[0] },
-                new Class() { Title = "Theory of Automata", Prefix = "CS", CourseNumber = 3350, Section = 2, Teacher = teachers[1] }
+                new Class() { Title = "Software Engineering I", Prefix = "CS", CourseNumber = 3375, Section = 1, Teacher = teachers[0],
+                GradeDistribution = new GradeDistribution() { Exam = 40, Homework = 20, Quiz = 15, Project = 15, Other = 10 } },
+                new Class() { Title = "Theory of Automata", Prefix = "CS", CourseNumber = 3350, Section = 2, Teacher = teachers[1],
+                GradeDistribution = new GradeDistribution() { Exam = 30, Homework = 20, Quiz = 15, Project = 20, Other = 5 }  }
             };
             context.Classes.AddRange(classes);
             context.SaveChanges();
@@ -70,18 +72,19 @@ namespace RGSWeb.Models
             List<Enrollment> enrollments = new List<Enrollment>();
             foreach(var student in students)
             {
-                enrollments.Add(new Enrollment() { Student = student, Class = classes[0] });
+                enrollments.Add(new Enrollment() { Student = student, Class = classes[0], Pending = false });
             }
-            enrollments.Add(new Enrollment() { Student = students[1], Class = classes[1] });
-            enrollments.Add(new Enrollment() { Student = students[3], Class = classes[1] });
+
+            enrollments.Add(new Enrollment() { Student = students[1], Class = classes[1], Pending = true });
+            enrollments.Add(new Enrollment() { Student = students[3], Class = classes[1], Pending = false });
             context.Enrollments.AddRange(enrollments);
             context.SaveChanges();
 
             // Create some work items
             WorkItem[] workItems = new WorkItem[]
             {
-                new WorkItem() { Title = "Do great stuff", AssignedBy = teachers[1], DueDate = new DateTime(2015, 02, 14), MaxPoints = 100, Description = "Make humans everywhere proud. Build a robot, find sasquatch, go to space...", Class = classes[1] },
-                new WorkItem() { Title = "Prepare presentation for Iteration I", AssignedBy = teachers[0], DueDate = new DateTime(2015, 09, 11), MaxPoints = 100, Description = "Be ready, get some good use cases, add some pictures in there, present stuff.", Class = classes[0] }
+                new WorkItem() { Title = "Do great stuff", DueDate = new DateTime(2015, 02, 14), MaxPoints = 100, Description = "Make humans everywhere proud. Build a robot, find sasquatch, go to space...", Class = classes[1] },
+                new WorkItem() { Title = "Prepare presentation for Iteration I", DueDate = new DateTime(2015, 09, 11), MaxPoints = 100, Description = "Be ready, get some good use cases, add some pictures in there, present stuff.", Class = classes[0] }
             };
             context.WorkItems.AddRange(workItems);
             context.SaveChanges();
