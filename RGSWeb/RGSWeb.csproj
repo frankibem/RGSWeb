@@ -222,6 +222,7 @@
     <Compile Include="Managers\AnnouncementManager.cs" />
     <Compile Include="Managers\ClassManager.cs" />
     <Compile Include="Managers\EnrollmentManager.cs" />
+    <Compile Include="Managers\GradeManager.cs" />
     <Compile Include="Managers\ScoreUnitManager.cs" />
     <Compile Include="Managers\AccountManager.cs" />
     <Compile Include="Managers\WorkItemManager.cs" />

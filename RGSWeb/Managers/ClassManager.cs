@@ -22,30 +22,12 @@ namespace RGSWeb.Managers
         private const string studentRole = "Student";
 
         /// <summary>
-        /// The Database Context to use for queries
-        /// </summary>
-        public ApplicationDbContext Db
-        {
-            get { return _db; }
-            set { _db = value; }
-        }
-
-        /// <summary>
-        /// The UserManager to use for user queries
-        /// </summary>
-        public ApplicationUserManager UserManager
-        {
-            get { return _userManager ?? new ApplicationUserManager(new UserStore<ApplicationUser>(Db)); }
-            set { _userManager = value; }
-        }
-
-        /// <summary>
         /// Creates a new ClassManager with the given Database context
         /// </summary>
         /// <param name="db">The Database context to use</param>
         public ClassManager(ApplicationDbContext db)
         {
-            Db = db;
+            _db = db;
         }
 
         /// <summary>
@@ -56,8 +38,8 @@ namespace RGSWeb.Managers
         /// <remarks>The UserManager must have been created from db</remarks>
         public ClassManager(ApplicationDbContext db, ApplicationUserManager userManager)
         {
-            Db = db;
-            UserManager = userManager;
+            _db = db;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -70,14 +52,14 @@ namespace RGSWeb.Managers
         public async Task<IEnumerable<Class>> GetUserClasses(ApplicationUser user)
         {
             IQueryable<Class> classes = null;
-            if(await UserManager.IsInRoleAsync(user.Id, studentRole))
+            if(await _userManager.IsInRoleAsync(user.Id, studentRole))
             {
-                classes = Db.Enrollments.Where(e => e.Student.Email == user.Email).Select(e => e.Class).Include(c => c.Teacher);
+                classes = _db.Enrollments.Where(e => e.Student.Email == user.Email).Select(e => e.Class).Include(c => c.Teacher);
             }
 
-            else if(await UserManager.IsInRoleAsync(user.Id, teacherRole))
+            else if(await _userManager.IsInRoleAsync(user.Id, teacherRole))
             {
-                classes = Db.Classes.Where(@class => @class.Teacher.Email == user.Email).Include(c => c.Teacher);
+                classes = _db.Classes.Where(@class => @class.Teacher.Email == user.Email).Include(c => c.Teacher);
             }
 
             return classes;
@@ -90,7 +72,7 @@ namespace RGSWeb.Managers
         /// <returns>Null if class is not found</returns>
         public async Task<Class> GetClassById(int id)
         {
-            return await Db.Classes.Where(c => c.Id == id).Include(c => c.Teacher).FirstOrDefaultAsync();
+            return await _db.Classes.Where(c => c.Id == id).Include(c => c.Teacher).FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -102,7 +84,7 @@ namespace RGSWeb.Managers
         /// created class</returns>
         public async Task<Class> CreateClass(CreateClassBindingModel classBindingModel)
         {
-            var teacher = await UserManager.FindByNameAsync(classBindingModel.TeacherUserName);
+            var teacher = await _userManager.FindByNameAsync(classBindingModel.TeacherUserName);
 
             if(teacher == null)
             {
@@ -119,8 +101,8 @@ namespace RGSWeb.Managers
                 GradeDistribution = classBindingModel.GradeDistribution
             };
 
-            Db.Classes.Add(@class);
-            await Db.SaveChangesAsync();
+            _db.Classes.Add(@class);
+            await _db.SaveChangesAsync();
             return @class;
         }
 
@@ -131,7 +113,7 @@ namespace RGSWeb.Managers
         public async Task UpdateClass(UpdateClassBindingModel ucbm)
         {
             // Find the class and update its properties
-            var @class = await Db.Classes.FindAsync(ucbm.Id);
+            var @class = await _db.Classes.FindAsync(ucbm.Id);
             if(@class == null)
             {
                 throw new Exception("No class with id: " + ucbm.Id);
@@ -144,10 +126,10 @@ namespace RGSWeb.Managers
             @class.Section = ucbm.Section;
             @class.GradeDistribution = ucbm.GradeDistribution;
 
-            Db.Entry(@class).State = EntityState.Modified;
+            _db.Entry(@class).State = EntityState.Modified;
             try
             {
-                await Db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch(DbUpdateConcurrencyException)
             {
@@ -166,14 +148,14 @@ namespace RGSWeb.Managers
         /// <returns>The class that was deleted</returns>
         public async Task<Class> DeleteClass(int id)
         {
-            Class @class = await Db.Classes.FindAsync(id);
+            Class @class = await _db.Classes.FindAsync(id);
             if(@class == null)
             {
                 throw new Exception("No class with id: " + id);
             }
 
-            Db.Classes.Remove(@class);
-            Db.SaveChanges();
+            _db.Classes.Remove(@class);
+            _db.SaveChanges();
 
             return @class;
         }
@@ -185,7 +167,7 @@ namespace RGSWeb.Managers
         /// <returns></returns>
         public async Task<IEnumerable<ApplicationUser>> GetAcceptedStudents(Class @class)
         {
-            return await Db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == false).Select(e => e.Student).ToListAsync();
+            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == false).Select(e => e.Student).ToListAsync();
         }
         /// <summary>
         /// Returns all students who have not been accepted into class (their status is
@@ -195,7 +177,7 @@ namespace RGSWeb.Managers
         /// <returns></returns>
         public async Task<IEnumerable<ApplicationUser>> GetPendingStudents(Class @class)
         {
-            return await Db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == true).Select(e => e.Student).ToListAsync();
+            return await _db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == true).Select(e => e.Student).ToListAsync();
         }
 
         /// <summary>
@@ -205,7 +187,7 @@ namespace RGSWeb.Managers
         /// <returns></returns>
         public async Task<IEnumerable<ApplicationUser>> GetAllStudents(Class @class)
         {
-            return await Db.Enrollments
+            return await _db.Enrollments
                 .Where(e => e.Class.Id == @class.Id)
                 .Select(e => e.Student).ToListAsync();
         }
@@ -217,7 +199,7 @@ namespace RGSWeb.Managers
         /// <returns></returns>
         public bool ClassExists(int id)
         {
-            return Db.Classes.Count(e => e.Id == id) > 0;
+            return _db.Classes.Count(e => e.Id == id) > 0;
         }
     }
 }

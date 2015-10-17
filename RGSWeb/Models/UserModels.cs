@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RGSWeb.Managers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;

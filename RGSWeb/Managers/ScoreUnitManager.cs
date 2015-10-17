@@ -20,30 +20,12 @@ namespace RGSWeb.Managers
         private const string studentRole = "Student";
 
         /// <summary>
-        /// The Database Context to use for queries
-        /// </summary>
-        public ApplicationDbContext Db
-        {
-            get { return _db; }
-            set { _db = value; }
-        }
-
-        /// <summary>
-        /// The UserManager to use for user queries
-        /// </summary>
-        public ApplicationUserManager UserManager
-        {
-            get { return _userManager ?? new ApplicationUserManager(new UserStore<ApplicationUser>(Db)); }
-            set { _userManager = value; }
-        }
-
-        /// <summary>
         /// Creates a new ScoreUnitManager with the given Database context
         /// </summary>
         /// <param name="db">The Database context to use</param>
         public ScoreUnitManager(ApplicationDbContext db)
         {
-            Db = db;
+            _db = db;
         }
 
         /// <summary>
@@ -54,8 +36,8 @@ namespace RGSWeb.Managers
         /// <remarks>The UserManager must have been created from db</remarks>
         public ScoreUnitManager(ApplicationDbContext db, ApplicationUserManager userManager)
         {
-            Db = db;
-            UserManager = userManager;
+            _db = db;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -65,11 +47,11 @@ namespace RGSWeb.Managers
         /// <returns>Creates new ScoreUnits for all students who have none</returns>
         public async Task<IEnumerable<ScoreUnit>> GetScoreUnits(WorkItem workItem)
         {
-            ClassManager classManager = new ClassManager(Db, UserManager);
+            ClassManager classManager = new ClassManager(_db, _userManager);
             var students = await classManager.GetAcceptedStudents(workItem.Class);
 
             var newScoreUnits = new List<ScoreUnit>();
-            var scoreUnits = await Db.ScoreUnits
+            var scoreUnits = await _db.ScoreUnits
                 .Include(su => su.Student)
                 .Where(su => su.WorkItem.Id == workItem.Id).ToDictionaryAsync(su => su.Student.Id);
 
@@ -87,13 +69,24 @@ namespace RGSWeb.Managers
                 }
             }
 
-            var addedScoreUnits = Db.ScoreUnits.AddRange(newScoreUnits);
-            await Db.SaveChangesAsync();
+            var addedScoreUnits = _db.ScoreUnits.AddRange(newScoreUnits);
+            await _db.SaveChangesAsync();
 
             // Convert dictionary to list and add new ScoreUnits
             var result = scoreUnits.Select(kvp => kvp.Value).ToList();
             result.AddRange(addedScoreUnits);
             return result;
+        }
+
+        /// <summary>
+        /// Returns a students ScoreUnit for a WorkItem
+        /// </summary>
+        /// <param name="workItem">WorkItem to return the ScoreUnit for</param>
+        /// <param name="student">Student to return the ScorreUnit for</param>
+        /// <returns></returns>
+        public async Task<ScoreUnit> GetStudentScoreUnit(WorkItem workItem, ApplicationUser student)
+        {
+            return await _db.ScoreUnits.Where(su => su.WorkItem.Id == workItem.Id && su.Student.Id == student.Id).FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -107,16 +100,16 @@ namespace RGSWeb.Managers
             {
                 foreach(var model in subm)
                 {
-                    var scoreUnit = await Db.ScoreUnits.FindAsync(model.Id);
+                    var scoreUnit = await _db.ScoreUnits.FindAsync(model.Id);
                     if(scoreUnit == null)
                     {
                         throw new Exception("Could not find ScoreUnit with id: " + model.Id);
                     }
 
                     scoreUnit.Grade = model.Grade;
-                    Db.Entry(scoreUnit).State = EntityState.Modified;
+                    _db.Entry(scoreUnit).State = EntityState.Modified;
                 }
-                await Db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
         }
     }
