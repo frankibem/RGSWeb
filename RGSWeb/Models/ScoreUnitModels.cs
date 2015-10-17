@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace RGSWeb.Models
 {
+    public class ScoreUnit
+    {
+        public int Id { get; set; }
+        public WorkItem WorkItem { get; set; }
+        public ApplicationUser Student { get; set; }
+        public float? Grade { get; set; }
+    }
+
     /// <summary>
     /// Alternative model for representing specific information from a ScoreUnit
     /// </summary>

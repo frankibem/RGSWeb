@@ -240,8 +240,7 @@
     <Compile Include="Models\ApplicationUserBindingModel.cs" />
     <Compile Include="Models\ClassModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ScoreUnit.cs" />
-    <Compile Include="Models\ScoreUnitBindingModels.cs" />
+    <Compile Include="Models\ScoreUnitModels.cs" />
     <Compile Include="Models\WorkItem.cs" />
     <Compile Include="ViewModels\AnnouncementViewModels.cs" />
     <Compile Include="ViewModels\ClassViewModel.cs" />
