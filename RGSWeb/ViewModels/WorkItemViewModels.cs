@@ -39,6 +39,11 @@ namespace RGSWeb.ViewModels
         public ClassViewModel Class { get; set; }
 
         /// <summary>
+        /// Creates a view-model for a WorkItem with default values
+        /// </summary>
+        public WorkItemViewModel() { }
+
+        /// <summary>
         /// Creates a view-model for the given WorkItem
         /// </summary>
         /// <param name="workItem">Model after which the view-model is created</param>

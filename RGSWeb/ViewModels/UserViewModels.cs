@@ -28,7 +28,7 @@ namespace RGSWeb.ViewModels
         public string UserName { get; set; }
 
         /// <summary>
-        /// Creates a default UserViewModel
+        /// Creates a view-model for a user with default values
         /// </summary>
         public UserViewModel() { }
 
@@ -57,7 +57,10 @@ namespace RGSWeb.ViewModels
         /// </summary>
         public float Grade { get; set; }
 
-        private StudentViewModel() { }
+        /// <summary>
+        /// Creates a view-model for a student with default values
+        /// </summary>
+        public StudentViewModel() { }
 
         /// <summary>
         /// Creates a StudentViewModel for an ApplicationUser
