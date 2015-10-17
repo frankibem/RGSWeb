@@ -15,6 +15,7 @@ namespace RGSWeb.Controllers.API
     /// <summary>
     /// API controller for grade related actions
     /// </summary>
+    [Authorize]
     public class GradesController : ApiController
     {
         private ApplicationDbContext _db;

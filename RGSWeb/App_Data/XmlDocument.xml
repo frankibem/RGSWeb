@@ -654,12 +654,12 @@
             </summary>
             <param name="classId">Id of the class</param>
         </member>
-        <member name="M:RGSWeb.Controllers.WorkItemsController.PutWorkItem(RGSWeb.Models.UpdateWorkItemViewModel)">
+        <member name="M:RGSWeb.Controllers.WorkItemsController.PutWorkItem(RGSWeb.ViewModels.UpdateWorkItemViewModel)">
             <summary>
             Update a WorkItem
             </summary>
         </member>
-        <member name="M:RGSWeb.Controllers.WorkItemsController.PostWorkItem(RGSWeb.Models.CreateWorkItemViewModel)">
+        <member name="M:RGSWeb.Controllers.WorkItemsController.PostWorkItem(RGSWeb.ViewModels.CreateWorkItemViewModel)">
             <summary>
             Create a new WorkItem
             </summary>
@@ -950,14 +950,14 @@
             <param name="userManager">The UserManager to use</param>
             <remarks>The UserManager must have been created from db</remarks>
         </member>
-        <member name="M:RGSWeb.Managers.WorkItemManager.CreateWorkItem(RGSWeb.Models.CreateWorkItemViewModel)">
+        <member name="M:RGSWeb.Managers.WorkItemManager.CreateWorkItem(RGSWeb.ViewModels.CreateWorkItemViewModel)">
             <summary>
             Creates a new WorkItem from the given model
             </summary>
             <param name="cwvm">Model containing the detail of the WorkItem to create</param>
             <returns>Null if the class or teacher is not found, Otherwise, returns the WorkItem created</returns>
         </member>
-        <member name="M:RGSWeb.Managers.WorkItemManager.UpdateWorkItem(RGSWeb.Models.UpdateWorkItemViewModel)">
+        <member name="M:RGSWeb.Managers.WorkItemManager.UpdateWorkItem(RGSWeb.ViewModels.UpdateWorkItemViewModel)">
             <summary>
             Updates a WorkItem using details in the given model
             </summary>
@@ -1268,79 +1268,40 @@
             </summary>
             <param name="scoreUnit">ScoreUnit to create the model from</param>
         </member>
-        <member name="T:RGSWeb.Models.CreateWorkItemViewModel">
+        <member name="P:RGSWeb.Models.WorkItem.Id">
             <summary>
-            A model whose details are used to create a WorkItem
+            Id of the WorkItem
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.Title">
+        <member name="P:RGSWeb.Models.WorkItem.Title">
             <summary>
             The title of the WorkItem
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.Description">
+        <member name="P:RGSWeb.Models.WorkItem.Description">
             <summary>
-            A short description of the WorkItem
+            Description for the WorkItem
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.DueDate">
+        <member name="P:RGSWeb.Models.WorkItem.DueDate">
             <summary>
-            Date by which the WorkItem is due
+            Date and time at which the WorkItem is due
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.TeacherUserName">
+        <member name="P:RGSWeb.Models.WorkItem.MaxPoints">
             <summary>
-            Id of the instructor for the class
+            Maximum points attainable for this WorkItem
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.MaxPoints">
+        <member name="P:RGSWeb.Models.WorkItem.Type">
             <summary>
-            Maximum points assignable for this WorkItem
+            The type of the WorkItem
             </summary>
+            <example>Exam</example>
         </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.ClassId">
+        <member name="P:RGSWeb.Models.WorkItem.Class">
             <summary>
-            The id of the class to which the WorkItem should belong
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.CreateWorkItemViewModel.Type">
-            <summary>
-            The type of this WorkItem (e.g. Project, Exam...)
-            </summary>
-        </member>
-        <member name="T:RGSWeb.Models.UpdateWorkItemViewModel">
-            <summary>
-            A model whose detail are used to update a WorkItem
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Id">
-            <summary>
-            Id of the WorkItem that is being updated
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Title">
-            <summary>
-            The title of the WorkItem
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Description">
-            <summary>
-            A short description of the WorkItem
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.DueDate">
-            <summary>
-            Date by which the WorkItem is due
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.MaxPoints">
-            <summary>
-            Maximum points assignable for this WorkItem
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UpdateWorkItemViewModel.Type">
-            <summary>
-            The type of this WorkItem (e.g. Project, Exam...)
+            The Class to which the WorkItem belongs
             </summary>
         </member>
         <member name="T:RGSWeb.ViewModels.UserViewModel">
@@ -1484,6 +1445,123 @@
             Creates a ClassViewModel for the given class
             </summary>
             <param name="class">Class to create view-model for</param>
+        </member>
+        <member name="T:RGSWeb.ViewModels.WorkItemViewModel">
+            <summary>
+            View-model to represent a WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Id">
+            <summary>
+            Id of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Title">
+            <summary>
+            The title of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Description">
+            <summary>
+            Description for the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.DueDate">
+            <summary>
+            Date and time at which the WorkItem is due
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.MaxPoints">
+            <summary>
+            Maximum points attainable for this WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Type">
+            <summary>
+            The type of the WorkItem
+            </summary>
+            <example>Exam</example>
+        </member>
+        <member name="P:RGSWeb.ViewModels.WorkItemViewModel.Class">
+            <summary>
+            The Class to which the WorkItem belongs
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.WorkItemViewModel.#ctor(RGSWeb.Models.WorkItem)">
+            <summary>
+            Creates a view-model for the given WorkItem
+            </summary>
+            <param name="workItem">Model after which the view-model is created</param>
+        </member>
+        <member name="T:RGSWeb.ViewModels.CreateWorkItemViewModel">
+            <summary>
+            A model whose details are used to create a WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.Title">
+            <summary>
+            The title of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.Description">
+            <summary>
+            A short description of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.DueDate">
+            <summary>
+            Date by which the WorkItem is due
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.MaxPoints">
+            <summary>
+            Maximum points assignable for this WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.ClassId">
+            <summary>
+            The id of the class to which the WorkItem should belong
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.CreateWorkItemViewModel.Type">
+            <summary>
+            The type of this WorkItem (e.g. Project, Exam...)
+            </summary>
+        </member>
+        <member name="T:RGSWeb.ViewModels.UpdateWorkItemViewModel">
+            <summary>
+            A model whose detail are used to update a WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.Id">
+            <summary>
+            Id of the WorkItem that is being updated
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.Title">
+            <summary>
+            The title of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.Description">
+            <summary>
+            A short description of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.DueDate">
+            <summary>
+            Date by which the WorkItem is due
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.MaxPoints">
+            <summary>
+            Maximum points assignable for this WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UpdateWorkItemViewModel.Type">
+            <summary>
+            The type of this WorkItem (e.g. Project, Exam...)
+            </summary>
         </member>
     </members>
 </doc>

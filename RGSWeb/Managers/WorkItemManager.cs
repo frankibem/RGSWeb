@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using RGSWeb.Models;
+using RGSWeb.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -65,9 +66,8 @@ namespace RGSWeb.Managers
         public async Task<WorkItem> CreateWorkItem(CreateWorkItemViewModel cwvm)
         {
             var @class = await Db.Classes.FindAsync(cwvm.ClassId);
-            var teacher = await UserManager.FindByEmailAsync(cwvm.TeacherUserName);
 
-            if(@class == null || teacher == null)
+            if(@class == null)
             {
                 return null;
             }
@@ -77,7 +77,6 @@ namespace RGSWeb.Managers
                 Title = cwvm.Title,
                 Description = cwvm.Description,
                 DueDate = cwvm.DueDate,
-                AssignedBy = teacher,
                 MaxPoints = cwvm.MaxPoints,
                 Type = cwvm.Type,
                 Class = @class
@@ -134,7 +133,7 @@ namespace RGSWeb.Managers
                 return null;
             }
 
-            return await Db.WorkItems.Where(e => e.Class.Id == @class.Id).Include(e => e.AssignedBy).ToListAsync();
+            return await Db.WorkItems.Where(e => e.Class.Id == @class.Id).ToListAsync();
         }
 
         /// <summary>
