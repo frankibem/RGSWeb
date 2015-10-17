@@ -54,7 +54,7 @@ namespace RGSWeb.Controllers
 
         // PUT: api/ScoreUnits
         /// <summary>
-        /// Add or update grade(s)
+        /// Updates grade(s) for a WorkItem
         /// </summary>
         [ResponseType(typeof(HttpStatusCode))]
         public async Task<IHttpActionResult> PutScoreUnits(List<ScoreUnitBindingModel> scoreUnits)

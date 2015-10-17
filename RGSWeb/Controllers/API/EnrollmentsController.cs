@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using RGSWeb.Managers;
 using RGSWeb.Models;
+using RGSWeb.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -36,7 +37,7 @@ namespace RGSWeb.Controllers.API
         /// </summary>
         /// <param name="classId">Id of the class</param>
         /// <param name="state">The state of the students to obtain e.g. All, PendingOnly, AcceptedOnly</param>
-        [ResponseType(typeof(IEnumerable<Enrollment>))]
+        [ResponseType(typeof(IEnumerable<EnrollmentViewModel>))]
         public async Task<IHttpActionResult> GetEnrollments(int classId, EnrollmentState? state)
         {
             if(!ModelState.IsValid)
@@ -51,20 +52,37 @@ namespace RGSWeb.Controllers.API
             }
 
             IEnumerable<Enrollment> enrollments = null;
+            List<EnrollmentViewModel> result = new List<EnrollmentViewModel>();
+
             if(!state.HasValue || state == EnrollmentState.All)
             {
                 enrollments = await _enrollmentManager.GetAllEnrollmentsForClass(@class);
-            }
-            else if(state == EnrollmentState.Accepted)
-            {
-                enrollments = await _enrollmentManager.GetAcceptedEnrollmentsForClass(@class);
+                foreach(var enroll in enrollments)
+                {
+                    result.Add(new EnrollmentViewModel(enroll));
+                }
             }
             else if(state == EnrollmentState.Pending)
             {
                 enrollments = await _enrollmentManager.GetPendingEnrollmentsForClass(@class);
+                foreach(var enroll in enrollments)
+                {
+                    result.Add(new EnrollmentViewModel(enroll));
+                }
+            }
+            else if(state == EnrollmentState.Accepted)
+            {
+                enrollments = await _enrollmentManager.GetAcceptedEnrollmentsForClass(@class);
+                var gradeManager = new GradeManager(_db);
+                foreach(var enroll in enrollments)
+                {
+                    var enrollvm = new EnrollmentViewModel(enroll);
+                    enrollvm.Grade = await gradeManager.GetStudentGradeAsync(enroll.Student, enroll.Class);
+                    result.Add(enrollvm);
+                }
             }
 
-            return Ok(enrollments);
+            return Ok(result);
         }
 
         /// <summary>
@@ -72,7 +90,7 @@ namespace RGSWeb.Controllers.API
         /// </summary>
         /// <param name="enroll">Contains the student Id and class Id</param>
         [HttpPost]
-        [ResponseType(typeof(Enrollment))]
+        [ResponseType(typeof(EnrollmentViewModel))]
         public async Task<IHttpActionResult> RequestEnrollment(EnrollmentBindingModel enroll)
         {
             if(!ModelState.IsValid)
@@ -92,10 +110,10 @@ namespace RGSWeb.Controllers.API
             var newEnroll = await _enrollmentManager.RequestEnrollment(@class, student);
             if(newEnroll == null)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Conflict, "Student is already enrolled in class"));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.Conflict, "Enrollment already requested, or student already enrolled in class"));
             }
 
-            return Ok(newEnroll);
+            return Ok(new EnrollmentViewModel(newEnroll));
         }
 
         /// <summary>
@@ -125,7 +143,7 @@ namespace RGSWeb.Controllers.API
         /// Drops a student from a class
         /// </summary>
         [HttpDelete]
-        [ResponseType(typeof(Enrollment))]
+        [ResponseType(typeof(EnrollmentViewModel))]
         public async Task<IHttpActionResult> DropStudent(EnrollmentBindingModel enroll)
         {
             if(!ModelState.IsValid)
@@ -149,7 +167,7 @@ namespace RGSWeb.Controllers.API
                     string.Format("Student: {0} is not enrolled in class: {1}", enroll.StudentUserName, enroll.ClassId)));
             }
 
-            return Ok(result);
+            return Ok(new EnrollmentViewModel(result));
         }
     }
 }

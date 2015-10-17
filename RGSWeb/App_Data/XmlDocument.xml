@@ -635,7 +635,7 @@
         </member>
         <member name="M:RGSWeb.Controllers.ScoreUnitsController.PutScoreUnits(System.Collections.Generic.List{RGSWeb.Models.ScoreUnitBindingModel})">
             <summary>
-            Add or update grade(s)
+            Updates grade(s) for a WorkItem
             </summary>
         </member>
         <member name="T:RGSWeb.Controllers.WorkItemsController">
@@ -1308,6 +1308,44 @@
             <summary>
             The Class to which the WorkItem belongs
             </summary>
+        </member>
+        <member name="T:RGSWeb.ViewModels.EnrollmentViewModel">
+            <summary>
+            View-model to represent an enrollment in a class
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.EnrollmentViewModel.Id">
+            <summary>
+            The Id of the enrollment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.EnrollmentViewModel.Class">
+            <summary>
+            The Class for which the enrollment applies
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.EnrollmentViewModel.Pending">
+            <summary>
+            Pending is true if the student has not been accepted to a class
+            and false otherwise
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.EnrollmentViewModel.Student">
+            <summary>
+            The student for which the enrollment applies
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.EnrollmentViewModel.Grade">
+            <summary>
+            Students grade in the class
+            </summary>
+            <remarks>Default grade is -1 (pending). User's of this class must set it explicitly</remarks>
+        </member>
+        <member name="M:RGSWeb.ViewModels.EnrollmentViewModel.#ctor(RGSWeb.Models.Enrollment)">
+            <summary>
+            Creates a view-model for the given enrollment
+            </summary>
+            <param name="enrollment">Model containing the details for the view-model</param>
         </member>
         <member name="T:RGSWeb.ViewModels.UserViewModel">
             <summary>
