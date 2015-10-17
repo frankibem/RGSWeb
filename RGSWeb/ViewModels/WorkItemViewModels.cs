@@ -44,13 +44,16 @@ namespace RGSWeb.ViewModels
         /// <param name="workItem">Model after which the view-model is created</param>
         public WorkItemViewModel(WorkItem workItem)
         {
-            Id = workItem.Id;
-            Title = workItem.Title;
-            Description = workItem.Description;
-            DueDate = workItem.DueDate;
-            MaxPoints = workItem.MaxPoints;
-            Type = workItem.Type;
-            Class = new ClassViewModel(workItem.Class);
+            if(workItem != null)
+            {
+                Id = workItem.Id;
+                Title = workItem.Title;
+                Description = workItem.Description;
+                DueDate = workItem.DueDate;
+                MaxPoints = workItem.MaxPoints;
+                Type = workItem.Type;
+                Class = new ClassViewModel(workItem.Class);
+            }
         }
     }
 

@@ -50,13 +50,16 @@ namespace RGSWeb.ViewModels
         /// <param name="class">Class to create view-model for</param>
         public ClassViewModel(Class @class)
         {
-            Id = @class.Id;
-            Title = @class.Title;
-            Prefix = @class.Prefix;
-            CourseNumber = @class.CourseNumber;
-            Section = @class.Section;
-            GradeDistribution = @class.GradeDistribution;
-            Teacher = new UserViewModel(@class.Teacher);
+            if(@class != null)
+            {
+                Id = @class.Id;
+                Title = @class.Title;
+                Prefix = @class.Prefix;
+                CourseNumber = @class.CourseNumber;
+                Section = @class.Section;
+                GradeDistribution = @class.GradeDistribution;
+                Teacher = new UserViewModel(@class.Teacher);
+            }
         }
     }
 }

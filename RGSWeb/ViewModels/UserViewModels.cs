@@ -1,6 +1,7 @@
 ﻿using RGSWeb.Managers;
 using RGSWeb.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace RGSWeb.ViewModels
 {
@@ -37,9 +38,12 @@ namespace RGSWeb.ViewModels
         /// <param name="user"></param>
         public UserViewModel(ApplicationUser user)
         {
-            this.FirstName = user.FirstName;
-            this.LastName = user.LastName;
-            this.UserName = user.UserName;
+            if(user != null)
+            {
+                this.FirstName = user.FirstName;
+                this.LastName = user.LastName;
+                this.UserName = user.UserName;
+            }
         }
     }
 
@@ -53,10 +57,7 @@ namespace RGSWeb.ViewModels
         /// </summary>
         public float Grade { get; set; }
 
-        /// <summary>
-        /// Creates a default StudentViewModel
-        /// </summary>
-        public StudentViewModel() { }
+        private StudentViewModel() { }
 
         /// <summary>
         /// Creates a StudentViewModel for an ApplicationUser
@@ -64,10 +65,8 @@ namespace RGSWeb.ViewModels
         /// <param name="user">ApplicationUser to construct view-model from</param>
         /// <param name="class">Class to calculate the students in</param>
         /// <param name="manager">Grademanager to calculate student's grade</param>
-        public StudentViewModel(ApplicationUser user, Class @class, GradeManager manager)
+        public StudentViewModel(ApplicationUser user)
             : base(user)
-        {
-            Grade = manager.GetStudentGrade(user, @class).Result;
-        }
+        { }
     }
 }

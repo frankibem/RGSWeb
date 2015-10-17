@@ -133,7 +133,7 @@ namespace RGSWeb.Managers
                 return null;
             }
 
-            return await Db.WorkItems.Where(e => e.Class.Id == @class.Id).ToListAsync();
+            return await Db.WorkItems.Where(e => e.Class.Id == @class.Id).Include(wi => wi.Class.Teacher).ToListAsync();
         }
 
         /// <summary>

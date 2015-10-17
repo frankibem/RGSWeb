@@ -28,6 +28,7 @@ namespace RGSWeb.Managers
         public ClassManager(ApplicationDbContext db)
         {
             _db = db;
+            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_db));
         }
 
         /// <summary>

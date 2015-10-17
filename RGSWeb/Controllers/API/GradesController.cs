@@ -46,7 +46,15 @@ namespace RGSWeb.Controllers.API
             }
 
             var students = await _classManager.GetAcceptedStudents(@class);
-            var result = students.Select(student => new StudentViewModel(student, @class, _gradeManager));
+
+            var result = new List<StudentViewModel>();
+            foreach(var student in students)
+            {
+                var viewModel = new StudentViewModel(student);
+                viewModel.Grade = await _gradeManager.GetStudentGradeAsync(student, @class);
+                result.Add(viewModel);
+            }
+
             return result;
         }
 
@@ -72,7 +80,10 @@ namespace RGSWeb.Controllers.API
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Could not match parameters to records"));
             }
 
-            return Ok(new StudentViewModel(student, @class, _gradeManager));
+            var result = new StudentViewModel(student);
+            result.Grade = await _gradeManager.GetStudentGradeAsync(student, @class);
+
+            return Ok(result);
         }
 
         protected override void Dispose(bool disposing)

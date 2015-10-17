@@ -1,4 +1,5 @@
 ﻿using RGSWeb.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +11,6 @@ namespace RGSWeb.Managers
     public class GradeManager
     {
         private ApplicationDbContext _db;
-        private ApplicationUserManager _userManager;
 
         /// <summary>
         /// Creates a new GradeManager with the given Database context
@@ -27,66 +27,74 @@ namespace RGSWeb.Managers
         /// <param name="student">To student to calculate a grade for</param>
         /// <param name="class">The class that the student is enrolled in</param>
         /// <returns></returns>
-        public async Task<float> GetStudentGrade(ApplicationUser student, Class @class)
+        public async Task<float> GetStudentGradeAsync(ApplicationUser student, Class @class)
         {
             WorkItemManager workItemManager = new WorkItemManager(_db);
-            ScoreUnitManager scoreUnitManager = new ScoreUnitManager(_db);
 
             var workItems = await workItemManager.GetClassWorkItems(@class);
+            var total = 0.0f;
 
-            // Group the work items by type
-            var groups = workItems.GroupBy(wi => wi.Type);
+            total += await GetAverageForType(student, workItems, WorkItemType.Exam, @class.GradeDistribution);
+            total += await GetAverageForType(student, workItems, WorkItemType.Homework, @class.GradeDistribution);
+            total += await GetAverageForType(student, workItems, WorkItemType.Other, @class.GradeDistribution);
+            total += await GetAverageForType(student, workItems, WorkItemType.Project, @class.GradeDistribution);
+            total += await GetAverageForType(student, workItems, WorkItemType.Quiz, @class.GradeDistribution);
 
-            float grade = 0.0f;
+            return total;
+        }
 
-            // For each work item type, sum up the students grades and average
-            foreach(var group in groups)
+        private async Task<float> GetAverageForType(ApplicationUser student, IEnumerable<WorkItem> workItems, WorkItemType type, GradeDistribution distribution)
+        {
+            var scoreUnitManager = new ScoreUnitManager(_db);
+            var workItemsForType = workItems.Where(wi => wi.Type == type);
+            var PointsForType = MaxPointsForType(type, distribution);
+
+            // If no WorkItem for the type, return total for that type
+            if(workItemsForType.Count() == 0)
             {
-                float percentage = 0;
-                switch(group.Key)
-                {
-                    case WorkItemType.Exam:
-                        percentage = @class.GradeDistribution.Exam;
-                        break;
-                    case WorkItemType.Project:
-                        percentage = @class.GradeDistribution.Project;
-                        break;
-                    case WorkItemType.Homework:
-                        percentage = @class.GradeDistribution.Homework;
-                        break;
-                    case WorkItemType.Quiz:
-                        percentage = @class.GradeDistribution.Quiz;
-                        break;
-                    case WorkItemType.Other:
-                        percentage = @class.GradeDistribution.Other;
-                        break;
-                }
+                return PointsForType;
+            }
 
-                float studentsScores = 0.0f;
-                float total = 0.0f;
-                bool hasGradedScoreUnit = false;
-                foreach(var workItem in group)
+            bool hasGradedScoreUnit = false;
+            float studentsScores = 0.0f;
+            float total = 0.0f;
+            foreach(var workItem in workItemsForType)
+            {
+                var scoreUnit = await scoreUnitManager.GetStudentScoreUnit(workItem, student);
+                if(scoreUnit != null && scoreUnit.Grade.HasValue)
                 {
-                    var scoreUnit = await scoreUnitManager.GetStudentScoreUnit(workItem, student);
-                    if(scoreUnit != null && scoreUnit.Grade.HasValue)
-                    {
-                        hasGradedScoreUnit = true;
-                        studentsScores += scoreUnit.Grade.Value;
-                        total += workItem.MaxPoints;
-                    }
-                }
-
-                // If no grade assigned for this group, assign maximum points
-                if(!hasGradedScoreUnit)
-                {
-                    grade += percentage;
-                }
-                else
-                {
-                    grade += (studentsScores / total) * percentage;
+                    hasGradedScoreUnit = true;
+                    studentsScores += scoreUnit.Grade.Value;
+                    total += workItem.MaxPoints;
                 }
             }
-            return grade;
+
+            // If no ScoreUnit has been graded, return the total for that type
+            if(!hasGradedScoreUnit)
+            {
+                return PointsForType;
+            }
+
+            return (studentsScores / total) * PointsForType;
+        }
+
+        private float MaxPointsForType(WorkItemType type, GradeDistribution distribution)
+        {
+            switch(type)
+            {
+                case WorkItemType.Exam:
+                    return distribution.Exam;
+                case WorkItemType.Project:
+                    return distribution.Project;
+                case WorkItemType.Homework:
+                    return distribution.Homework;
+                case WorkItemType.Quiz:
+                    return distribution.Quiz;
+                case WorkItemType.Other:
+                    return distribution.Other;
+                default:
+                    return 0;
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ namespace RGSWeb.Controllers
     [Authorize]
     public class WorkItemsController : ApiController
     {
-        private ApplicationDbContext _db = new ApplicationDbContext();
+        private ApplicationDbContext _db;
         private ApplicationUserManager _userManager;
         private WorkItemManager _workItemManager;
 
@@ -29,7 +29,7 @@ namespace RGSWeb.Controllers
         public WorkItemsController()
         {
             _db = new ApplicationDbContext();
-            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>());
+            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_db));
             _workItemManager = new WorkItemManager(_db);
         }
 

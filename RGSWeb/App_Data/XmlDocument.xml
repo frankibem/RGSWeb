@@ -872,7 +872,7 @@
             </summary>
             <param name="db">The Database context to use</param>
         </member>
-        <member name="M:RGSWeb.Managers.GradeManager.GetStudentGrade(RGSWeb.Models.ApplicationUser,RGSWeb.Models.Class)">
+        <member name="M:RGSWeb.Managers.GradeManager.GetStudentGradeAsync(RGSWeb.Models.ApplicationUser,RGSWeb.Models.Class)">
             <summary>
             Calculates and returns a students grade in a class
             </summary>
@@ -1268,6 +1268,11 @@
             </summary>
             <param name="scoreUnit">ScoreUnit to create the model from</param>
         </member>
+        <member name="T:RGSWeb.Models.WorkItem">
+            <summary>
+            Model to represent a class work-item
+            </summary>
+        </member>
         <member name="P:RGSWeb.Models.WorkItem.Id">
             <summary>
             Id of the WorkItem
@@ -1345,12 +1350,7 @@
             The student's grade for the class
             </summary>
         </member>
-        <member name="M:RGSWeb.ViewModels.StudentViewModel.#ctor">
-            <summary>
-            Creates a default StudentViewModel
-            </summary>
-        </member>
-        <member name="M:RGSWeb.ViewModels.StudentViewModel.#ctor(RGSWeb.Models.ApplicationUser,RGSWeb.Models.Class,RGSWeb.Managers.GradeManager)">
+        <member name="M:RGSWeb.ViewModels.StudentViewModel.#ctor(RGSWeb.Models.ApplicationUser)">
             <summary>
             Creates a StudentViewModel for an ApplicationUser
             </summary>
