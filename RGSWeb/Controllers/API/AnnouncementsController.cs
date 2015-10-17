@@ -2,11 +2,14 @@
 using RGSWeb.Managers;
 using RGSWeb.Models;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Linq;
+using RGSWeb.ViewModels;
 
 namespace RGSWeb.Controllers.API
 {
@@ -35,6 +38,7 @@ namespace RGSWeb.Controllers.API
         /// </summary>
         /// <param name="classId">Id of the class</param>
         /// <returns></returns>
+        [ResponseType(typeof(IEnumerable<AnnouncementViewModel>))]
         public async Task<IHttpActionResult> GetClassAnnouncements(int classId)
         {
             var @class = await _db.Classes.FindAsync(classId);
@@ -43,6 +47,7 @@ namespace RGSWeb.Controllers.API
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + classId));
             }
 
+            var result = (await _announcementManager.GetAnnouncementsForClass(@class)).Select(a => new AnnouncementViewModel(a));
             return Ok(await _announcementManager.GetAnnouncementsForClass(@class));
         }
 
@@ -72,7 +77,7 @@ namespace RGSWeb.Controllers.API
         /// <summary>
         /// Create a new announcement
         /// </summary>
-        [ResponseType(typeof(Announcement))]
+        [ResponseType(typeof(AnnouncementViewModel))]
         public async Task<IHttpActionResult> PostAnnouncement(CreateAnnouncementModel cam)
         {
             if(!ModelState.IsValid)
@@ -86,22 +91,31 @@ namespace RGSWeb.Controllers.API
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Could not match class to existing records"));
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = announcement.Id }, announcement);
+            return CreatedAtRoute("DefaultApi", new { id = announcement.Id }, new AnnouncementViewModel(announcement));
         }
 
         /// <summary>
         /// Delete an announcment by id
         /// </summary>
         /// <param name="id">Id of the announcement to delete</param>
-        [ResponseType(typeof(Announcement))]
-        public async Task<Announcement> DeleteWorkItem(int id)
+        [ResponseType(typeof(AnnouncementViewModel))]
+        public async Task<AnnouncementViewModel> DeleteWorkItem(int id)
         {
             var announcement = await _announcementManager.DeleteAnnouncement(id);
             if(announcement == null)
             {
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No announcement with id: " + id));
             }
-            return announcement;
+            return new AnnouncementViewModel(announcement);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if(disposing)
+            {
+                _db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

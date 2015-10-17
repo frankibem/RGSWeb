@@ -1,12 +1,8 @@
 ﻿using RGSWeb.Managers;
-using System;
-using System.Collections.Generic;
+using RGSWeb.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace RGSWeb.Models
+namespace RGSWeb.ViewModels
 {
     /// <summary>
     /// Base view-model for application users
@@ -66,10 +62,12 @@ namespace RGSWeb.Models
         /// Creates a StudentViewModel for an ApplicationUser
         /// </summary>
         /// <param name="user">ApplicationUser to construct view-model from</param>
+        /// <param name="class">Class to calculate the students in</param>
         /// <param name="manager">Grademanager to calculate student's grade</param>
-        public StudentViewModel(ApplicationUser user, GradeManager manager)
+        public StudentViewModel(ApplicationUser user, Class @class, GradeManager manager)
             : base(user)
         {
+            Grade = manager.GetStudentGrade(user, @class).Result;
         }
     }
 }

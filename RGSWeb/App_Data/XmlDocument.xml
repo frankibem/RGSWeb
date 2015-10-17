@@ -553,6 +553,29 @@
             Drops a student from a class
             </summary>
         </member>
+        <member name="T:RGSWeb.Controllers.API.GradesController">
+            <summary>
+            API controller for grade related actions
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.GradesController.#ctor">
+            <summary>
+            Creates a new default GradesController
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.GradesController.GetGradesForClass(System.Int32)">
+            <summary>
+            Returns the grades of all students in a class
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.GradesController.GetStudentsGrade(System.String,System.Int32)">
+            <summary>
+            Returns a students grade in a class
+            </summary>
+            <param name="classId"></param>
+            <returns></returns>
+        </member>
         <member name="T:RGSWeb.Controllers.ClassesController">
             <summary>
             API controller for class related actions
@@ -1117,59 +1140,6 @@
             Class to represent the weight distribution of the different types of workitems
             </summary>
         </member>
-        <member name="T:RGSWeb.Models.UserViewModel">
-            <summary>
-            Base view-model for application users
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UserViewModel.FirstName">
-            <summary>
-            The user's first name
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UserViewModel.LastName">
-            <summary>
-            The user's last name
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UserViewModel.UserName">
-            <summary>
-            Username for user
-            </summary>
-        </member>
-        <member name="M:RGSWeb.Models.UserViewModel.#ctor">
-            <summary>
-            Creates a default UserViewModel
-            </summary>
-        </member>
-        <member name="M:RGSWeb.Models.UserViewModel.#ctor(RGSWeb.Models.ApplicationUser)">
-            <summary>
-            Create a UserModel for an ApplicationUser
-            </summary>
-            <param name="user"></param>
-        </member>
-        <member name="T:RGSWeb.Models.StudentViewModel">
-            <summary>
-            Model for representing a student
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.StudentViewModel.Grade">
-            <summary>
-            The student's grade for the class
-            </summary>
-        </member>
-        <member name="M:RGSWeb.Models.StudentViewModel.#ctor">
-            <summary>
-            Creates a default StudentViewModel
-            </summary>
-        </member>
-        <member name="M:RGSWeb.Models.StudentViewModel.#ctor(RGSWeb.Models.ApplicationUser,RGSWeb.Managers.GradeManager)">
-            <summary>
-            Creates a StudentViewModel for an ApplicationUser
-            </summary>
-            <param name="user">ApplicationUser to construct view-model from</param>
-            <param name="manager">Grademanager to calculate student's grade</param>
-        </member>
         <member name="T:RGSWeb.Models.WorkItemType">
             <summary>
             Class to represent the different types of workitems
@@ -1373,6 +1343,96 @@
             The type of this WorkItem (e.g. Project, Exam...)
             </summary>
         </member>
+        <member name="T:RGSWeb.ViewModels.UserViewModel">
+            <summary>
+            Base view-model for application users
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UserViewModel.FirstName">
+            <summary>
+            The user's first name
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UserViewModel.LastName">
+            <summary>
+            The user's last name
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.UserViewModel.UserName">
+            <summary>
+            Username for user
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.UserViewModel.#ctor">
+            <summary>
+            Creates a default UserViewModel
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.UserViewModel.#ctor(RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Create a UserModel for an ApplicationUser
+            </summary>
+            <param name="user"></param>
+        </member>
+        <member name="T:RGSWeb.ViewModels.StudentViewModel">
+            <summary>
+            Model for representing a student
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.StudentViewModel.Grade">
+            <summary>
+            The student's grade for the class
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.StudentViewModel.#ctor">
+            <summary>
+            Creates a default StudentViewModel
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.StudentViewModel.#ctor(RGSWeb.Models.ApplicationUser,RGSWeb.Models.Class,RGSWeb.Managers.GradeManager)">
+            <summary>
+            Creates a StudentViewModel for an ApplicationUser
+            </summary>
+            <param name="user">ApplicationUser to construct view-model from</param>
+            <param name="class">Class to calculate the students in</param>
+            <param name="manager">Grademanager to calculate student's grade</param>
+        </member>
+        <member name="T:RGSWeb.ViewModels.AnnouncementViewModel">
+            <summary>
+            View-model to represent an announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.Id">
+            <summary>
+            Id of the announcment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.Title">
+            <summary>
+            Title of the announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.Description">
+            <summary>
+            Description of the announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.CreatedOn">
+            <summary>
+            Creation time of the assignment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.ViewModels.AnnouncementViewModel.Class">
+            <summary>
+            Class for which the announcement was created
+            </summary>
+        </member>
+        <member name="M:RGSWeb.ViewModels.AnnouncementViewModel.#ctor(RGSWeb.Models.Announcement)">
+            <summary>
+            Creates a view-model for the announcement
+            </summary>
+            <param name="announcement"></param>
+        </member>
         <member name="T:RGSWeb.ViewModels.ClassViewModel">
             <summary>
             View-model to represent a class
@@ -1424,11 +1484,6 @@
             Creates a ClassViewModel for the given class
             </summary>
             <param name="class">Class to create view-model for</param>
-        </member>
-        <member name="T:RGSWeb.ViewModels.EnrollmentViewModels">
-            <summary>
-            View-model to represent an enrollment
-            </summary>
         </member>
     </members>
 </doc>
