@@ -36,9 +36,8 @@ namespace RGSWeb.Controllers.API
         /// Return a list of enrollments in a class
         /// </summary>
         /// <param name="classId">Id of the class</param>
-        /// <param name="state">The state of the students to obtain e.g. All, PendingOnly, AcceptedOnly</param>
         [ResponseType(typeof(IEnumerable<EnrollmentViewModel>))]
-        public async Task<IHttpActionResult> GetEnrollments(int classId, EnrollmentState? state)
+        public async Task<IHttpActionResult> GetEnrollments(int classId)
         {
             if(!ModelState.IsValid)
             {
@@ -51,38 +50,52 @@ namespace RGSWeb.Controllers.API
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + classId));
             }
 
-            IEnumerable<Enrollment> enrollments = null;
-            List<EnrollmentViewModel> result = new List<EnrollmentViewModel>();
-
-            if(!state.HasValue || state == EnrollmentState.All)
-            {
-                enrollments = await _enrollmentManager.GetAllEnrollmentsForClass(@class);
-                foreach(var enroll in enrollments)
-                {
-                    result.Add(new EnrollmentViewModel(enroll));
-                }
-            }
-            else if(state == EnrollmentState.Pending)
-            {
-                enrollments = await _enrollmentManager.GetPendingEnrollmentsForClass(@class);
-                foreach(var enroll in enrollments)
-                {
-                    result.Add(new EnrollmentViewModel(enroll));
-                }
-            }
-            else if(state == EnrollmentState.Accepted)
-            {
-                enrollments = await _enrollmentManager.GetAcceptedEnrollmentsForClass(@class);
-                var gradeManager = new GradeManager(_db);
-                foreach(var enroll in enrollments)
-                {
-                    var enrollvm = new EnrollmentViewModel(enroll);
-                    enrollvm.Grade = await gradeManager.GetStudentGradeAsync(enroll.Student, enroll.Class);
-                    result.Add(enrollvm);
-                }
-            }
+            var enrollments = await _enrollmentManager.GetAllEnrollmentsForClass(@class);
+            var result = await ConvertToViewModel(enrollments);
 
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Returns a list of all enrollments by a student (pending and not)
+        /// </summary>
+        /// <param name="studentUserName">Username of student</param>
+        /// <returns></returns>
+        public async Task<IHttpActionResult> GetEnrollments(string studentUserName)
+        {
+            if(studentUserName == null)
+            {
+                return BadRequest("Must supply a value for student username");
+            }
+
+            var student = await _userManager.FindByEmailAsync(studentUserName);
+            var enrollments = await _enrollmentManager.GetStudentEnrollments(student);
+
+            var result = await ConvertToViewModel(enrollments);
+            return Ok(result);
+        }
+
+
+        /// <summary>
+        /// Converts a list of enrollments to a list of corresponding view-models
+        /// </summary>
+        /// <param name="enrollments"></param>
+        /// <returns></returns>
+        private async Task<List<EnrollmentViewModel>> ConvertToViewModel(IEnumerable<Enrollment> enrollments)
+        {
+            List<EnrollmentViewModel> result = new List<EnrollmentViewModel>();
+            var gradeManager = new GradeManager(_db);
+            foreach(var enroll in enrollments)
+            {
+                var enrollvm = new EnrollmentViewModel(enroll);
+                if(!enroll.Pending)
+                {
+                    enrollvm.Grade = await gradeManager.GetStudentGradeAsync(enroll.Student, enroll.Class);
+                }
+                result.Add(enrollvm);
+            }
+
+            return result;
         }
 
         /// <summary>

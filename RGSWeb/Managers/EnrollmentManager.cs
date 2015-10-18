@@ -125,5 +125,15 @@ namespace RGSWeb.Managers
         {
             return await _db.Enrollments.Where(e => e.Class.Id == @class.Id && e.Pending == false).Include(e => e.Student).ToListAsync();
         }
+
+        /// <summary>
+        /// Returns of enrollments which apply to the given student
+        /// </summary>
+        /// <param name="student"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Enrollment>> GetStudentEnrollments(ApplicationUser student)
+        {
+            return await _db.Enrollments.Where(e => e.Student.Id == student.Id).Include(e => e.Class).Include(e => e.Student).ToListAsync();
+        }
     }
 }

@@ -529,12 +529,25 @@
             Create a new default EnrollmentsController
             </summary>
         </member>
-        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.GetEnrollments(System.Int32,System.Nullable{RGSWeb.Models.EnrollmentState})">
+        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.GetEnrollments(System.Int32)">
             <summary>
             Return a list of enrollments in a class
             </summary>
             <param name="classId">Id of the class</param>
-            <param name="state">The state of the students to obtain e.g. All, PendingOnly, AcceptedOnly</param>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.GetEnrollments(System.String)">
+            <summary>
+            Returns a list of all enrollments by a student (pending and not)
+            </summary>
+            <param name="studentUserName">Username of student</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.ConvertToViewModel(System.Collections.Generic.IEnumerable{RGSWeb.Models.Enrollment})">
+            <summary>
+            Converts a list of enrollments to a list of corresponding view-models
+            </summary>
+            <param name="enrollments"></param>
+            <returns></returns>
         </member>
         <member name="M:RGSWeb.Controllers.API.EnrollmentsController.RequestEnrollment(RGSWeb.Models.EnrollmentBindingModel)">
             <summary>
@@ -859,6 +872,13 @@
             Returns all non-pending enrollments for the given class
             </summary>
             <param name="class">Class to return non-pending enrollments for</param>
+            <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.EnrollmentManager.GetStudentEnrollments(RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Returns of enrollments which apply to the given student
+            </summary>
+            <param name="student"></param>
             <returns></returns>
         </member>
         <member name="T:RGSWeb.Managers.GradeManager">
