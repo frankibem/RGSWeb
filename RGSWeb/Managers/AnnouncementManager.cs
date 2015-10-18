@@ -40,7 +40,7 @@ namespace RGSWeb.Managers
             Announcement announcement = new Announcement
             {
                 Title = cam.Title,
-                CreatedOn = cam.CreatedOn,
+                CreatedOn = DateTime.UtcNow,
                 Description = cam.Description,
                 Class = @class
             };

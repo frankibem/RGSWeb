@@ -1064,11 +1064,6 @@
             Id of the class for which to create the announcement
             </summary>
         </member>
-        <member name="P:RGSWeb.Models.CreateAnnouncementModel.CreatedOn">
-            <summary>
-            Creation time for the assignment
-            </summary>
-        </member>
         <member name="T:RGSWeb.Models.UpdateAnnouncementModel">
             <summary>
             Model used to update an announcement

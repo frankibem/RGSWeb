@@ -46,10 +46,6 @@ namespace RGSWeb.Models
         /// Id of the class for which to create the announcement
         /// </summary>
         public int ClassId { get; set; }
-        /// <summary>
-        /// Creation time for the assignment
-        /// </summary>
-        public DateTime CreatedOn { get; set; }
     }
 
     /// <summary>
