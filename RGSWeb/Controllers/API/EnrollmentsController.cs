@@ -61,6 +61,7 @@ namespace RGSWeb.Controllers.API
         /// </summary>
         /// <param name="studentUserName">Username of student</param>
         /// <returns></returns>
+        [ResponseType(typeof(IEnumerable<EnrollmentViewModel>))]
         public async Task<IHttpActionResult> GetEnrollments(string studentUserName)
         {
             if(studentUserName == null)
