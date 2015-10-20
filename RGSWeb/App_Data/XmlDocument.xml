@@ -481,6 +481,12 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:RGSWeb.Controllers.AccountController.GetUserRole">
+            <summary>
+            Returns a list of roles to which the user belongs
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:RGSWeb.Controllers.AccountController.Register(RGSWeb.Models.RegisterBindingModel)">
             <summary>
             Registers a new user

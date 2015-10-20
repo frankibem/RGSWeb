@@ -67,6 +67,18 @@ namespace RGSWeb.Controllers
             };
         }
 
+        /// <summary>
+        /// Returns a list of roles to which the user belongs
+        /// </summary>
+        /// <returns></returns>
+        // GET api/Account/Role
+        [Route("Role")]
+        public string GetUserRole()
+        {
+            var roles = UserManager.GetRoles(User.Identity.GetUserId());
+            return string.Join(",", roles);
+        }
+
         // POST api/Account/Logout
         [Route("Logout")]
         public IHttpActionResult Logout()
