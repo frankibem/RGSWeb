@@ -2,6 +2,7 @@
 using RGSWeb.Managers;
 using RGSWeb.Models;
 using RGSWeb.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -76,7 +77,6 @@ namespace RGSWeb.Controllers.API
             return Ok(result);
         }
 
-
         /// <summary>
         /// Converts a list of enrollments to a list of corresponding view-models
         /// </summary>
@@ -133,23 +133,24 @@ namespace RGSWeb.Controllers.API
         /// <summary>
         /// Accept/Reject a student's enrollment into a class
         /// </summary>
-        /// <param name="enroll">Model containing the details of the enrollment</param>
+        /// <param name="models">List of model containing the details of the enrollment</param>
         [HttpPut]
-        public async Task<IHttpActionResult> AcceptStudentEnrollment(EnrollmentBindingModel enroll)
+        public async Task<IHttpActionResult> AcceptStudentEnrollment(List<EnrollmentBindingModel> models)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Ensure that the enrollment exists
-            var enrollment = _db.Enrollments.Where(e => e.Student.UserName == enroll.StudentUserName && e.Class.Id == enroll.ClassId).FirstOrDefault();
-            if(enrollment == null)
+            try
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Could not match model with records"));
+                await _enrollmentManager.AcceptEnrollment(models);
+            }
+            catch(Exception ex)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, ex.Message));
             }
 
-            await _enrollmentManager.AcceptEnrollment(enrollment, enroll.Accept);
             return StatusCode(HttpStatusCode.NoContent);
         }
 

@@ -1,4 +1,5 @@
 ﻿using RGSWeb.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -78,22 +79,28 @@ namespace RGSWeb.Managers
         /// <summary>
         /// Accepts or rejects a students enrollment into a class
         /// </summary>
-        /// <param name="enrollment">The enrollment to update</param>
-        /// <param name="state">True if the student should be accepted. Otherwise false.</param>
-        /// <remarks>Deletes the enrollment if rejected</remarks>
-        public async Task AcceptEnrollment(Enrollment enrollment, bool state)
+        /// <param name="models">List of models for enrollment</param>
+        /// <remarks>Deletes an enrollment if rejected</remarks>
+        public async Task AcceptEnrollment(List<EnrollmentBindingModel> models)
         {
-            if(!state)
+            foreach(var model in models)
             {
-                _db.Enrollments.Remove(enrollment);
+                var enroll = _db.Enrollments.Where(e => e.Student.UserName == model.StudentUserName && e.Class.Id == model.ClassId).FirstOrDefault();
+                if(enroll == null)
+                {
+                    throw new Exception(string.Format("No enrollment for user: {0} in class: {1}", model.StudentUserName, model.ClassId));
+                }
+                if(!model.Accept)
+                {
+                    _db.Enrollments.Remove(enroll);
+                }
+                else
+                {
+                    enroll.Pending = false;
+                    _db.Entry(enroll).State = EntityState.Modified;
+                }
+                await _db.SaveChangesAsync();
             }
-            else
-            {
-                enrollment.Pending = false;
-                _db.Entry(enrollment).State = EntityState.Modified;
-            }
-
-            await _db.SaveChangesAsync();
         }
 
         /// <summary>

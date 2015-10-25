@@ -561,11 +561,11 @@
             </summary>
             <param name="enroll">Contains the student Id and class Id</param>
         </member>
-        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.AcceptStudentEnrollment(RGSWeb.Models.EnrollmentBindingModel)">
+        <member name="M:RGSWeb.Controllers.API.EnrollmentsController.AcceptStudentEnrollment(System.Collections.Generic.List{RGSWeb.Models.EnrollmentBindingModel})">
             <summary>
             Accept/Reject a student's enrollment into a class
             </summary>
-            <param name="enroll">Model containing the details of the enrollment</param>
+            <param name="models">List of model containing the details of the enrollment</param>
         </member>
         <member name="M:RGSWeb.Controllers.API.EnrollmentsController.DropStudent(RGSWeb.Models.EnrollmentBindingModel)">
             <summary>
@@ -851,13 +851,12 @@
             <remarks>This clears all data associated with the student in this class and
             cannot be undone</remarks>
         </member>
-        <member name="M:RGSWeb.Managers.EnrollmentManager.AcceptEnrollment(RGSWeb.Models.Enrollment,System.Boolean)">
+        <member name="M:RGSWeb.Managers.EnrollmentManager.AcceptEnrollment(System.Collections.Generic.List{RGSWeb.Models.EnrollmentBindingModel})">
             <summary>
             Accepts or rejects a students enrollment into a class
             </summary>
-            <param name="enrollment">The enrollment to update</param>
-            <param name="state">True if the student should be accepted. Otherwise false.</param>
-            <remarks>Deletes the enrollment if rejected</remarks>
+            <param name="models">List of models for enrollment</param>
+            <remarks>Deletes an enrollment if rejected</remarks>
         </member>
         <member name="M:RGSWeb.Managers.EnrollmentManager.GetAllEnrollmentsForClass(RGSWeb.Models.Class)">
             <summary>
