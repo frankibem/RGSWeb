@@ -27,7 +27,7 @@ namespace RGSWeb.Models
     }
 
     /// <summary>
-    /// Represents the 
+    /// Represents the state of a student's enrollment
     /// </summary>
     public enum EnrollmentState
     {

@@ -1117,7 +1117,7 @@
         </member>
         <member name="T:RGSWeb.Models.EnrollmentState">
             <summary>
-            Represents the 
+            Represents the state of a student's enrollment
             </summary>
         </member>
         <member name="F:RGSWeb.Models.EnrollmentState.All">
