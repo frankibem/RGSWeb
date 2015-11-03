@@ -30,7 +30,7 @@ namespace RGSWeb.Controllers
         public ScoreUnitsController()
         {
             _db = new ApplicationDbContext();
-            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>());
+            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_db));
             _scoreUnitManager = new ScoreUnitManager(_db);
         }
 
@@ -50,6 +50,27 @@ namespace RGSWeb.Controllers
 
             var scoreUnits = await _scoreUnitManager.GetScoreUnits(workItem);
             return scoreUnits.Select(su => new ScoreUnitBindingModel(su)).ToList();
+        }
+
+        // GET: api/ScoreUnits?username=johndoe@rgs.com&classId=2
+        /// <summary>
+        /// Returns all score units for a student in a class
+        /// </summary>
+        /// <param name="username">THe username of the student</param>
+        /// <param name="classId">The id of the class to retrieve score units for</param>
+        /// <returns></returns>
+        [ResponseType(typeof(List<ScoreUnitBindingModel>))]
+        public async Task<IHttpActionResult> GetStudentScoreUnits(string username, int classId)
+        {
+            var @class = await _db.Classes.FindAsync(classId);
+            var student = await _userManager.FindByEmailAsync(username);
+            if(@class == null || student == null)
+            {
+                return BadRequest("Could not match both username and classId to existing records");
+            }
+
+            var scoreUnits = await _scoreUnitManager.GetStudentScoreUnitsForClass(student, @class);
+            return Ok(scoreUnits.Select(su => new ScoreUnitBindingModel(su)).ToList());
         }
 
         // PUT: api/ScoreUnits

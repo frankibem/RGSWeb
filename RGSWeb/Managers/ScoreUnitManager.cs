@@ -84,9 +84,19 @@ namespace RGSWeb.Managers
         /// <param name="workItem">WorkItem to return the ScoreUnit for</param>
         /// <param name="student">Student to return the ScorreUnit for</param>
         /// <returns></returns>
-        public async Task<ScoreUnit> GetStudentScoreUnit(WorkItem workItem, ApplicationUser student)
+        public async Task<ScoreUnit> GetStudentScoreUnitForWorkItem(WorkItem workItem, ApplicationUser student)
         {
             return await _db.ScoreUnits.Where(su => su.WorkItem.Id == workItem.Id && su.Student.Id == student.Id).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Returns all score units for a student in a class
+        /// </summary>
+        /// <param name="student">The student to return score units for</param>
+        /// <param name="class">The class in which the student is enrolled in</param>
+        public async Task<List<ScoreUnit>> GetStudentScoreUnitsForClass(ApplicationUser student, Class @class)
+        {
+            return await _db.ScoreUnits.Where(su => su.Student.Id == student.Id && su.WorkItem.Class.Id == @class.Id).ToListAsync();
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace RGSWeb.Models
 {
-    public class ApplicationDbInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
+    public class ApplicationDbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
     {
         private ApplicationUserManager UserManager;
         private RoleManager<IdentityRole> RoleManager;
@@ -66,7 +66,6 @@ namespace RGSWeb.Models
                 GradeDistribution = new GradeDistribution() { Exam = 30, Homework = 20, Quiz = 15, Project = 20, Other = 5 }  }
             };
             context.Classes.AddRange(classes);
-            context.SaveChanges();
 
             // Enroll the students
             List<Enrollment> enrollments = new List<Enrollment>();
@@ -78,7 +77,6 @@ namespace RGSWeb.Models
             enrollments.Add(new Enrollment() { Student = students[1], Class = classes[1], Pending = true });
             enrollments.Add(new Enrollment() { Student = students[3], Class = classes[1], Pending = false });
             context.Enrollments.AddRange(enrollments);
-            context.SaveChanges();
 
             // Create some work items
             WorkItem[] workItems = new WorkItem[]
@@ -92,11 +90,11 @@ namespace RGSWeb.Models
             {
                 new Announcement()
                 {
-                    Title = "First day of free stuff on campus", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", Class = classes[0], CreatedOn = DateTime.Now },
+                    Title = "First day of free stuff on campus", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", Class = classes[0], CreatedOn = DateTime.UtcNow },
                 new Announcement()
                 {
                     Title = "Too good to be true. Good stuff for free", Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", Class = classes[1],
-                    CreatedOn = DateTime.Now
+                    CreatedOn = DateTime.UtcNow
                 }
             };
 

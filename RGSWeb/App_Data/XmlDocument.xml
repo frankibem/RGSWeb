@@ -652,6 +652,14 @@
             </summary>
             <param name="workItemId">Id of the score unit to get</param>
         </member>
+        <member name="M:RGSWeb.Controllers.ScoreUnitsController.GetStudentScoreUnits(System.String,System.Int32)">
+            <summary>
+            Returns all score units for a student in a class
+            </summary>
+            <param name="username">THe username of the student</param>
+            <param name="classId">The id of the class to retrieve score units for</param>
+            <returns></returns>
+        </member>
         <member name="M:RGSWeb.Controllers.ScoreUnitsController.PutScoreUnits(System.Collections.Generic.List{RGSWeb.Models.ScoreUnitBindingModel})">
             <summary>
             Updates grade(s) for a WorkItem
@@ -931,13 +939,20 @@
             <param name="workItem">WorkItem for which to return ScoreUnits</param>
             <returns>Creates new ScoreUnits for all students who have none</returns>
         </member>
-        <member name="M:RGSWeb.Managers.ScoreUnitManager.GetStudentScoreUnit(RGSWeb.Models.WorkItem,RGSWeb.Models.ApplicationUser)">
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.GetStudentScoreUnitForWorkItem(RGSWeb.Models.WorkItem,RGSWeb.Models.ApplicationUser)">
             <summary>
             Returns a students ScoreUnit for a WorkItem
             </summary>
             <param name="workItem">WorkItem to return the ScoreUnit for</param>
             <param name="student">Student to return the ScorreUnit for</param>
             <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Managers.ScoreUnitManager.GetStudentScoreUnitsForClass(RGSWeb.Models.ApplicationUser,RGSWeb.Models.Class)">
+            <summary>
+            Returns all score units for a student in a class
+            </summary>
+            <param name="student">The student to return score units for</param>
+            <param name="class">The class in which the student is enrolled in</param>
         </member>
         <member name="M:RGSWeb.Managers.ScoreUnitManager.UpdateScoreUnits(System.Collections.Generic.List{RGSWeb.Models.ScoreUnitBindingModel})">
             <summary>
@@ -1262,7 +1277,7 @@
             </summary>
             <remarks>Set to 0 if adding for the first time</remarks>
         </member>
-        <member name="P:RGSWeb.Models.ScoreUnitBindingModel.StudentUserName">
+        <member name="P:RGSWeb.Models.ScoreUnitBindingModel.Student">
             <summary>
             Username of the student
             </summary>

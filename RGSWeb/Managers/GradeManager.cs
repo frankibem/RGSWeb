@@ -60,7 +60,7 @@ namespace RGSWeb.Managers
             float total = 0.0f;
             foreach(var workItem in workItemsForType)
             {
-                var scoreUnit = await scoreUnitManager.GetStudentScoreUnit(workItem, student);
+                var scoreUnit = await scoreUnitManager.GetStudentScoreUnitForWorkItem(workItem, student);
                 if(scoreUnit != null && scoreUnit.Grade.HasValue)
                 {
                     hasGradedScoreUnit = true;

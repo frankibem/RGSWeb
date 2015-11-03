@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RGSWeb.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +28,8 @@ namespace RGSWeb.Models
         /// <summary>
         /// Username of the student
         /// </summary>
-        public string StudentUserName { get; set; }
+        public UserViewModel Student { get; set; }
+
         /// <summary>
         /// Id of the work item
         /// </summary>
@@ -49,7 +51,7 @@ namespace RGSWeb.Models
         public ScoreUnitBindingModel(ScoreUnit scoreUnit)
         {
             Id = scoreUnit.Id;
-            StudentUserName = scoreUnit.Student.UserName;
+            Student = new UserViewModel(scoreUnit.Student);
             WorkItemId = scoreUnit.WorkItem.Id;
             Grade = scoreUnit.Grade;
         }
