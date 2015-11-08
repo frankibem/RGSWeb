@@ -41,14 +41,14 @@ namespace RGSWeb.Models
             ApplicationUser[] teachers = new ApplicationUser[]
             {
                 new ApplicationUser() { UserName = "susanmengel@rgs.com", FirstName = "Susan", LastName = "Mengel" , Email = "susanmengel@rgs.com"},
-                new ApplicationUser() { UserName = "michaelgelfond@rgs.com", FirstName = "Michael", LastName = "Gelfond", Email = "michaelgelfond@rgs.com" }
+                new ApplicationUser() { UserName = "teacher@rgs.com", FirstName = "Michael", LastName = "Gelfond", Email = "teacher@rgs.com" }
             };
             CreateUsersAndAddToRole(teachers, roles[1]);
 
             // Create some students
             ApplicationUser[] students = new ApplicationUser[]
             {
-                new ApplicationUser() { UserName = "frankibem@rgs.com", FirstName = "Frank", LastName = "Ibem", Email = "frankibem@rgs.com" },
+                new ApplicationUser() { UserName = "student@rgs.com", FirstName = "John", LastName = "Doe", Email = "student@rgs.com" },
                 new ApplicationUser() { UserName = "joshuahernandez@rgs.com", FirstName = "Joshua", LastName = "Hernandez", Email = "joshuahernandez@rgs.com" },
                 new ApplicationUser() { UserName = "laurenjoness@rgs.com", FirstName = "Lauren", LastName = "Joness", Email = "laurenjoness@rgs.com" },
                 new ApplicationUser() { UserName = "clairegray@rgs.com", FirstName = "Claire", LastName = "Gray", Email = "clairegray@rgs.com" },

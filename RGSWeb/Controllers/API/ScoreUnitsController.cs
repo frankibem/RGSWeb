@@ -30,7 +30,7 @@ namespace RGSWeb.Controllers
         public ScoreUnitsController()
         {
             _db = new ApplicationDbContext();
-            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>());
+            _userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_db));
             _scoreUnitManager = new ScoreUnitManager(_db);
         }
 
