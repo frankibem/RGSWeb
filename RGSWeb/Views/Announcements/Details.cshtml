@@ -4,39 +4,21 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<p style="margin-top: 10px">
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+</p>
+
+<h3>Announcement - @Model.Title</h3>
+<hr />
 
 <div>
-    <h4>Announcement</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+    Created on @Model.CreatedOn.ToLongDateString() for @Html.ActionLink(Model.Class.Title, "Details", "Classes", new { id = Model.Class.Id })
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedOn)
-        </dd>
-
-    </dl>
+    <blockquote>
+        @Model.Description
+    </blockquote>
+    <footer>
+        By @Html.ActionLink(string.Format("{0}, {1}", Model.Class.Teacher.LastName, Model.Class.Teacher.FirstName), "Details", "Teachers", new { id = Model.Class.Teacher.Id })
+    </footer>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

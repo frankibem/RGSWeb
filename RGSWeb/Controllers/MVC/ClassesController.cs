@@ -47,11 +47,11 @@ namespace RGSWeb.Controllers.MVC
             }
 
             var workItemManager = new WorkItemManager(db);
-            var workItems = (await workItemManager.GetClassWorkItems(@class));
+            var workItems = (await workItemManager.GetClassWorkItems(@class)).Take(5);
             ViewBag.WorkItems = workItems;
 
             var announcementManager = new AnnouncementManager(db);
-            var announcements = (await announcementManager.GetAnnouncementsForClass(@class));
+            var announcements = (await announcementManager.GetAnnouncementsForClass(@class)).Take(5);
             ViewBag.Announcements = announcements;
 
             return View(@class);
