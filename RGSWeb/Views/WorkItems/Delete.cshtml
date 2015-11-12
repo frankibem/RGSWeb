@@ -1,4 +1,4 @@
-﻿@model RGSWeb.Models.Class
+﻿@model RGSWeb.Models.WorkItem
 
 @{
     ViewBag.Title = "Delete";
@@ -8,7 +8,7 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Class</h4>
+    <h4>WorkItem</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -20,35 +20,35 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Prefix)
+            @Html.DisplayNameFor(model => model.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Prefix)
+            @Html.DisplayFor(model => model.Description)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CourseNumber)
+            @Html.DisplayNameFor(model => model.DueDate)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CourseNumber)
+            @Html.DisplayFor(model => model.DueDate)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Section)
+            @Html.DisplayNameFor(model => model.MaxPoints)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Section)
+            @Html.DisplayFor(model => model.MaxPoints)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.GradeDistribution)
+            @Html.DisplayNameFor(model => model.Type)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.GradeDistribution)
+            @Html.DisplayFor(model => model.Type)
         </dd>
 
     </dl>

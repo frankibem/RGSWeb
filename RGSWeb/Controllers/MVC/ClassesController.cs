@@ -9,10 +9,10 @@ using System.Web;
 using System.Web.Mvc;
 using RGSWeb.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using RGSWeb.Managers;
 
 namespace RGSWeb.Controllers.MVC
 {
-    [Authorize(Roles = "Admin")]
     public class ClassesController : Controller
     {
         private ApplicationDbContext db;
@@ -27,33 +27,7 @@ namespace RGSWeb.Controllers.MVC
         // GET: Classes
         public async Task<ActionResult> Index()
         {
-            return View(await db.Classes.ToListAsync());
-        }
-
-        public async Task<ActionResult> List(string name)
-        {
-            if(name == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var user = await userManager.FindByNameAsync(name);
-            if(user == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            var result = new List<Class>();
-            if(await userManager.IsInRoleAsync(user.Id, "Teacher"))
-            {
-                result = await db.Classes.Where(cl => cl.Teacher.Id == user.Id).ToListAsync();
-            }
-            else if(await userManager.IsInRoleAsync(user.Id, "Student"))
-            {
-                result = await db.Enrollments.Where(e => e.Student.UserName == name).Select(e => e.Class).ToListAsync();
-            }
-            ViewBag.UserName = string.Format("{0}, {1}", user.LastName, user.FirstName);
-            return View(result);
+            return View(await db.Classes.Include(@class => @class.Teacher).ToListAsync());
         }
 
         // GET: Classes/Details/5
@@ -63,11 +37,23 @@ namespace RGSWeb.Controllers.MVC
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            const int maxItems = 10;
+
             Class @class = await db.Classes.FindAsync(id);
             if(@class == null)
             {
                 return HttpNotFound();
             }
+
+            var workItemManager = new WorkItemManager(db);
+            var workItems = (await workItemManager.GetClassWorkItems(@class));
+            ViewBag.WorkItems = workItems;
+
+            var announcementManager = new AnnouncementManager(db);
+            var announcements = (await announcementManager.GetAnnouncementsForClass(@class));
+            ViewBag.Announcements = announcements;
+
             return View(@class);
         }
 
@@ -82,27 +68,28 @@ namespace RGSWeb.Controllers.MVC
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Title,Prefix,CourseNumber,Section,TeacherUserName")] CreateClassBindingModel @cvm)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Title,Prefix,CourseNumber,Section,TeacherUserName,GradeDistribution")] CreateClassBindingModel classModel)
         {
             if(!ModelState.IsValid)
             {
-                return View(cvm);
+                return View(@classModel);
             }
 
-            var teacher = await userManager.FindByNameAsync(cvm.TeacherUserName);
+            ApplicationUser teacher = await userManager.FindByEmailAsync(classModel.TeacherUserName);
             if(teacher == null)
             {
-                // TODO: Add error for teacher user name
-                return View(cvm);
+                ModelState.AddModelError("TeacherUserName", "Could not match username to existing record");
+                return View(@classModel);
             }
 
             Class @class = new Class
             {
-                Title = cvm.Title,
-                Prefix = cvm.Prefix,
-                CourseNumber = cvm.CourseNumber,
-                Section = cvm.Section,
-                Teacher = teacher
+                Prefix = classModel.Prefix,
+                CourseNumber = classModel.CourseNumber,
+                Section = classModel.Section,
+                Teacher = teacher,
+                Title = classModel.Title,
+                GradeDistribution = classModel.GradeDistribution
             };
 
             db.Classes.Add(@class);
@@ -130,7 +117,7 @@ namespace RGSWeb.Controllers.MVC
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Prefix,CourseNumber,Section")] Class @class)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Prefix,CourseNumber,Section,GradeDistribution")] Class @class)
         {
             if(ModelState.IsValid)
             {

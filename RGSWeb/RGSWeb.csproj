@@ -211,12 +211,14 @@
     <Compile Include="Controllers\API\ClassesController.cs" />
     <Compile Include="Controllers\API\EnrollmentsController.cs" />
     <Compile Include="Controllers\API\GradesController.cs" />
+    <Compile Include="Controllers\MVC\AnnouncementsController.cs" />
     <Compile Include="Controllers\MVC\ClassesController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\API\ScoreUnitsController.cs" />
     <Compile Include="Controllers\API\WorkItemsController.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
     <Compile Include="Controllers\MVC\UsersController.cs" />
+    <Compile Include="Controllers\MVC\WorkItemsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -318,7 +320,16 @@
     <Content Include="Views\Classes\Details.cshtml" />
     <Content Include="Views\Classes\Edit.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
-    <Content Include="Views\Classes\List.cshtml" />
+    <Content Include="Views\Announcements\Create.cshtml" />
+    <Content Include="Views\Announcements\Delete.cshtml" />
+    <Content Include="Views\Announcements\Details.cshtml" />
+    <Content Include="Views\Announcements\Edit.cshtml" />
+    <Content Include="Views\Announcements\Index.cshtml" />
+    <Content Include="Views\WorkItems\Create.cshtml" />
+    <Content Include="Views\WorkItems\Delete.cshtml" />
+    <Content Include="Views\WorkItems\Details.cshtml" />
+    <Content Include="Views\WorkItems\Edit.cshtml" />
+    <Content Include="Views\WorkItems\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

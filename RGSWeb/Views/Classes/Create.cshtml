@@ -1,17 +1,16 @@
 ﻿@model RGSWeb.Models.CreateClassBindingModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "New Class";
 }
 
-<h2>Create</h2>
+<h2>Create a new class</h2>
 
 @using(Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Class</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -47,10 +46,18 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TeacherUserName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.TeacherUserName, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.TeacherUserName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Section, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.TeacherUserName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.GradeDistribution, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.GradeDistribution, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GradeDistribution, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -61,7 +68,3 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

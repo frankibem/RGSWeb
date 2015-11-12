@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace RGSWeb.Models
 {
@@ -22,6 +23,8 @@ namespace RGSWeb.Models
         /// <summary>
         /// Creation time of the assignment
         /// </summary>
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Creation date")]
         public DateTime CreatedOn { get; set; }
         /// <summary>
         /// Class for which the announcement was created

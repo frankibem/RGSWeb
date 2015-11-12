@@ -1,50 +1,139 @@
-﻿@model RGSWeb.Models.Class
+﻿@using RGSWeb.Models
+@model RGSWeb.Models.Class
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Class - @Model.Title</h2>
+<hr />
 
-<div>
-    <h4>Class</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Prefix)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Prefix)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CourseNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CourseNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Section)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Section)
-        </dd>
-
-    </dl>
-</div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
 </p>
+
+<div class="row">
+    <div class="col-lg-6">
+        <table class="table table-bordered">
+            <tr>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.Prefix)</b>
+                </td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.CourseNumber)</b>
+                </td>
+                <td>
+                    <b>@Html.DisplayNameFor(model => model.Section)</b>
+                </td>
+            </tr>
+            <tr>
+                <td>@Model.Prefix</td>
+                <td>@Model.CourseNumber</td>
+                <td>@Model.Section</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-lg-6">
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th>
+                    Grade Distribution
+                </th>
+                <th>
+                    Value
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.GradeDistribution.Homework)
+                </td>
+                <td>
+                    @Model.GradeDistribution.Homework
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.GradeDistribution.Quiz)
+                </td>
+                <td>
+                    @Model.GradeDistribution.Quiz
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.GradeDistribution.Project)
+                </td>
+                <td>
+                    @Model.GradeDistribution.Project
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.GradeDistribution.Exam)
+                </td>
+                <td>
+                    @Model.GradeDistribution.Exam
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.GradeDistribution.Other)
+                </td>
+                <td>
+                    @Model.GradeDistribution.Other
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Work items @Html.ActionLink("View all", "Index", "WorkItems")</h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    @foreach(var workItem in (IEnumerable<WorkItem>)ViewBag.WorkItems)
+                    {
+                        @Html.ActionLink(string.Format("{0}{1}", workItem.Title.Substring(0, Math.Min(workItem.Title.Length, 40)),
+    workItem.Title.Length > 40 ? "..." : ""), "Details", "WorkItems", new { id = workItem.Id }, new { @class = "list-group-item" });
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Announcements @Html.ActionLink("View all", "Index", "Announcements")</h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    @foreach(var announcement in (IEnumerable<Announcement>)ViewBag.Announcements)
+                    {
+                        @Html.ActionLink(string.Format("{0}{1}", announcement.Title.Substring(0, Math.Min(announcement.Title.Length, 40)), announcement.Title.Length > 40 ? "..." : ""), "Details", "Announcements", new { id = announcement.Id }, new { @class = "list-group-item" });
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Enrollments</h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    <a href="#" class="list-group-item">Current Students</a>
+                    <a href="#" class="list-group-item">Wait list</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

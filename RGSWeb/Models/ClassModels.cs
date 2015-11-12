@@ -55,12 +55,15 @@ namespace RGSWeb.Models
         [Required]
         public string Prefix { get; set; }
         [Required]
+        [Display(Name = "Course number")]
         public short CourseNumber { get; set; }
         [Required]
         public short Section { get; set; }
         [Required]
+        [Display(Name = "Teacher username")]
         public string TeacherUserName { get; set; }
         [Required]
+        [Display(Name = "Grade Distribution")]
         public GradeDistribution GradeDistribution { get; set; }
     }
 
