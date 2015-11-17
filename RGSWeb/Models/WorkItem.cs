@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace RGSWeb.Models
 {
@@ -22,10 +23,12 @@ namespace RGSWeb.Models
         /// <summary>
         /// Date and time at which the WorkItem is due
         /// </summary>
+        [Display(Name = "Due on")]
         public DateTime DueDate { get; set; }
         /// <summary>
         /// Maximum points attainable for this WorkItem
         /// </summary>
+        [Display(Name = "Max points")]
         public float MaxPoints { get; set; }
         /// <summary>
         /// The type of the WorkItem

@@ -17,11 +17,13 @@ namespace RGSWeb.Controllers.MVC
     {
         private ApplicationDbContext db;
         private ApplicationUserManager userManager;
+        private ClassManager classManager;
 
         public ClassesController()
         {
             db = new ApplicationDbContext();
             userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+            classManager = new ClassManager(db);
         }
 
         // GET: Classes
@@ -75,25 +77,13 @@ namespace RGSWeb.Controllers.MVC
                 return View(@classModel);
             }
 
-            ApplicationUser teacher = await userManager.FindByEmailAsync(classModel.TeacherUserName);
-            if(teacher == null)
+            var result = await classManager.CreateClass(classModel);
+            if(result == null)
             {
                 ModelState.AddModelError("TeacherUserName", "Could not match username to existing record");
                 return View(@classModel);
             }
 
-            Class @class = new Class
-            {
-                Prefix = classModel.Prefix,
-                CourseNumber = classModel.CourseNumber,
-                Section = classModel.Section,
-                Teacher = teacher,
-                Title = classModel.Title,
-                GradeDistribution = classModel.GradeDistribution
-            };
-
-            db.Classes.Add(@class);
-            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

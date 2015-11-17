@@ -7,18 +7,19 @@
 <p style="margin-top: 10px">
     @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
 </p>
 
 <h3>Announcement - @Model.Title</h3>
 <hr />
 
 <div>
-    Created on @Model.CreatedOn.ToLongDateString() for @Html.ActionLink(Model.Class.Title, "Details", "Classes", new { id = Model.Class.Id })
+    Created on @Model.CreatedOn.ToLongDateString() for @Html.ActionLink(Model.Class.Title, "Details", "Classes", new { id = Model.Class.Id }, null)
 
     <blockquote>
         @Model.Description
     </blockquote>
     <footer>
-        By @Html.ActionLink(string.Format("{0}, {1}", Model.Class.Teacher.LastName, Model.Class.Teacher.FirstName), "Details", "Teachers", new { id = Model.Class.Teacher.Id })
+        By @Html.ActionLink(string.Format("{0}, {1}", Model.Class.Teacher.LastName, Model.Class.Teacher.FirstName), "Details", "Teachers", new { id = Model.Class.Teacher.Id }, null)
     </footer>
 </div>

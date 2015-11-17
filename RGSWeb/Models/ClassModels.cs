@@ -61,6 +61,7 @@ namespace RGSWeb.Models
         public short Section { get; set; }
         [Required]
         [Display(Name = "Teacher username")]
+        [DataType(DataType.EmailAddress)]
         public string TeacherUserName { get; set; }
         [Required]
         [Display(Name = "Grade Distribution")]

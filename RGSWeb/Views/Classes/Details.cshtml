@@ -12,8 +12,9 @@
     <div class="row">
         <div class="col-md-5">
             <p>
-                @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
                 @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
             </p>
         </div>
     </div>
@@ -21,39 +22,43 @@
     <div class="row">
         <div class="col-lg-6">
             <h5>Details</h5>
-            <table class="table table-bordered">
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.Prefix)</th>
-                    <th>#</th>
-                    <th>@Html.DisplayNameFor(model => model.Section)</th>
-                    <th>@Html.DisplayNameFor(model => model.Teacher)</th>
-                </tr>
-                <tr>
-                    <td>@Model.Prefix</td>
-                    <td>@Model.CourseNumber</td>
-                    <td>@Model.Section</td>
-                    <td>@Html.ActionLink(string.Format("{0}, {1}", Model.Teacher.LastName, Model.Teacher.FirstName), "Details", "Teachers")</td>
-                </tr>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Prefix)</th>
+                        <th>@Html.DisplayNameFor(model => model.Id)</th>
+                        <th>@Html.DisplayNameFor(model => model.Section)</th>
+                        <th>@Html.DisplayNameFor(model => model.Teacher)</th>
+                    </tr>
+                    <tr>
+                        <td>@Model.Prefix</td>
+                        <td>@Model.CourseNumber</td>
+                        <td>@Model.Section</td>
+                        <td>@Html.ActionLink(string.Format("{0}, {1}", Model.Teacher.LastName, Model.Teacher.FirstName), "Details", "Teachers")</td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <div class="col-lg-6">
             <h5>Grade distribution</h5>
-            <table class="table table-bordered">
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.GradeDistribution.Homework)</th>
-                    <th>@Html.DisplayNameFor(model => model.GradeDistribution.Quiz)</th>
-                    <th>@Html.DisplayNameFor(model => model.GradeDistribution.Project)</th>
-                    <th>@Html.DisplayNameFor(model => model.GradeDistribution.Exam)</th>
-                    <th>@Html.DisplayNameFor(model => model.GradeDistribution.Other)</th>
-                </tr>
-                <tr>
-                    <td>@Html.DisplayFor(model => model.GradeDistribution.Homework)</td>
-                    <td>@Html.DisplayFor(model => model.GradeDistribution.Quiz)</td>
-                    <td>@Html.DisplayFor(model => model.GradeDistribution.Project)</td>
-                    <td>@Html.DisplayFor(model => model.GradeDistribution.Exam)</td>
-                    <td>@Html.DisplayFor(model => model.GradeDistribution.Other)</td>
-                </tr>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.GradeDistribution.Homework)</th>
+                        <th>@Html.DisplayNameFor(model => model.GradeDistribution.Quiz)</th>
+                        <th>@Html.DisplayNameFor(model => model.GradeDistribution.Project)</th>
+                        <th>@Html.DisplayNameFor(model => model.GradeDistribution.Exam)</th>
+                        <th>@Html.DisplayNameFor(model => model.GradeDistribution.Other)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.GradeDistribution.Homework)</td>
+                        <td>@Html.DisplayFor(model => model.GradeDistribution.Quiz)</td>
+                        <td>@Html.DisplayFor(model => model.GradeDistribution.Project)</td>
+                        <td>@Html.DisplayFor(model => model.GradeDistribution.Exam)</td>
+                        <td>@Html.DisplayFor(model => model.GradeDistribution.Other)</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 

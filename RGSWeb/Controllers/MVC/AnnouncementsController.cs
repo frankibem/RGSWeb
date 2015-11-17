@@ -98,7 +98,7 @@ namespace RGSWeb.Controllers.MVC
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Announcement announcement = await db.Announcements.FindAsync(id);
+            Announcement announcement = await db.Announcements.Include(ann => ann.Class.Teacher).SingleOrDefaultAsync(ann => ann.Id == id);
             if(announcement == null)
             {
                 return HttpNotFound();

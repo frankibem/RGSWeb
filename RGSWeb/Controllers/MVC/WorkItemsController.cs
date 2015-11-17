@@ -24,12 +24,12 @@ namespace RGSWeb.Controllers.MVC
         // GET: WorkItems/Details/5
         public async Task<ActionResult> Details(int? id)
         {
-            if (id == null)
+            if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            WorkItem workItem = await db.WorkItems.FindAsync(id);
-            if (workItem == null)
+            WorkItem workItem = await db.WorkItems.Include(model => model.Class.Teacher).SingleOrDefaultAsync(model => model.Id == id);
+            if(workItem == null)
             {
                 return HttpNotFound();
             }
@@ -49,7 +49,7 @@ namespace RGSWeb.Controllers.MVC
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,Title,Description,DueDate,MaxPoints,Type")] WorkItem workItem)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 db.WorkItems.Add(workItem);
                 await db.SaveChangesAsync();
@@ -62,12 +62,12 @@ namespace RGSWeb.Controllers.MVC
         // GET: WorkItems/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            if (id == null)
+            if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             WorkItem workItem = await db.WorkItems.FindAsync(id);
-            if (workItem == null)
+            if(workItem == null)
             {
                 return HttpNotFound();
             }
@@ -81,7 +81,7 @@ namespace RGSWeb.Controllers.MVC
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Description,DueDate,MaxPoints,Type")] WorkItem workItem)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 db.Entry(workItem).State = EntityState.Modified;
                 await db.SaveChangesAsync();
@@ -93,12 +93,12 @@ namespace RGSWeb.Controllers.MVC
         // GET: WorkItems/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
+            if(id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             WorkItem workItem = await db.WorkItems.FindAsync(id);
-            if (workItem == null)
+            if(workItem == null)
             {
                 return HttpNotFound();
             }
@@ -118,7 +118,7 @@ namespace RGSWeb.Controllers.MVC
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if(disposing)
             {
                 db.Dispose();
             }
