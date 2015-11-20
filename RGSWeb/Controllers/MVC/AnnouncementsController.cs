@@ -11,6 +11,7 @@ using RGSWeb.Models;
 
 namespace RGSWeb.Controllers.MVC
 {
+    [Authorize(Roles = "Admin")]
     public class AnnouncementsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

@@ -13,6 +13,7 @@ using RGSWeb.Managers;
 
 namespace RGSWeb.Controllers.MVC
 {
+    [Authorize(Roles = "Admin")]
     public class ClassesController : Controller
     {
         private ApplicationDbContext db;
@@ -42,7 +43,7 @@ namespace RGSWeb.Controllers.MVC
 
             const int maxItems = 10;
 
-            Class @class = await db.Classes.FindAsync(id);
+            Class @class = await db.Classes.Include(c => c.Teacher).Where(c => c.Id == id).FirstOrDefaultAsync();
             if(@class == null)
             {
                 return HttpNotFound();
