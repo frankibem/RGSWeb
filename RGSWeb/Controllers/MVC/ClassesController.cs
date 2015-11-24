@@ -54,7 +54,7 @@ namespace RGSWeb.Controllers.MVC
             ViewBag.WorkItems = workItems;
 
             var announcementManager = new AnnouncementManager(db);
-            var announcements = (await announcementManager.GetAnnouncementsForClass(@class)).Take(5);
+            var announcements = (await announcementManager.GetClassAnnouncements(@class)).Take(5);
             ViewBag.Announcements = announcements;
 
             return View(@class);
@@ -139,10 +139,56 @@ namespace RGSWeb.Controllers.MVC
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Class @class = await db.Classes.FindAsync(id);
-            db.Classes.Remove(@class);
-            await db.SaveChangesAsync();
+            var result = await classManager.DeleteClass(id);
             return RedirectToAction("Index");
+        }
+
+        // Returns a list of current students in a class
+        public async Task<ActionResult> Students(int classId)
+        {
+            var @class = await db.Classes.FindAsync(classId);
+            if(@class == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, string.Format("No class with id {0}", classId));
+            }
+
+            EnrollmentManager manager = new EnrollmentManager(db);
+            var currentStudents = await manager.GetAcceptedEnrollmentsForClass(@class);
+            return View(currentStudents);
+        }
+
+        /// <summary>
+        /// Returns a list of students in the waitlist for a class
+        /// </summary>
+        /// <param name="classId">Id of the class</param>
+        public async Task<ActionResult> Waitlist(int classId)
+        {
+            var @class = await db.Classes.FindAsync(classId);
+            if(@class == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, string.Format("No class with id {0}", classId));
+            }
+
+            EnrollmentManager manager = new EnrollmentManager(db);
+            var currentStudents = await manager.GetPendingEnrollmentsForClass(@class);
+
+            ViewBag.Class = @class;
+            return View(currentStudents);
+        }
+
+        public async Task<ActionResult> UpdateWaitlist(List<EnrollmentBindingModel> updates)
+        {
+            if(updates == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            int classId = updates[0].ClassId;
+
+            EnrollmentManager manager = new EnrollmentManager(db);
+            await manager.AcceptEnrollment(updates);
+
+            return await Waitlist(classId);
         }
 
         protected override void Dispose(bool disposing)

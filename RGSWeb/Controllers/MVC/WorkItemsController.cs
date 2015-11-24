@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RGSWeb.Models;
+using RGSWeb.Managers;
 
 namespace RGSWeb.Controllers.MVC
 {
@@ -16,9 +17,30 @@ namespace RGSWeb.Controllers.MVC
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: WorkItems
-        public async Task<ActionResult> Index()
+        /// <summary>
+        /// Returns a list of all work items for a class if classId is given. Otherwise, returns
+        /// a list of all work items
+        /// </summary>
+        /// <param name="classId">Id of class to return work items for</param>
+        public async Task<ActionResult> Index(int? classId)
         {
-            return View(await db.WorkItems.ToListAsync());
+            if(!classId.HasValue)
+            {
+                ViewBag.Title = "All work items";
+                return View(await db.WorkItems.ToListAsync());
+            }
+
+            Class @class = await db.Classes.FindAsync(classId);
+            if(@class == null)
+            {
+                ViewBag.Title = "Error";
+                ModelState.AddModelError("error", string.Format("No class with id \"{0}\"", classId));
+                return View();
+            }
+
+            ViewBag.Title = string.Format("Work items for \"{0}\"", @class.Title);
+            WorkItemManager manager = new WorkItemManager(db);
+            return View(await manager.GetClassWorkItems(@class));
         }
 
         // GET: WorkItems/Details/5

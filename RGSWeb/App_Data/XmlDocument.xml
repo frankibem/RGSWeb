@@ -636,6 +636,12 @@
             </summary>
             <param name="id">Id of the class to delete</param>
         </member>
+        <member name="M:RGSWeb.Controllers.MVC.ClassesController.Waitlist(System.Int32)">
+            <summary>
+            Returns a list of students in the waitlist for a class
+            </summary>
+            <param name="classId">Id of the class</param>
+        </member>
         <member name="M:RGSWeb.Controllers.MVC.UsersController.Teachers(System.String,System.String,System.String,System.Nullable{System.Int32})">
             <summary>
             Returns a list of all teachers in the application
@@ -647,6 +653,13 @@
             Returns a list of all students in the application
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Controllers.MVC.WorkItemsController.Index(System.Nullable{System.Int32})">
+            <summary>
+            Returns a list of all work items for a class if classId is given. Otherwise, returns
+            a list of all work items
+            </summary>
+            <param name="classId">Id of class to return work items for</param>
         </member>
         <member name="T:RGSWeb.Controllers.ScoreUnitsController">
             <summary>
@@ -732,7 +745,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:RGSWeb.Managers.AnnouncementManager.GetAnnouncementsForClass(RGSWeb.Models.Class)">
+        <member name="M:RGSWeb.Managers.AnnouncementManager.GetClassAnnouncements(RGSWeb.Models.Class)">
             <summary>
             Returns a list of announcements for the given class
             </summary>

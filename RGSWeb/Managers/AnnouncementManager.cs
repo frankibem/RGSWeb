@@ -104,7 +104,7 @@ namespace RGSWeb.Managers
         /// </summary>
         /// <param name="class"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Announcement>> GetAnnouncementsForClass(Class @class)
+        public async Task<IEnumerable<Announcement>> GetClassAnnouncements(Class @class)
         {
             return await _db.Announcements.Where(a => a.Class.Id == @class.Id).ToListAsync();
         }

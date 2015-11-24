@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RGSWeb.Models;
+using RGSWeb.Managers;
 
 namespace RGSWeb.Controllers.MVC
 {
@@ -17,9 +18,25 @@ namespace RGSWeb.Controllers.MVC
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Announcements
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? classId)
         {
-            return View(await db.Announcements.ToListAsync());
+            if(!classId.HasValue)
+            {
+                ViewBag.Title = "All announcements";
+                return View(await db.Announcements.ToListAsync());
+            }
+
+            Class @class = await db.Classes.FindAsync(classId);
+            if(@class == null)
+            {
+                ViewBag.Title = "Error";
+                ModelState.AddModelError("error", string.Format("No class with id \"{0}\"", classId));
+                return View();
+            }
+
+            ViewBag.Title = string.Format("Announcements for \"{0}\"", @class.Title);
+            AnnouncementManager manager = new AnnouncementManager(db);
+            return View(await manager.GetClassAnnouncements(@class));
         }
 
         // GET: Announcements/Details/5

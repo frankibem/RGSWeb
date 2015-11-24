@@ -47,8 +47,8 @@ namespace RGSWeb.Controllers.API
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, "No class with id: " + classId));
             }
 
-            var result = (await _announcementManager.GetAnnouncementsForClass(@class)).Select(a => new AnnouncementViewModel(a));
-            return Ok(await _announcementManager.GetAnnouncementsForClass(@class));
+            var result = (await _announcementManager.GetClassAnnouncements(@class)).Select(a => new AnnouncementViewModel(a));
+            return Ok(await _announcementManager.GetClassAnnouncements(@class));
         }
 
         /// <summary>
