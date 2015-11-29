@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using PagedList;
+using RGSWeb.Managers;
 using RGSWeb.Models;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace RGSWeb.Controllers.MVC
 {
@@ -145,6 +147,21 @@ namespace RGSWeb.Controllers.MVC
             int pageNumber = page ?? 1;
 
             return View(students.ToPagedList(pageNumber, pageSize));
+        }
+
+        /// <summary>
+        /// Shows the details of the user with the given user name
+        /// </summary>
+        /// <param name="userName"></param>
+        public async Task<ActionResult> Details(string userName)
+        {
+            var teacher = await userManager.FindByEmailAsync(userName);
+
+            ClassManager manager = new ClassManager(db);
+            var classes = await manager.GetUserClasses(teacher);
+            ViewBag.Classes = classes;
+
+            return View(teacher);
         }
     }
 }

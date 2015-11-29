@@ -34,7 +34,7 @@
                         <td>@Model.Prefix</td>
                         <td>@Model.CourseNumber</td>
                         <td>@Model.Section</td>
-                        <td>@Html.ActionLink(string.Format("{0}, {1}", Model.Teacher.LastName, Model.Teacher.FirstName), "Details", "Teachers")</td>
+                        <td>@Html.ActionLink(string.Format("{0}, {1}", Model.Teacher.LastName, Model.Teacher.FirstName), "Details", "Users", new { userName = Model.Teacher.Email }, null)</td>
                     </tr>
                 </table>
             </div>
@@ -77,7 +77,7 @@
                     else
                     {
                         <div class="list-group">
-                            @foreach(var workItem in workItems)
+                            @foreach(var workItem in workItems.Take(5))
                             {
                                 @Html.ActionLink(string.Format("{0}{1}", workItem.Title.Substring(0, Math.Min(workItem.Title.Length, 40)),
          workItem.Title.Length > 40 ? "..." : ""), "Details", "WorkItems", new { id = workItem.Id }, new { @class = "list-group-item" });
@@ -121,7 +121,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="list-group">
-                        @Html.ActionLink("Current Students", "Students", new { classId = Model.Id }, new { @class = "list-group-item" })
+                        @Html.ActionLink("Current Students", "Current", new { classId = Model.Id }, new { @class = "list-group-item" })
                         @Html.ActionLink("Wait list", "Waitlist", new { classId = Model.Id }, new { @class = "list-group-item" })
                     </div>
                 </div>

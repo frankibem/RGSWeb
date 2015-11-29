@@ -342,6 +342,8 @@
     <Content Include="Views\Users\Teachers.cshtml" />
     <Content Include="Views\Users\Students.cshtml" />
     <Content Include="Views\Classes\Waitlist.cshtml" />
+    <Content Include="Views\Users\Details.cshtml" />
+    <Content Include="Views\Classes\Current.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,0 +1,29 @@
+﻿@using RGSWeb.Models
+@model IEnumerable<Enrollment>
+
+<h3>Current Students - @ViewBag.Class.Title</h3>
+<hr />
+
+@{
+    int classId = ViewBag.Class.Id;
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+
+            @foreach(var enrollment in Model)
+            {
+                <tr>
+                    <td>
+                        @{var name = string.Format("{0}, {1}", enrollment.Student.LastName, enrollment.Student.FirstName);}
+                        @Html.ActionLink(name, "Details", "Users", new { username = enrollment.Student.Email }, null)
+                    </td>
+                    <td>@enrollment.Student.Email</td>
+                </tr>
+            }
+        </table>
+    </div>
+}

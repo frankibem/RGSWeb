@@ -176,19 +176,42 @@ namespace RGSWeb.Controllers.MVC
             return View(currentStudents);
         }
 
-        public async Task<ActionResult> UpdateWaitlist(List<EnrollmentBindingModel> updates)
+        /// <summary>
+        /// Returns a list of current students in a class
+        /// </summary>
+        /// <param name="classId">Id of the class</param>
+        [ActionName("Current")]
+        public async Task<ActionResult> CurrentStudents(int classId)
         {
-            if(updates == null)
+            var @class = await db.Classes.FindAsync(classId);
+            if(@class == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, string.Format("No class with id {0}", classId));
+            }
+
+            EnrollmentManager manager = new EnrollmentManager(db);
+            var currentStudents = await manager.GetAcceptedEnrollmentsForClass(@class);
+
+            ViewBag.Class = @class;
+            return View(currentStudents);
+        }
+
+        public async Task<ActionResult> UpdateWaitlist(string username, int classId, bool accept)
+        {
+            if(username == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            int classId = updates[0].ClassId;
+            List<EnrollmentBindingModel> updates = new List<EnrollmentBindingModel>
+            {
+                new EnrollmentBindingModel { Accept = accept, ClassId = classId, StudentUserName = username }
+            };
 
             EnrollmentManager manager = new EnrollmentManager(db);
             await manager.AcceptEnrollment(updates);
 
-            return await Waitlist(classId);
+            return RedirectToAction("Waitlist", new { classId = classId });
         }
 
         protected override void Dispose(bool disposing)

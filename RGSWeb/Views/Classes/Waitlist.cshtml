@@ -1,7 +1,8 @@
 ﻿@using RGSWeb.Models
 @model IEnumerable<Enrollment>
 
-<h3>Wait list for @ViewBag.Class.Title</h3>
+<h3>Wait list - @ViewBag.Class.Title</h3>
+<hr />
 
 @{
     int classId = ViewBag.Class.Id;
@@ -9,9 +10,9 @@
     <div class="table-responsive">
         <table class="table table-bordered">
             <tr>
-                <th>Student name</th>
-                <th>Student email</th>
-                <th></th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Decision</th>
             </tr>
 
             @foreach(var enrollment in Model)
@@ -20,12 +21,11 @@
                     <td>@string.Format("{0}, {1}", enrollment.Student.LastName, enrollment.Student.FirstName)</td>
                     <td>@enrollment.Student.Email</td>
                     <td>
-                        @Html.ActionLink("Accept", "UpdateWaitlist", new { updates = new List<EnrollmentBindingModel> { new EnrollmentBindingModel { Accept = true, ClassId = classId, StudentUserName = enrollment.Student.Email } } }, new { @class = "btn btn-default" })
-                        @Html.ActionLink("Reject", "UpdateWaitlist", new { updates = new List<EnrollmentBindingModel> { new EnrollmentBindingModel { Accept = false, ClassId = classId, StudentUserName = enrollment.Student.Email } } }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Accept", "UpdateWaitlist", new { accept = true, classId = classId, username = enrollment.Student.Email }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Reject", "UpdateWaitlist", new { accept = false, classId = classId, username = enrollment.Student.Email }, new { @class = "btn btn-default" })
                     </td>
                 </tr>
             }
-
         </table>
     </div>
 }

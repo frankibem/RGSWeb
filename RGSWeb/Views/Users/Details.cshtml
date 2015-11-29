@@ -1,0 +1,16 @@
+﻿@using RGSWeb.Models
+@model ApplicationUser
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div>
+    <h3>@Model.LastName, @Model.FirstName</h3>
+    <hr />
+
+    <dl class="dl-horizontal">
+        <dt>Email</dt>
+        <dd>@Model.Email</dd>
+    </dl>
+</div>

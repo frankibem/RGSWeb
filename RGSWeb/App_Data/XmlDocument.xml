@@ -642,6 +642,12 @@
             </summary>
             <param name="classId">Id of the class</param>
         </member>
+        <member name="M:RGSWeb.Controllers.MVC.ClassesController.CurrentStudents(System.Int32)">
+            <summary>
+            Returns a list of current students in a class
+            </summary>
+            <param name="classId">Id of the class</param>
+        </member>
         <member name="M:RGSWeb.Controllers.MVC.UsersController.Teachers(System.String,System.String,System.String,System.Nullable{System.Int32})">
             <summary>
             Returns a list of all teachers in the application
@@ -653,6 +659,12 @@
             Returns a list of all students in the application
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:RGSWeb.Controllers.MVC.UsersController.Details(System.String)">
+            <summary>
+            Shows the details of the user with the given user name
+            </summary>
+            <param name="userName"></param>
         </member>
         <member name="M:RGSWeb.Controllers.MVC.WorkItemsController.Index(System.Nullable{System.Int32})">
             <summary>

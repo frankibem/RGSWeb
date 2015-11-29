@@ -13,40 +13,46 @@
     </div>
 }
 
-<div class="table-responsive">
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th>
-                @Html.ActionLink("Last Name", "Students", new { sortOrder = ViewBag.NameSortParam, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th>
-                First Name
-            </th>
-            <th>
-                Email
-            </th>
-        </tr>
+@if(Model.TotalItemCount == 0)
+{
+    <div>No results to show</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>
+                    @Html.ActionLink("Last Name", "Students", new { sortOrder = ViewBag.NameSortParam, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th>First Name</th>
+                <th>Email</th>
+            </tr>
 
-        @if(Model != null)
+            @if(Model != null)
             {
                 foreach(var item in Model)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </table>
-</div>
+        </table>
+    </div>
 
-<br />
-    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    <br />
+
+    <span>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </span>
+}

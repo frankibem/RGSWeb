@@ -4,34 +4,41 @@
     ViewBag.Title = "Details";
 }
 
-<p style="margin-top: 10px">
-    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
-</p>
-
-<h4>Work item - @Model.Title</h4>
+<h2>Work item - @Model.Title</h2>
+<hr />
 
 <div class="container">
-    <table class="table">
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.DueDate)</th>
-            <td>@Model.DueDate.ToLongDateString()</td>
-        </tr>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Class.Teacher)</th>
-            <td>@Html.ActionLink(string.Format("{0}, {1}", Model.Class.Teacher.LastName, Model.Class.Teacher.FirstName), "Details", "Teachers", new { id = Model.Class.Teacher.Id }, null)</td>
-        </tr>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Type)</th>
-            <td>@Model.Type</td>
-        </tr>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.MaxPoints)</th>
-            <td>@Model.MaxPoints.ToString()</td>
-        </tr>
-    </table>
+    <div class="row">
+        <div class="col-md-5">
+            <p>
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+            </p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.DueDate)</th>
+                <td>@Model.DueDate.ToString("G")</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Class.Teacher)</th>
+                <td>@Html.ActionLink(string.Format("{0}, {1}", Model.Class.Teacher.LastName, Model.Class.Teacher.FirstName), "Details", "Teachers", new { id = Model.Class.Teacher.Id }, null)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Type)</th>
+                <td>@Model.Type</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.MaxPoints)</th>
+                <td>@Model.MaxPoints.ToString()</td>
+            </tr>
+        </table>
+    </div>
 
-    <p>
+    <blockquote>
         @Model.Description
-    </p>
+    </blockquote>
 </div>
