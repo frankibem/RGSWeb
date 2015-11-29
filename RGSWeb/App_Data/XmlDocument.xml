@@ -1056,36 +1056,6 @@
             <param name="id">The id of the WorkItem to search for</param>
             <returns></returns>
         </member>
-        <member name="T:RGSWeb.Models.Announcement">
-            <summary>
-            Class to represent a class announcement
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.Announcement.Id">
-            <summary>
-            Id of the announcment
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.Announcement.Title">
-            <summary>
-            Title of the announcement
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.Announcement.Description">
-            <summary>
-            Description of the announcement
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.Announcement.CreatedOn">
-            <summary>
-            Creation time of the assignment
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.Announcement.Class">
-            <summary>
-            Class for which the announcement was created
-            </summary>
-        </member>
         <member name="T:RGSWeb.Models.CreateAnnouncementModel">
             <summary>
             Model used to create an announcement
@@ -1124,32 +1094,6 @@
         <member name="P:RGSWeb.Models.UpdateAnnouncementModel.Description">
             <summary>
             Updated announcement description
-            </summary>
-        </member>
-        <member name="T:RGSWeb.Models.Enrollment">
-            <summary>
-            A class to represent student enrollment in a "class"
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.Enrollment.Id">
-            <summary>
-            The Id of the enrollment
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.Enrollment.Class">
-            <summary>
-            The Class for which the enrollment applies
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.Enrollment.Pending">
-            <summary>
-            Pending is true if the student has not been accepted to a class
-            and false otherwise
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.Enrollment.Student">
-            <summary>
-            The student for which the enrollment applies
             </summary>
         </member>
         <member name="T:RGSWeb.Models.EnrollmentState">
@@ -1197,42 +1141,6 @@
             Class to represent the weight distribution of the different types of workitems
             </summary>
         </member>
-        <member name="T:RGSWeb.Models.WorkItemType">
-            <summary>
-            Class to represent the different types of workitems
-            </summary>
-        </member>
-        <member name="T:RGSWeb.Models.UserResultView">
-            <summary>
-            Alternative model to represent a user
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UserResultView.Email">
-            <summary>
-            User's email address
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UserResultView.FirstName">
-            <summary>
-            User's first name
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.UserResultView.LastName">
-            <summary>
-            User's last name
-            </summary>
-        </member>
-        <member name="M:RGSWeb.Models.UserResultView.#ctor">
-            <summary>
-            Creates a default UserResultView
-            </summary>
-        </member>
-        <member name="M:RGSWeb.Models.UserResultView.#ctor(RGSWeb.Models.ApplicationUser)">
-            <summary>
-            Create a UserResultView for the given user
-            </summary>
-            <param name="user">Model to create the UserResultView from</param>
-        </member>
         <member name="T:RGSWeb.Models.Class">
             <summary>
              Represents a class in the raider grader system
@@ -1277,6 +1185,139 @@
             <summary>
             The teacher who is going to teach this class
             </summary>
+        </member>
+        <member name="T:RGSWeb.Models.Enrollment">
+            <summary>
+            A class to represent student enrollment in a "class"
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Id">
+            <summary>
+            The Id of the enrollment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Pending">
+            <summary>
+            Pending is true if the student has not been accepted to a class
+            and false otherwise
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Class">
+            <summary>
+            The Class for which the enrollment applies
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Enrollment.Student">
+            <summary>
+            The student for which the enrollment applies
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.WorkItemType">
+            <summary>
+            Class to represent the different types of workitems
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.WorkItem">
+            <summary>
+            Model to represent a class work-item
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.WorkItem.Id">
+            <summary>
+            Id of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.WorkItem.Title">
+            <summary>
+            The title of the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.WorkItem.Description">
+            <summary>
+            Description for the WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.WorkItem.DueDate">
+            <summary>
+            Date and time at which the WorkItem is due
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.WorkItem.MaxPoints">
+            <summary>
+            Maximum points attainable for this WorkItem
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.WorkItem.Type">
+            <summary>
+            The type of the WorkItem
+            </summary>
+            <example>Exam</example>
+        </member>
+        <member name="P:RGSWeb.Models.WorkItem.Class">
+            <summary>
+            The Class to which the WorkItem belongs
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.Announcement">
+            <summary>
+            Class to represent a class announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Announcement.Id">
+            <summary>
+            Id of the announcment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Announcement.Title">
+            <summary>
+            Title of the announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Announcement.Description">
+            <summary>
+            Description of the announcement
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Announcement.CreatedOn">
+            <summary>
+            Creation time of the assignment
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.Announcement.Class">
+            <summary>
+            Class for which the announcement was created
+            </summary>
+        </member>
+        <member name="T:RGSWeb.Models.UserResultView">
+            <summary>
+            Alternative model to represent a user
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.UserResultView.Email">
+            <summary>
+            User's email address
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.UserResultView.FirstName">
+            <summary>
+            User's first name
+            </summary>
+        </member>
+        <member name="P:RGSWeb.Models.UserResultView.LastName">
+            <summary>
+            User's last name
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Models.UserResultView.#ctor">
+            <summary>
+            Creates a default UserResultView
+            </summary>
+        </member>
+        <member name="M:RGSWeb.Models.UserResultView.#ctor(RGSWeb.Models.ApplicationUser)">
+            <summary>
+            Create a UserResultView for the given user
+            </summary>
+            <param name="user">Model to create the UserResultView from</param>
         </member>
         <member name="P:RGSWeb.Models.ApplicationUser.FirstName">
             <summary>
@@ -1324,47 +1365,6 @@
             Creates a model from the given ScoreUnit
             </summary>
             <param name="scoreUnit">ScoreUnit to create the model from</param>
-        </member>
-        <member name="T:RGSWeb.Models.WorkItem">
-            <summary>
-            Model to represent a class work-item
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.WorkItem.Id">
-            <summary>
-            Id of the WorkItem
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.WorkItem.Title">
-            <summary>
-            The title of the WorkItem
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.WorkItem.Description">
-            <summary>
-            Description for the WorkItem
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.WorkItem.DueDate">
-            <summary>
-            Date and time at which the WorkItem is due
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.WorkItem.MaxPoints">
-            <summary>
-            Maximum points attainable for this WorkItem
-            </summary>
-        </member>
-        <member name="P:RGSWeb.Models.WorkItem.Type">
-            <summary>
-            The type of the WorkItem
-            </summary>
-            <example>Exam</example>
-        </member>
-        <member name="P:RGSWeb.Models.WorkItem.Class">
-            <summary>
-            The Class to which the WorkItem belongs
-            </summary>
         </member>
         <member name="T:RGSWeb.ViewModels.EnrollmentViewModel">
             <summary>

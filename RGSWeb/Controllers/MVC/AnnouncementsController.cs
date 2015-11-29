@@ -129,10 +129,12 @@ namespace RGSWeb.Controllers.MVC
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Announcement announcement = await db.Announcements.FindAsync(id);
+            Announcement announcement = await db.Announcements.Include(a => a.Class).Where(a => a.Id == id).FirstOrDefaultAsync();
+            int classId = announcement.Class.Id;
+
             db.Announcements.Remove(announcement);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { classId = classId });
         }
 
         protected override void Dispose(bool disposing)

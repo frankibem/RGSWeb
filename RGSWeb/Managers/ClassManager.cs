@@ -155,25 +155,8 @@ namespace RGSWeb.Managers
                 throw new Exception("No class with id: " + id);
             }
 
-            // Delete all data associated with class
-            var announcements = _db.Announcements.Where(announce => announce.Class.Id == id);
-            _db.Announcements.RemoveRange(announcements);
-            _db.SaveChanges();
-
-            var workItems = _db.WorkItems.Where(wi => wi.Class.Id == id);
-            foreach(var workItem in workItems)
-            {
-                var scoreUnits = _db.ScoreUnits.Where(su => su.WorkItem.Id == workItem.Id);
-                _db.ScoreUnits.RemoveRange(scoreUnits);
-                _db.WorkItems.Remove(workItem);
-
-            }
-
-            var enrollments = _db.Enrollments.Where(enroll => enroll.Class.Id == id);
-            _db.Enrollments.RemoveRange(enrollments);
-
             _db.Classes.Remove(@class);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             return @class;
         }

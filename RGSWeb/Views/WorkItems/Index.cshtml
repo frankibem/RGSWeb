@@ -7,49 +7,56 @@
     @Html.ActionLink("Create a new work item", "Create", null, new { @class = "btn btn-default" })
 </p>
 
-<div class="table-responsive">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DueDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Type)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.MaxPoints)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var item in Model)
-            {
+@if(Model.Count() == 0)
+{
+    <p>No work items to show</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td>
-                        @{ var title = string.Format("{0}{1}", item.Title.Substring(0, Math.Min(item.Title.Length, 30)), item.Title.Length > 30 ? "..." : "");}
-                        @Html.ActionLink(title, "Details", new { id = item.Id })
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DueDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Type)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MaxPoints)
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DueDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MaxPoints)
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @{ var title = string.Format("{0}{1}", item.Title.Substring(0, Math.Min(item.Title.Length, 30)), item.Title.Length > 30 ? "..." : "");}
+                            @Html.ActionLink(title, "Details", new { id = item.Id })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DueDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MaxPoints)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

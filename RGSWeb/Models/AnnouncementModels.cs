@@ -4,35 +4,6 @@ using System.ComponentModel.DataAnnotations;
 namespace RGSWeb.Models
 {
     /// <summary>
-    /// Class to represent a class announcement
-    /// </summary>
-    public class Announcement
-    {
-        /// <summary>
-        /// Id of the announcment
-        /// </summary>
-        public int Id { get; set; }
-        /// <summary>
-        /// Title of the announcement
-        /// </summary>
-        public string Title { get; set; }
-        /// <summary>
-        /// Description of the announcement
-        /// </summary>
-        public string Description { get; set; }
-        /// <summary>
-        /// Creation time of the assignment
-        /// </summary>
-        [DataType(DataType.DateTime)]
-        [Display(Name = "Creation date")]
-        public DateTime CreatedOn { get; set; }
-        /// <summary>
-        /// Class for which the announcement was created
-        /// </summary>
-        public Class Class { get; set; }
-    }
-
-    /// <summary>
     /// Model used to create an announcement
     /// </summary>
     public class CreateAnnouncementModel
