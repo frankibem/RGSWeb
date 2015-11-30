@@ -48,7 +48,7 @@ namespace RGSWeb.Controllers.API
             }
 
             var result = (await _announcementManager.GetClassAnnouncements(@class)).Select(a => new AnnouncementViewModel(a));
-            return Ok(await _announcementManager.GetClassAnnouncements(@class));
+            return Ok(result);
         }
 
         /// <summary>
