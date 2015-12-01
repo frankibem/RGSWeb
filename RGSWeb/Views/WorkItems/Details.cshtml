@@ -25,7 +25,7 @@
             </tr>
             <tr>
                 <th>@Html.DisplayNameFor(model => model.Class.Teacher)</th>
-                <td>@Html.ActionLink(string.Format("{0}, {1}", Model.Class.Teacher.LastName, Model.Class.Teacher.FirstName), "Details", "Teachers", new { id = Model.Class.Teacher.Id }, null)</td>
+                <td>@Html.ActionLink(string.Format("{0}, {1}", Model.Class.Teacher.LastName, Model.Class.Teacher.FirstName), "Details", "Users", new { userName = Model.Class.Teacher.Email }, null)</td>
             </tr>
             <tr>
                 <th>@Html.DisplayNameFor(model => model.Type)</th>

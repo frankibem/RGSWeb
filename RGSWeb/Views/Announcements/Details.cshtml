@@ -20,6 +20,6 @@
         @Model.Description
     </blockquote>
     <footer>
-        By @Html.ActionLink(string.Format("{0}, {1}", Model.Class.Teacher.LastName, Model.Class.Teacher.FirstName), "Details", "Teachers", new { id = Model.Class.Teacher.Id }, null)
+        By @Html.ActionLink(string.Format("{0}, {1}", Model.Class.Teacher.LastName, Model.Class.Teacher.FirstName), "Details", "Users", new { userName = Model.Class.Teacher.Email }, null)
     </footer>
 </div>
