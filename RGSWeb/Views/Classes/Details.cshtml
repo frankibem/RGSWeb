@@ -73,6 +73,7 @@
                     @if(workItems.Count() == 0)
                     {
                         <p>No work items for this class</p>
+                        @Html.ActionLink("Create New", "Create", "WorkItems", new { classId = Model.Id }, new { @class = "btn btn-success" })
                     }
                     else
                     {
@@ -83,7 +84,8 @@
          workItem.Title.Length > 40 ? "..." : ""), "Details", "WorkItems", new { id = workItem.Id }, new { @class = "list-group-item" });
                             }
                         </div>
-                        @Html.ActionLink("View all", "Index", "WorkItems", new { classId = Model.Id }, null)
+                        @Html.ActionLink("Create New", "Create", "WorkItems", new { classId = Model.Id }, new { @class = "btn btn-success", style = "margin-right: 5px" })
+                        @Html.ActionLink("View all", "Index", "WorkItems", new { classId = Model.Id }, new { @class = "btn btn-default" })
                     }
                 </div>
             </div>
@@ -99,6 +101,7 @@
                     @if(announcements.Count() == 0)
                     {
                         <p>No announcements for this class</p>
+                        @Html.ActionLink("Create New", "Create", "Announcements", new { classId = Model.Id }, new { @class = "btn btn-success" })
                     }
                     else
                     {
@@ -108,7 +111,8 @@
                                 @Html.ActionLink(string.Format("{0}{1}", announcement.Title.Substring(0, Math.Min(announcement.Title.Length, 40)), announcement.Title.Length > 40 ? "..." : ""), "Details", "Announcements", new { id = announcement.Id }, new { @class = "list-group-item" });
                             }
                         </div>
-                        @Html.ActionLink("View all", "Index", "Announcements", new { classId = Model.Id }, null)
+                        @Html.ActionLink("Create New", "Create", "Announcements", new { classId = Model.Id }, new { @class = "btn btn-success", style = "margin-right: 5px" })
+                        @Html.ActionLink("View all", "Index", "Announcements", new { classId = Model.Id }, new { @class = "btn btn-default" })
                     }
                 </div>
             </div>

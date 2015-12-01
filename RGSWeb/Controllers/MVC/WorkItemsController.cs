@@ -9,9 +9,11 @@ using System.Web;
 using System.Web.Mvc;
 using RGSWeb.Models;
 using RGSWeb.Managers;
+using RGSWeb.ViewModels;
 
 namespace RGSWeb.Controllers.MVC
 {
+    [Authorize(Roles = "Admin")]
     public class WorkItemsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -39,6 +41,7 @@ namespace RGSWeb.Controllers.MVC
             }
 
             ViewBag.Title = string.Format("Work items for \"{0}\"", @class.Title);
+            ViewBag.ClassId = classId;
             WorkItemManager manager = new WorkItemManager(db);
             return View(await manager.GetClassWorkItems(@class));
         }
@@ -59,8 +62,9 @@ namespace RGSWeb.Controllers.MVC
         }
 
         // GET: WorkItems/Create
-        public ActionResult Create()
+        public ActionResult Create(int classId)
         {
+            ViewBag.ClassId = classId;
             return View();
         }
 
@@ -69,13 +73,14 @@ namespace RGSWeb.Controllers.MVC
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Title,Description,DueDate,MaxPoints,Type")] WorkItem workItem)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Title,Description,DueDate,MaxPoints,ClassId,Type")] CreateWorkItemViewModel workItem)
         {
             if(ModelState.IsValid)
             {
-                db.WorkItems.Add(workItem);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                int classId = workItem.ClassId;
+                WorkItemManager manager = new WorkItemManager(db);
+                await manager.CreateWorkItem(workItem);
+                return RedirectToAction("Index", new { classId = classId });
             }
 
             return View(workItem);

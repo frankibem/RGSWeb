@@ -34,6 +34,7 @@ namespace RGSWeb.Controllers.MVC
                 return View();
             }
 
+            ViewBag.ClassId = classId;
             ViewBag.Title = string.Format("Announcements for \"{0}\"", @class.Title);
             AnnouncementManager manager = new AnnouncementManager(db);
             return View(await manager.GetClassAnnouncements(@class));
@@ -56,8 +57,9 @@ namespace RGSWeb.Controllers.MVC
         }
 
         // GET: Announcements/Create
-        public ActionResult Create()
+        public ActionResult Create(int classId)
         {
+            ViewBag.ClassId = classId;
             return View();
         }
 
@@ -66,13 +68,14 @@ namespace RGSWeb.Controllers.MVC
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Title,Description,CreatedOn")] Announcement announcement)
+        public async Task<ActionResult> Create([Bind(Include = "Title,Description,ClassId")] CreateAnnouncementModel announcement)
         {
             if(ModelState.IsValid)
             {
-                db.Announcements.Add(announcement);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                int classId = announcement.ClassId;
+                AnnouncementManager manager = new AnnouncementManager(db);
+                await manager.CreateAnnouncement(announcement);
+                return RedirectToAction("Index", new { classId = classId });
             }
 
             return View(announcement);

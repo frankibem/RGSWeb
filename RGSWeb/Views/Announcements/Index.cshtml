@@ -3,7 +3,7 @@
 <h3>@ViewBag.Title</h3>
 
 <p>
-    @Html.ActionLink("Create a new announcement", "Create", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Create a new announcement", "Create", new { classId = ViewBag.ClassId }, new { @class = "btn btn-default" })
 </p>
 
 @if(Model.Count() == 0)

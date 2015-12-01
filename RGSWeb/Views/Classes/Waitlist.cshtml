@@ -7,25 +7,32 @@
 @{
     int classId = ViewBag.Class.Id;
 
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Decision</th>
-            </tr>
-
-            @foreach(var enrollment in Model)
-            {
+    if(Model.Count() == 0)
+    {
+        <h4>There are no waitlisted students for this class</h4>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered">
                 <tr>
-                    <td>@string.Format("{0}, {1}", enrollment.Student.LastName, enrollment.Student.FirstName)</td>
-                    <td>@enrollment.Student.Email</td>
-                    <td>
-                        @Html.ActionLink("Accept", "UpdateWaitlist", new { accept = true, classId = classId, username = enrollment.Student.Email }, new { @class = "btn btn-default" })
-                        @Html.ActionLink("Reject", "UpdateWaitlist", new { accept = false, classId = classId, username = enrollment.Student.Email }, new { @class = "btn btn-default" })
-                    </td>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Decision</th>
                 </tr>
-            }
-        </table>
-    </div>
+
+                @foreach(var enrollment in Model)
+                {
+                    <tr>
+                        <td>@string.Format("{0}, {1}", enrollment.Student.LastName, enrollment.Student.FirstName)</td>
+                        <td>@enrollment.Student.Email</td>
+                        <td>
+                            @Html.ActionLink("Accept", "UpdateWaitlist", new { accept = true, classId = classId, username = enrollment.Student.Email }, new { @class = "btn btn-default" })
+                            @Html.ActionLink("Reject", "UpdateWaitlist", new { accept = false, classId = classId, username = enrollment.Student.Email }, new { @class = "btn btn-default" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
 }
